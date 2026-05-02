@@ -1,0 +1,51 @@
+# Unity 생성 파일
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# MemoryCaptures는 크기가 크므로 제외
+MemoryCaptures/
+
+# Asset meta 파일은 유지 (필수)
+# !/[Aa]ssets/**/*.meta
+
+# Visual Studio 캐시/옵션 디렉토리
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider IDE
+.idea/
+
+# Mac 시스템 파일
+.DS_Store
+*.DS_Store
+
+# Windows 시스템 파일
+Thumbs.db
+Desktop.ini
+
+# JetBrains Rider
+*.sln
+*.csproj
+
+# Unity SmartMerge 도구
+*.orig
+
+# Crash 보고서
+crashlytics-build.properties
+
+# npm (Node.js)
+node_modules/
+
+# Shrimp task manager 데이터
+shrimp_data/

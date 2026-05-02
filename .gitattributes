@@ -1,0 +1,29 @@
+# Unity YAML 파일을 텍스트로 처리 (Smart Merge 지원)
+*.cs        diff=csharp
+*.unity     merge=unityyamlmerge eol=lf
+*.prefab    merge=unityyamlmerge eol=lf
+*.asset     merge=unityyamlmerge eol=lf
+*.meta      merge=unityyamlmerge eol=lf
+*.mat       merge=unityyamlmerge eol=lf
+*.anim      merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
+
+# 바이너리 파일
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.bmp       binary
+*.tga       binary
+*.tiff      binary
+*.psd       binary
+*.fbx       binary
+*.mp4       binary
+*.wav       binary
+*.mp3       binary
+*.ogg       binary
+*.ttf       binary
+*.otf       binary
+*.pdf       binary
+*.zip       binary
+*.unitypackage binary
