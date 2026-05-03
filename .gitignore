@@ -47,8 +47,3 @@ crashlytics-build.properties
 # npm (Node.js)
 node_modules/
 
-# Shrimp task manager 데이터
-shrimp_data/
-
-# Claude Code 설정
-.claude/
