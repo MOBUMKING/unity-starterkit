@@ -7,8 +7,8 @@
 
 ## 현재 단계
 
-- **현재 마일스톤**: M1 — 프로젝트 기반 & 씬 구조
-- **전체 진행률**: 0 / 8 기능 완료
+- **현재 마일스톤**: M3 — Boot 씬 진입 & 초기화 흐름
+- **전체 진행률**: 2 / 8 기능 완료 (F005, F006)
 
 ---
 
@@ -36,15 +36,15 @@
 
 ### M2: 데이터 & 저장 시스템 (F005, F006)
 > **목표**: 스테이지 데이터(ScriptableObject)와 PlayerPrefs 저장·복원이 코드 레벨에서 동작하는 기반 완성  
-> **상태**: 예정  
+> **상태**: 완료  
 > **선행 조건**: M1 완료 (폴더 구조, 씬 파일)
 
 | 상태 | 기능 | 설명 |
 |------|------|------|
-| [ ] | F006-a — StageDataSO 정의 | ScriptableObject 클래스 작성 (stageNumber, stageName, clearAnimationType, failAnimationType) |
-| [ ] | F006-b — StageDataSO 20개 생성 | 에셋 생성 및 인스펙터에서 각 스테이지 데이터 입력 |
-| [ ] | F006-c — StageManager 구현 | 현재 스테이지 번호 관리, 범위(1~20) 제한, 다음 스테이지 계산, StageDataSO 배열 보관 |
-| [ ] | F005 — SaveManager 구현 | PlayerPrefs "MaxClearedStage" 저장 / 불러오기 / 초기화, StageManager에 복원값 전달 |
+| [x] | F006-a — StageDataSO 정의 | ScriptableObject 클래스 작성 (stageNumber, stageName, clearAnimationType, failAnimationType) |
+| [x] | F006-b — StageDataSO 20개 생성 | 에셋 생성 및 인스펙터에서 각 스테이지 데이터 입력 |
+| [x] | F006-c — StageManager 구현 | 현재 스테이지 번호 관리, 범위(1~20) 제한, 다음 스테이지 계산, StageDataSO 배열 보관 |
+| [x] | F005 — SaveManager 구현 | PlayerPrefs "MaxClearedStage" 저장 / 불러오기 / 초기화, StageManager에 복원값 전달 |
 
 > **설계 의도**: SaveManager와 StageManager는 UI와 무관하게 독립적으로 동작해야 한다. UI 작업 전에 완성하여 이후 단계에서 데이터를 그냥 가져다 쓸 수 있도록 한다.
 
@@ -159,4 +159,7 @@ M6: AnimationController — DOTween 클리어/실패 연출 삽입 (F003, F004)
 
 ## 완료 이력
 
-> 아직 완료된 기능 없음
+| 날짜 | 기능 | 비고 |
+|------|------|------|
+| 2026-05-03 | F006 — 스테이지 범위 제한 | AnimationType enum, StageDataSO 클래스, StageManager, SO 에셋 20개 |
+| 2026-05-03 | F005 — 저장 & 복원 | SaveManager (PlayerPrefs MaxClearedStage) |
