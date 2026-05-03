@@ -8,6 +8,17 @@
           "TEMPLATES_USE": "en",
           "ENABLE_GUI": "true"
         }
+      },
+      "UnityMCP": {
+        "command": "C:\\Users\\rhdwl\\AppData\\Local\\Microsoft\\WinGet\\Links\\uvx.exe",
+        "args": [
+          "--from", "mcpforunityserver==9.6.8",
+          "mcp-for-unity",
+          "--transport", "http",
+          "--http-url", "http://127.0.0.1:8080",
+          "--project-scoped-tools",
+          "--unity-instance-token", "aadaca4a05d34bf5a516bf88955b71e2"
+        ]
       }
     }
   }

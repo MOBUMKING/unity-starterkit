@@ -14,6 +14,25 @@
 - 구현 전에 접근 방식 설명 후 진행
 - 요청한 것만 구현
 
+## 폴더/파일 생성 규칙 [IMPORTANT]
+- 폴더나 파일을 생성하기 전에 반드시 Glob/PowerShell로 기존 구조를 먼저 파악한다
+- 이 프로젝트의 게임 에셋은 모두 `Assets/_Project/` 하위에 위치한다:
+  - 스크립트: `Assets/_Project/Scripts/` (하위: Managers, UI, Data)
+  - 씬: `Assets/_Project/Scenes/`
+  - ScriptableObject 에셋: `Assets/_Project/ScriptableObjects/`
+  - UI 프리팹/에셋: `Assets/_Project/UI/`
+  - 프리팹: `Assets/_Project/Prefabs/`
+  - 애니메이션: `Assets/_Project/Animations/`
+  - 머티리얼: `Assets/_Project/Materials/`
+  - 에디터 스크립트: `Assets/_Project/Editor/`
+  - 데이터 에셋: `Assets/_Project/Data/`
+- `Assets/` 루트에 새 폴더를 직접 생성하지 않는다 (Plugins, Resources, Settings 등 Unity 예약 폴더 제외)
+
+## Unity 씬/에셋 편집 규칙 [IMPORTANT]
+- Unity 씬(.unity), 프리팹(.prefab), 에셋(.asset) 파일을 YAML로 직접 편집하는 것을 절대 금지한다
+- GameObject 생성, 컴포넌트 추가/설정, 씬 저장 등 모든 Unity Editor 작업은 반드시 Unity MCP를 통해 수행한다
+- Unity MCP를 사용할 수 없는 상황이면 작업을 중단하고 사용자에게 보고한다
+
 ## 작업 완료 체크리스트 [IMPORTANT]
 모든 항목을 실제로 확인한 뒤 완료 보고. 추측으로 통과 처리 금지.
 1. 컴파일 에러 없음 — Unity MCP로 콘솔 조회, "error CS" 검색
