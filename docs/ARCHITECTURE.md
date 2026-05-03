@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — 모바일 게임 프로토타입
 
-> 마지막 갱신: 2026-05-03 (M2 완료 기준)
+> 마지막 갱신: 2026-05-04 (M3 완료, M1 씬 UI 구조 완성 기준)
 
 ---
 
@@ -55,15 +55,30 @@
   - `Reset()` — PlayerPrefs.DeleteKey + Save
 - **의존**: 없음 (다른 Manager 참조 금지)
 
+#### `BootLoader` (MonoBehaviour)
+- **파일**: `BootLoader.cs`
+- **역할**: Boot 씬 전용 진입점. 저장 데이터를 복원하고 Main 씬으로 전환한다.
+- **싱글턴 아님**: Boot 씬과 함께 파괴되므로 DontDestroyOnLoad 불필요
+- **주요 멤버**:
+  - `Awake()` — CancellationTokenSource 초기화, `InitializeAsync().Forget()`
+  - `InitializeAsync(CancellationToken): UniTask` — `SaveManager.Load()` → `StageManager.SetCurrentStage(maxCleared+1)` → `SceneManager.LoadSceneAsync("Main")`
+  - `OnDestroy()` — `_cts?.Cancel()` / `_cts?.Dispose()`
+- **비동기**: UniTask + CancellationToken 패턴
+- **의존**: `SaveManager`, `StageManager`
+
 ---
 
 ## 시스템 의존 관계
 
 ```
+BootLoader (구현됨 — Boot 씬 전용)
+  ├── SaveManager    ← 구현됨
+  └── StageManager   ← 구현됨
+
 GameFlowController (미구현)
-  ├── StageManager   ← 현재 구현됨
+  ├── StageManager   ← 구현됨
   ├── UIManager      (미구현)
-  └── SaveManager    ← 현재 구현됨
+  └── SaveManager    ← 구현됨
 
 UIManager (미구현)
   └── AnimationController (미구현)
@@ -86,7 +101,8 @@ Assets/_Project/
 │   │   └── StageDataSO.cs         ← M2 구현
 │   └── Managers/
 │       ├── StageManager.cs        ← M2 구현
-│       └── SaveManager.cs         ← M2 구현
+│       ├── SaveManager.cs         ← M2 구현
+│       └── BootLoader.cs          ← M3 구현
 ├── ScriptableObjects/
 │   └── Stage01.asset ~ Stage20.asset  ← M2 생성
 └── Scenes/
@@ -96,11 +112,27 @@ Assets/_Project/
 
 ---
 
+## Main 씬 UI 계층 구조 (M1 완성)
+
+```
+Main.unity
+└── Canvas  [CanvasScaler: ScaleWithScreenSize / 1080×1920 / Match 0.5]
+    └── SafeArea  [RectTransform: anchorMin(0,0) anchorMax(1,1) offset(0,0)]
+        ├── MainPanel      [비활성화 / RectTransform 전체 stretch]
+        ├── InGamePanel    [비활성화 / RectTransform 전체 stretch]
+        ├── ClearPanel     [비활성화 / RectTransform 전체 stretch]
+        ├── FailPanel      [비활성화 / RectTransform 전체 stretch]
+        └── GameClearPanel [비활성화 / RectTransform 전체 stretch]
+```
+
+> **설계 의도**: SafeAreaHandler(M4)가 런타임에 SafeArea의 RectTransform을 Screen.safeArea로 재조정한다. 각 패널은 UIManager(M4)의 ShowPanel() 메서드가 활성화/비활성화를 제어한다.
+
+---
+
 ## 미구현 클래스 (예정)
 
 | 클래스 | 마일스톤 | 역할 |
 |--------|---------|------|
-| `BootLoader` | M3 | Boot 씬 저장 데이터 로드 → Main 씬 전환 |
 | `UIManager` | M4 | 패널 Show/Hide, 버튼 이벤트 연결 |
 | `SafeAreaHandler` | M4 | Screen.safeArea 기반 RectTransform 조정 |
 | `GameFlowController` | M5 | OnStageClear/OnStageFail 판정 흐름 제어 |

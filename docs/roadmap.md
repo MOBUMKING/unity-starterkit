@@ -1,14 +1,15 @@
 # 개발 로드맵 — 모바일 게임 프로토타입 (Arrows 참조 레벨 선택형)
 
 > PRD 기반 작성 | ARCHITECTURE.md 미존재 → 전체 미구현 상태로 초기화  
-> 2026-05-03 점검: 개발 효율 순서로 단계 세분화 재배치
+> 2026-05-03 점검: 개발 효율 순서로 단계 세분화 재배치  
+> 2026-05-04 업데이트: M3 완료 반영 (BootLoader 구현 및 Boot 씬 배치)
 
 ---
 
 ## 현재 단계
 
-- **현재 마일스톤**: M3 — Boot 씬 진입 & 초기화 흐름
-- **전체 진행률**: 2 / 8 기능 완료 (F005, F006)
+- **현재 마일스톤**: M4 — UIManager & 화면 전환 골격
+- **전체 진행률**: 4 / 8 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader)
 
 ---
 
@@ -18,17 +19,17 @@
 
 ### M1: 프로젝트 기반 & 씬 구조
 > **목표**: 씬 구성, Canvas 기준 해상도, 폴더 구조가 완성되어 이후 모든 작업의 기반이 갖춰진 상태  
-> **상태**: 진행중  
+> **상태**: 완료  
 > **선행 조건**: 없음  
 > **완료 기준**: Boot 씬 → Main 씬 전환이 Play Mode에서 정상 작동
 
 | 상태 | 항목 | 설명 |
 |------|------|------|
-| [ ] | 폴더 구조 생성 | Assets/Scripts, Assets/UI, Assets/Data, Assets/Scenes 폴더 생성 |
-| [ ] | 씬 파일 생성 | Boot 씬, Main 씬 추가 및 Build Settings에 등록 (Boot=0, Main=1) |
-| [ ] | Canvas & Canvas Scaler 설정 | Main 씬에 Canvas 생성, Scale With Screen Size / 1080×1920 / Match 0.5 설정 — **F008 선행 적용** |
-| [ ] | Safe Area 패널 배치 | Canvas 자식에 SafeArea 패널 배치 (SafeAreaHandler 컴포넌트 붙일 자리 확보) |
-| [ ] | UI 패널 계층 구조 생성 | MainPanel, InGamePanel, ClearPanel, FailPanel, GameClearPanel 빈 오브젝트 생성 및 비활성화 |
+| [x] | 폴더 구조 생성 | Assets/_Project/Scripts, UI, Data, Scenes 등 폴더 생성 완료 |
+| [x] | 씬 파일 생성 | Boot.unity, Main.unity 생성 완료 |
+| [x] | Canvas & Canvas Scaler 설정 | Main 씬에 Canvas 생성, Scale With Screen Size / 1080×1920 / Match 0.5 설정 — **F008 선행 적용** |
+| [x] | Safe Area 패널 배치 | Canvas 자식에 SafeArea 패널 배치 (SafeAreaHandler 컴포넌트 붙일 자리 확보) |
+| [x] | UI 패널 계층 구조 생성 | MainPanel, InGamePanel, ClearPanel, FailPanel, GameClearPanel 빈 오브젝트 생성 및 비활성화 |
 
 > **설계 의도**: Canvas Scaler와 Safe Area를 가장 먼저 설정해야 이후 모든 UI 작업이 올바른 해상도 기준 위에서 이루어진다. 나중에 적용하면 배치된 UI를 전부 재조정해야 한다.
 
@@ -52,13 +53,13 @@
 
 ### M3: Boot 씬 진입 & 초기화 흐름
 > **목표**: 앱 실행 시 Boot 씬에서 저장 데이터를 불러오고 Main 씬으로 전환하는 진입점 완성  
-> **상태**: 예정  
+> **상태**: 완료  
 > **선행 조건**: M2 완료 (SaveManager, StageManager 필요)
 
 | 상태 | 항목 | 설명 |
 |------|------|------|
-| [ ] | BootLoader 구현 | Boot 씬 전용 MonoBehaviour. SaveManager.Load() 호출 → SceneManager로 Main 씬 전환 |
-| [ ] | Boot 씬에 BootLoader 배치 | Boot 씬 GameObejct에 BootLoader 컴포넌트 부착, 씬 전환 확인 |
+| [x] | BootLoader 구현 | Boot 씬 전용 MonoBehaviour. SaveManager.Load() 호출 → SceneManager로 Main 씬 전환 (UniTask 비동기) |
+| [x] | Boot 씬에 BootLoader 배치 | Boot 씬 GameObject에 BootLoader 컴포넌트 부착, 씬 전환 흐름 완성 |
 
 > **설계 의도**: 진입점을 명확히 분리해야 이후 UIManager가 MainPanel부터 정확한 스테이지 번호를 표시할 수 있다. Boot 씬이 없으면 저장 데이터 복원 타이밍이 모호해진다.
 
@@ -163,3 +164,5 @@ M6: AnimationController — DOTween 클리어/실패 연출 삽입 (F003, F004)
 |------|------|------|
 | 2026-05-03 | F006 — 스테이지 범위 제한 | AnimationType enum, StageDataSO 클래스, StageManager, SO 에셋 20개 |
 | 2026-05-03 | F005 — 저장 & 복원 | SaveManager (PlayerPrefs MaxClearedStage) |
+| 2026-05-04 | M3 — Boot 씬 진입 & 초기화 흐름 | BootLoader (UniTask 비동기), Boot 씬 배치, Boot→Main 씬 전환 완성 |
+| 2026-05-04 | M1 — 프로젝트 기반 & 씬 구조 | Canvas CanvasScaler(1080×1920, Match 0.5), SafeArea 패널, MainPanel/InGamePanel/ClearPanel/FailPanel/GameClearPanel 비활성화 배치 |
