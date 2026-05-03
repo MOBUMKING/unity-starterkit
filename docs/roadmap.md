@@ -2,14 +2,15 @@
 
 > PRD 기반 작성 | ARCHITECTURE.md 미존재 → 전체 미구현 상태로 초기화  
 > 2026-05-03 점검: 개발 효율 순서로 단계 세분화 재배치  
-> 2026-05-04 업데이트: M3 완료 반영 (BootLoader 구현 및 Boot 씬 배치)
+> 2026-05-04 업데이트: M3 완료 반영 (BootLoader 구현 및 Boot 씬 배치)  
+> 2026-05-04 업데이트: M4 완료 반영 (UIManager & SafeAreaHandler 구현)
 
 ---
 
 ## 현재 단계
 
-- **현재 마일스톤**: M4 — UIManager & 화면 전환 골격
-- **전체 진행률**: 4 / 8 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader)
+- **현재 마일스톤**: M5 — GameFlowController & 판정 로직 연결
+- **전체 진행률**: 4 / 6 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader, M4 UIManager)
 
 ---
 
@@ -67,16 +68,16 @@
 
 ### M4: UIManager & 화면 전환 골격 (F001, F002, F007)
 > **목표**: 메인 화면 → 인게임 화면 → 게임 완료 화면 전환이 버튼 클릭으로 동작하는 UI 골격 완성  
-> **상태**: 예정  
+> **상태**: 완료  
 > **선행 조건**: M3 완료 (BootLoader → Main 씬 진입 흐름 확립 후)
 
 | 상태 | 기능 | 설명 |
 |------|------|------|
-| [ ] | UIManager 구현 | 패널 참조 보관, ShowPanel(panelType) 메서드로 단일 패널 활성화/비활성화, 버튼 이벤트 연결 |
-| [ ] | F001 — 메인 화면 UI | MainPanel: 타이틀 텍스트, 현재 도전 스테이지 번호(StageManager에서 조회), 플레이 버튼 |
-| [ ] | F002 — 인게임 화면 UI | InGamePanel: 스테이지 번호 표시, 빈 게임 영역, 클리어 버튼(초록), 실패 버튼(빨강) |
-| [ ] | F007 — 게임 완료 화면 UI | GameClearPanel: 전체 클리어 축하 텍스트, 처음부터 다시 시작 버튼 |
-| [ ] | SafeAreaHandler 구현 및 적용 | SafeArea RectTransform을 디바이스 safeArea에 맞게 자동 조정 (F008 완성) |
+| [x] | UIManager 구현 | 패널 참조 보관, ShowPanel(PanelType) 메서드로 단일 패널 활성화/비활성화, RefreshStageDisplay(), OnPlayButtonClick(), OnRestartButtonClick() 구현 |
+| [x] | F001 — 메인 화면 UI | MainPanel: 타이틀 텍스트, 현재 도전 스테이지 번호(StageManager에서 조회), 플레이 버튼 |
+| [x] | F002 — 인게임 화면 UI | InGamePanel: 스테이지 번호 표시, 빈 게임 영역, 클리어 버튼(초록), 실패 버튼(빨강) |
+| [x] | F007 — 게임 완료 화면 UI | GameClearPanel: 전체 클리어 축하 텍스트, 처음부터 다시 시작 버튼 |
+| [x] | SafeAreaHandler 구현 및 적용 | SafeArea RectTransform을 디바이스 safeArea에 맞게 자동 조정 (F008 완성) |
 
 > **설계 의도**: UIManager는 GameFlowController의 명령을 받아 패널을 전환하므로, GameFlowController보다 먼저 구현한다. UI가 준비된 후 컨트롤러를 연결하면 순서가 명확하고 테스트가 쉽다.
 
@@ -166,3 +167,4 @@ M6: AnimationController — DOTween 클리어/실패 연출 삽입 (F003, F004)
 | 2026-05-03 | F005 — 저장 & 복원 | SaveManager (PlayerPrefs MaxClearedStage) |
 | 2026-05-04 | M3 — Boot 씬 진입 & 초기화 흐름 | BootLoader (UniTask 비동기), Boot 씬 배치, Boot→Main 씬 전환 완성 |
 | 2026-05-04 | M1 — 프로젝트 기반 & 씬 구조 | Canvas CanvasScaler(1080×1920, Match 0.5), SafeArea 패널, MainPanel/InGamePanel/ClearPanel/FailPanel/GameClearPanel 비활성화 배치 |
+| 2026-05-04 | M4 — UIManager & 화면 전환 골격 | UIManager(ShowPanel/RefreshStageDisplay/버튼이벤트), SafeAreaHandler(노치/홈바 대응), 5개 패널 UI 골격, PanelType enum |
