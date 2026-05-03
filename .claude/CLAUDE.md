@@ -27,3 +27,12 @@
 ## 설계 원칙
 - 에디터 친화적 설계: 코드 수정 없이 인스펙터에서 조정 가능하도록 구성
 - [SerializeField] 사용, public 필드 최소화
+
+## 참조 문서
+코드 구현 전 다음 파일이 존재하면 반드시 읽고 맥락 파악:
+- ARCHITECTURE.md — 클래스 구조 및 의존성
+- PRD.md — 기능 명세 및 요구사항
+- roadmap.md — 현재 구현 단계 및 우선순위
+
+## 작업 관리
+- 복잡한 멀티스텝 작업 시 Shrimp Task Manager(mcp__shrimp-task-manager)를 사용해 계획 및 추적
