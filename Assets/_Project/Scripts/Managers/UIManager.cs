@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -31,6 +32,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TMP_Text _mainStageText;
     [SerializeField] private TMP_Text _inGameStageText;
+
+    [SerializeField] private AnimationController _animationController;
 
     private Dictionary<PanelType, GameObject> _panelMap;
 
@@ -113,5 +116,39 @@ public class UIManager : MonoBehaviour
         StageManager.Instance.SetCurrentStage(1);
         RefreshStageDisplay();
         ShowPanel(PanelType.Main);
+    }
+
+    /// <summary>
+    /// 클리어 연출 패널을 표시하고 AnimationController에 재생을 위임한다. 완료 후 onComplete 콜백을 호출한다.
+    /// </summary>
+    public void PlayClearAndThen(Action onComplete)
+    {
+        ShowPanel(PanelType.Clear);
+
+        if (_animationController == null)
+        {
+            Debug.LogWarning("[UIManager] AnimationController가 연결되지 않았습니다.");
+            onComplete?.Invoke();
+            return;
+        }
+
+        _animationController.PlayClear(onComplete);
+    }
+
+    /// <summary>
+    /// 실패 연출 패널을 표시하고 AnimationController에 재생을 위임한다. 완료 후 onComplete 콜백을 호출한다.
+    /// </summary>
+    public void PlayFailAndThen(Action onComplete)
+    {
+        ShowPanel(PanelType.Fail);
+
+        if (_animationController == null)
+        {
+            Debug.LogWarning("[UIManager] AnimationController가 연결되지 않았습니다.");
+            onComplete?.Invoke();
+            return;
+        }
+
+        _animationController.PlayFail(onComplete);
     }
 }

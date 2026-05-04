@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -21,34 +22,36 @@ public class GameFlowController : MonoBehaviour
     }
 
     /// <summary>
-    /// 스테이지 클리어 판정 시 호출. 저장 후 다음 스테이지 메인화면 또는 게임 완료 화면으로 전환한다.
+    /// 스테이지 클리어 판정 시 호출. 즉시 저장 후 클리어 연출을 재생하고 완료 시 다음 화면으로 전환한다.
     /// </summary>
     public void OnStageClear()
     {
         SaveManager.Instance.Save(StageManager.Instance.CurrentStageNumber);
 
-        // TODO(M6): AnimationController.PlayClear(OnClearAnimationComplete) 콜백 삽입 위치
-
-        if (StageManager.Instance.IsLastStage())
+        UIManager.Instance.PlayClearAndThen(() =>
         {
-            UIManager.Instance.ShowPanel(PanelType.GameClear);
-        }
-        else
-        {
-            StageManager.Instance.AdvanceToNextStage();
-            UIManager.Instance.RefreshStageDisplay();
-            UIManager.Instance.ShowPanel(PanelType.Main);
-        }
+            if (StageManager.Instance.IsLastStage())
+            {
+                UIManager.Instance.ShowPanel(PanelType.GameClear);
+            }
+            else
+            {
+                StageManager.Instance.AdvanceToNextStage();
+                UIManager.Instance.RefreshStageDisplay();
+                UIManager.Instance.ShowPanel(PanelType.Main);
+            }
+        });
     }
 
     /// <summary>
-    /// 스테이지 실패 판정 시 호출. 스테이지 번호를 유지한 채 메인화면으로 복귀한다.
+    /// 스테이지 실패 판정 시 호출. 실패 연출을 재생하고 완료 시 동일 스테이지 메인화면으로 복귀한다.
     /// </summary>
     public void OnStageFail()
     {
-        // TODO(M6): AnimationController.PlayFail(OnFailAnimationComplete) 콜백 삽입 위치
-
-        UIManager.Instance.RefreshStageDisplay();
-        UIManager.Instance.ShowPanel(PanelType.Main);
+        UIManager.Instance.PlayFailAndThen(() =>
+        {
+            UIManager.Instance.RefreshStageDisplay();
+            UIManager.Instance.ShowPanel(PanelType.Main);
+        });
     }
 }

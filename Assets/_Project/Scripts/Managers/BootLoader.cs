@@ -13,6 +13,11 @@ public class BootLoader : MonoBehaviour
     private void Awake()
     {
         _cts = new CancellationTokenSource();
+    }
+
+    private void Start()
+    {
+        // Start()에서 호출: 모든 Awake() 완료 후 실행이 보장되므로 SaveManager.Instance가 null이 아님
         InitializeAsync(_cts.Token).Forget();
     }
 
