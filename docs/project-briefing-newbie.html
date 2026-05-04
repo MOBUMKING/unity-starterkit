@@ -1,317 +1,189 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity Starter Kit — 프로젝트 브리핑</title>
+<meta charset="UTF-8">
+<title>Unity Starter Kit — 프로젝트 브리핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/monokai.css">
+<style>
+:root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #ffa657;
+    --radius: 8px;
+    --gap: 16px;
+}
 
-    <!-- Reveal.js CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/theme/black.css">
+.reveal { background: var(--bg); color: var(--text); font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; }
+.reveal .slides { text-align: left; }
+.reveal h1, .reveal h2 { color: var(--accent); }
+.reveal h2 { font-size: 1.4em; margin-bottom: 0.3em; }
+.reveal h3 { color: var(--text2); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5em; }
+.reveal p { font-size: 0.78em; line-height: 1.6; color: var(--text2); }
+.reveal ul, .reveal ol { font-size: 0.78em; color: var(--text2); }
+.reveal section.center-slide { text-align: center; }
 
-    <style>
-        :root {
-            --accent: #4FC3F7;
-            --accent-2: #FFD54F;
-            --ok: #81C784;
-            --warn: #FFB74D;
-            --danger: #E57373;
-            --muted: #B0BEC5;
-        }
+/* 카드/그리드 */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.card h4 { margin: 0 0 8px; color: var(--accent); font-size: 0.95em; }
+.card p, .card li { margin: 4px 0; font-size: 0.82em; color: var(--text2); line-height: 1.5; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); }
 
-        .reveal {
-            font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-            font-size: 28px;
-        }
+/* 배지 */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.72em; font-weight: 600; white-space: nowrap; }
+.badge-green { background: #1a3a1e; color: var(--green); border: 1px solid var(--green); }
+.badge-yellow { background: #3a2c10; color: var(--yellow); border: 1px solid var(--yellow); }
+.badge-blue  { background: #0d2a4a; color: var(--accent); border: 1px solid var(--accent); }
+.badge-red   { background: #3a1010; color: var(--red); border: 1px solid var(--red); }
+.badge-purple{ background: #2a1a3a; color: var(--purple); border: 1px solid var(--purple); }
 
-        .reveal .slides section {
-            height: 100%;
-            box-sizing: border-box;
-            padding: 10px 30px;
-            display: flex !important;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-        }
-        .reveal .slides section.center-slide {
-            text-align: center;
-            align-items: center;
-        }
+/* 진행바 */
+.progress-bar { background: var(--surface2); border-radius: 4px; height: 8px; margin: 4px 0 12px; }
+.progress-bar .fill { height: 100%; border-radius: 4px; background: var(--green); }
 
-        .reveal h1, .reveal h2, .reveal h3 {
-            color: var(--accent);
-            font-weight: 700;
-            text-transform: none;
-            letter-spacing: -0.5px;
-            margin: 0 0 12px 0;
-        }
+/* 화살표 흐름 */
+.arrow-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.78em; }
+.arrow-flow .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 7px 12px; color: var(--text); white-space: nowrap; }
+.arrow-flow .arrow { color: var(--text2); font-size: 1.05em; }
+.arrow-flow .branch { color: var(--yellow); font-weight: bold; }
 
-        .reveal h1 { font-size: 1.9em; }
-        .reveal h2 { font-size: 1.2em; margin-bottom: 12px; }
-        .reveal h3 { font-size: 0.82em; color: var(--accent-2); margin-bottom: 6px; }
+/* info-box */
+.info-box { background: #0d2a4a; border-left: 3px solid var(--accent); border-radius: var(--radius); padding: 11px 16px; margin-top: 14px; font-size: 0.74em; color: var(--text2); line-height: 1.55; }
+.info-box strong { color: var(--accent); }
 
-        .reveal p { margin: 6px 0; font-size: 0.65em; line-height: 1.45; }
+/* api-table */
+.api-table { width: 100%; border-collapse: collapse; font-size: 0.72em; }
+.api-table th { background: var(--surface2); color: var(--accent); padding: 7px 10px; text-align: left; border: 1px solid var(--border); font-size: 0.95em; }
+.api-table td { padding: 6px 10px; border: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.5; }
+.api-table tr:nth-child(even) td { background: #0d1117; }
+.api-table code { background: var(--surface2); padding: 1px 5px; border-radius: 3px; font-family: 'Consolas', 'Cascadia Code', monospace; color: var(--purple); font-size: 0.92em; white-space: nowrap; }
 
-        .reveal code { font-family: 'Cascadia Code', 'Consolas', monospace; }
+/* 코드 블록 */
+.code-block { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-family: 'Consolas', 'Cascadia Code', monospace; font-size: 0.62em; color: #cdd9e5; line-height: 1.55; white-space: pre; overflow-x: auto; margin-top: 10px; }
+.code-block .kw  { color: #ff7b72; }
+.code-block .ty  { color: #ffa657; }
+.code-block .cm  { color: #8b949e; }
+.code-block .st  { color: #a5d6ff; }
+.code-block .nu  { color: #79c0ff; }
+.code-block .fn  { color: #d2a8ff; }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.5em;
-            font-weight: 600;
-            margin: 0 4px 4px 0;
-            vertical-align: middle;
-        }
-        .badge-ok    { background: #2E7D32; color: #fff; }
-        .badge-todo  { background: #455A64; color: #ECEFF1; }
-        .badge-now   { background: #F57C00; color: #fff; }
-        .badge-info  { background: #1565C0; color: #fff; }
+/* 기타 */
+.slide-label { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; font-size: 0.55em; color: var(--text2); margin-bottom: 10px; }
+.key-tag { background: var(--surface2); border: 1px solid var(--accent); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-family: monospace; }
+.divider-section { background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 30px; text-align: center; }
+.footnote { font-size: 0.65em; color: var(--text2); margin-top: 10px; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+/* 한국어 줄바꿈 보호 (가장 중요) */
+.reveal td, .reveal th,
+.reveal .card, .reveal .info-box,
+.reveal li, .reveal p {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
 
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 10px 14px;
-        }
-        .card h3 { margin-top: 0; margin-bottom: 6px; font-size: 0.75em; }
-        .card p, .card ul { font-size: 0.58em; }
-        .card ul { margin: 4px 0; padding-left: 18px; }
-        .card li { margin-bottom: 2px; line-height: 1.35; }
+/* 사이드바 TOC */
+#toc-toggle {
+    position: fixed;
+    left: 12px; top: 12px;
+    z-index: 10001;
+    background: rgba(13,17,23,0.92);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 6px;
+    color: #8b949e;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: monospace;
+    transition: color 0.2s, border-color 0.2s;
+    line-height: 1;
+}
+#toc-toggle:hover { color: #4FC3F7; border-color: #4FC3F7; }
 
-        .progress-bar {
-            background: rgba(255,255,255,0.1);
-            height: 28px;
-            border-radius: 14px;
-            overflow: hidden;
-            margin: 12px 0 6px;
-            display: flex;
-        }
-        .progress-cell {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.55em;
-            font-weight: 700;
-            border-right: 2px solid #1a1a1a;
-        }
-        .progress-cell:last-child { border-right: none; }
-        .pc-done    { background: var(--ok);     color: #1B5E20; }
-        .pc-current { background: var(--accent-2); color: #5D4037; }
-        .pc-todo    { background: rgba(255,255,255,0.08); color: var(--muted); }
+#toc-sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 264px;
+    height: 100vh;
+    background: rgba(9,11,16,0.97);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    z-index: 10000;
+    overflow-y: auto;
+    transform: translateX(-264px);
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    padding: 50px 0 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+#toc-sidebar.open { transform: translateX(0); }
 
-        .reveal table {
-            font-size: 0.46em;
-            border-collapse: collapse;
-            margin: 4px 0;
-            width: 100%;
-        }
-        .reveal th, .reveal td {
-            padding: 6px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            line-height: 1.4;
-            vertical-align: top;
-        }
-        .reveal th { color: var(--accent); font-weight: 700; }
-        .reveal td code, .reveal th code {
-            background: rgba(255,255,255,0.08);
-            padding: 1px 5px;
-            border-radius: 3px;
-            font-size: 0.95em;
-        }
-
-        .api-table th:nth-child(1), .api-table td:nth-child(1) { width: 22%; color: var(--accent-2); }
-        .api-table th:nth-child(2), .api-table td:nth-child(2) { width: 40%; }
-        .api-table th:nth-child(3), .api-table td:nth-child(3) { width: 38%; color: rgba(255,255,255,0.78); }
-
-        .arrow-flow {
-            font-family: 'Cascadia Code', 'Consolas', monospace;
-            font-size: 0.5em;
-            line-height: 1.55;
-            background: rgba(0,0,0,0.4);
-            padding: 12px 18px;
-            border-radius: 6px;
-            border-left: 3px solid var(--accent);
-            margin: 6px 0;
-            white-space: pre;
-            overflow: auto;
-        }
-
-        .divider-section {
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-        }
-        .divider-section h1 { color: #fff !important; }
-        .divider-section .sub { color: var(--accent-2); font-size: 0.85em; margin-top: 12px; }
-
-        .icon-emoji { font-size: 1.4em; display: block; margin-bottom: 6px; }
-
-        .footnote {
-            font-size: 0.45em !important;
-            color: var(--muted);
-            margin-top: 8px !important;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 6px;
-        }
-
-        .reveal ul, .reveal ol { line-height: 1.45; margin: 4px 0; }
-        .reveal li { margin-bottom: 4px; font-size: 0.65em; }
-        .reveal ul ul, .reveal ol ul { margin-top: 4px; }
-
-        .info-box {
-            background: rgba(79, 195, 247, 0.08);
-            border-left: 3px solid var(--accent);
-            padding: 8px 14px;
-            border-radius: 4px;
-            margin: 8px 0;
-        }
-        .info-box p { font-size: 0.6em; margin: 0; }
-        .info-box strong { color: var(--accent-2); }
-
-        .key-tag {
-            display: inline-block;
-            background: rgba(255, 213, 79, 0.15);
-            color: var(--accent-2);
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-size: 0.92em;
-            font-weight: 600;
-        }
-
-        .slide-label {
-            position: absolute;
-            top: 8px;
-            right: 18px;
-            font-size: 0.5em;
-            color: var(--muted);
-            opacity: 0.7;
-        }
-
-        .code-block {
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-left: 3px solid var(--accent);
-            border-radius: 6px;
-            padding: 12px 16px;
-            font-family: 'Cascadia Code', 'Consolas', monospace;
-            font-size: 0.46em;
-            color: #cdd9e5;
-            line-height: 1.6;
-            white-space: pre;
-            overflow-x: auto;
-            margin: 8px 0;
-            text-align: left;
-        }
-        .code-block .kw  { color: #ff7b72; }
-        .code-block .ty  { color: #ffa657; }
-        .code-block .cm  { color: #8b949e; font-style: italic; }
-        .code-block .st  { color: #a5d6ff; }
-        .code-block .nu  { color: #79c0ff; }
-        .code-block .mn  { color: #7ee787; }
-
-        /* ── 한국어 줄바꿈 전역 방어 ── */
-        .reveal td, .reveal th,
-        .reveal .card, .reveal .info-box,
-        .reveal li, .reveal p {
-            word-break: keep-all;
-            overflow-wrap: break-word;
-        }
-
-        /* ── 사이드바 TOC ── */
-        #toc-toggle {
-            position: fixed;
-            left: 12px; top: 12px;
-            z-index: 10001;
-            background: rgba(13,17,23,0.92);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 6px;
-            color: #8b949e;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-family: monospace;
-            transition: color 0.2s, border-color 0.2s;
-            line-height: 1;
-        }
-        #toc-toggle:hover { color: #4FC3F7; border-color: #4FC3F7; }
-
-        #toc-sidebar {
-            position: fixed;
-            left: 0; top: 0;
-            width: 264px;
-            height: 100vh;
-            background: rgba(9,11,16,0.97);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            z-index: 10000;
-            overflow-y: auto;
-            transform: translateX(-264px);
-            transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
-            padding: 50px 0 24px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.15) transparent;
-        }
-        #toc-sidebar.open { transform: translateX(0); }
-
-        #toc-list { list-style: none; margin: 0; padding: 0; }
-
-        #toc-list li a {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-            padding: 4px 14px;
-            font-size: 11.5px;
-            color: #8b949e;
-            text-decoration: none;
-            line-height: 1.45;
-            border-left: 2px solid transparent;
-            transition: background 0.12s, color 0.12s, border-color 0.12s;
-            word-break: keep-all;
-        }
-        #toc-list li a:hover {
-            background: rgba(79,195,247,0.07);
-            color: #4FC3F7;
-            border-left-color: rgba(79,195,247,0.5);
-        }
-        #toc-list li a.toc-active {
-            color: #4FC3F7;
-            border-left-color: #4FC3F7;
-            background: rgba(79,195,247,0.06);
-        }
-        #toc-list li.toc-divider a {
-            color: #FFD54F;
-            font-weight: 700;
-            font-size: 10.5px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-top: 8px;
-            padding-top: 9px;
-            border-top: 1px solid rgba(255,255,255,0.07);
-        }
-        #toc-list li.toc-cover a { color: #e6edf3; font-weight: 600; }
-        .toc-num {
-            display: inline-block;
-            min-width: 18px;
-            text-align: right;
-            color: rgba(139,148,158,0.45);
-            font-size: 10px;
-            flex-shrink: 0;
-        }
-        #toc-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-        }
-        #toc-sidebar.open ~ #toc-overlay,
-        body.toc-open #toc-overlay { display: block; }
-    </style>
+#toc-list { list-style: none; margin: 0; padding: 0; }
+#toc-list li a {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 14px;
+    font-size: 11.5px;
+    color: #8b949e;
+    text-decoration: none;
+    line-height: 1.45;
+    border-left: 2px solid transparent;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    word-break: keep-all;
+}
+#toc-list li a:hover {
+    background: rgba(79,195,247,0.07);
+    color: #4FC3F7;
+    border-left-color: rgba(79,195,247,0.5);
+}
+#toc-list li a.toc-active {
+    color: #4FC3F7;
+    border-left-color: #4FC3F7;
+    background: rgba(79,195,247,0.06);
+}
+#toc-list li.toc-divider a {
+    color: #FFD54F;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 8px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+#toc-list li.toc-cover a { color: #e6edf3; font-weight: 600; }
+.toc-num {
+    display: inline-block;
+    min-width: 18px;
+    text-align: right;
+    color: rgba(139,148,158,0.45);
+    font-size: 10px;
+    flex-shrink: 0;
+}
+#toc-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+#toc-sidebar.open ~ #toc-overlay,
+body.toc-open #toc-overlay { display: block; }
+</style>
 </head>
 <body>
 
-<!-- ── 사이드바 TOC ── -->
+<!-- 사이드바 TOC -->
 <button id="toc-toggle" title="목차 열기/닫기">☰ 목차</button>
 <nav id="toc-sidebar" aria-label="슬라이드 목차">
     <ul id="toc-list"></ul>
@@ -321,1146 +193,844 @@
 <div class="reveal">
 <div class="slides">
 
-<!-- ═════════════ 표지 ═════════════ -->
+<!-- ═════════════════════ 1. 표지 ═════════════════════ -->
 <section class="center-slide">
-    <h1 style="font-size: 2.2em;">Unity Starter Kit</h1>
-    <h3 style="color: var(--muted); font-size: 0.95em; margin-bottom: 1em;">프로젝트 브리핑 — 신입 사원 안내 · 개발자 기술 참조</h3>
-    <p style="margin-top: 0.8em;">
-        <span class="badge badge-ok">6 / 7 단계 완료</span>
-        <span class="badge badge-now">7단계 진행중</span>
-        <span class="badge badge-info">모바일 게임</span>
-        <span class="badge badge-info">iOS · Android</span>
-        <span class="badge badge-info">스테이지 1~20</span>
-    </p>
-    <div class="card" style="max-width: 760px; margin-top: 1.2em; text-align: left;">
-        <p style="font-size: 0.65em; margin: 0 0 10px; line-height: 1.6;">
-            모바일 게임을 빠르게 만들 수 있도록 공통 뼈대를 미리 완성해 둔 <strong style="color: var(--accent-2);">범용 시작 재료 세트</strong>입니다.
-        </p>
-        <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.58em;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: rgba(79,195,247,0.15); border: 1px solid rgba(79,195,247,0.35); color: #4FC3F7; padding: 2px 8px; border-radius: 4px; white-space: nowrap; font-weight: 600; font-size: 0.9em;">PART 1–2</span>
-                <span style="color: var(--muted);">신입 사원·비개발자용 — 실생활 비유 중심</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: rgba(188,140,255,0.12); border: 1px solid rgba(188,140,255,0.3); color: #bc8cff; padding: 2px 8px; border-radius: 4px; white-space: nowrap; font-weight: 600; font-size: 0.9em;">PART 3</span>
-                <span style="color: var(--muted);">개발자 기술 참조 — 클래스·메서드·코드 예제</span>
-            </div>
-        </div>
+    <h1 style="font-size: 2.0em; margin-bottom: 0.3em;">Unity Starter Kit</h1>
+    <h3 style="color: var(--muted); font-size: 0.95em; margin-bottom: 1.2em;">프로젝트 브리핑 — 신입 사원 안내 · 개발자 기술 참조</h3>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 1.5em;">
+        <span class="badge badge-green">M1~M7 완료</span>
+        <span class="badge badge-blue">7 / 7 마일스톤</span>
+        <span class="badge badge-purple">2026-05-05</span>
     </div>
-    <p style="font-size: 0.5em; color: var(--muted); margin-top: 1.2em;">2026-05-04 기준 · M6 완료 · PART 1-2는 개발 경험이 없는 분도 읽을 수 있습니다</p>
-</section>
-
-<!-- ═════════════ 이 프로젝트는 무엇인가요? ═════════════ -->
-<section>
-    <span class="slide-label">개요 1/3</span>
-    <h2>이 프로젝트가 무엇인가요?</h2>
-    <div class="card" style="margin-bottom: 10px;">
-        <p style="font-size: 0.7em; line-height: 1.6; margin: 0;">
-            <strong style="color: var(--accent-2);">레벨 선택형 모바일 게임</strong>을 만들 때마다 반복되는 공통 작업들 — 화면 구성, 진행 저장, 화면 전환, 노치·홈바 대응 — 을 미리 만들어 둔 <strong>시작점</strong>입니다.
+    <div class="card" style="max-width: 720px; margin: 0 auto; text-align: left;">
+        <p style="text-align: center; font-size: 0.9em; color: var(--text);">
+            모바일 캐주얼 게임을 빠르게 만들 수 있는 <strong style="color: var(--accent);">기성 자재 모음</strong> —<br>
+            앱 시작 · 화면 전환 · 저장 · 연출까지 미리 만들어진 부품
         </p>
     </div>
-    <div class="info-box">
-        <p><strong>왜 만들었나?</strong> — 새 게임을 만들 때마다 "1스테이지부터 20스테이지까지 진행하고, 끝나면 저장되고, 다시 켜면 이어서 시작되는" 같은 뼈대를 처음부터 다시 짜는 것은 시간 낭비입니다. 이 프로젝트는 그 뼈대를 미리 완성해 둔 것입니다. 실제 게임 내용(퍼즐·리듬·아케이드 등)만 중간에 끼워 넣으면 됩니다.</p>
-    </div>
-    <div class="grid-3" style="margin-top: 10px;">
-        <div class="card" style="text-align: center;">
-            <span class="icon-emoji">🎯</span>
-            <h3>장르</h3>
-            <p style="margin: 0;">캐주얼 / 스테이지 진행형</p>
+    <div style="display: flex; flex-direction: column; gap: 5px; max-width: 600px; margin: 1.5em auto 0; font-size: 0.62em;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="badge badge-blue" style="min-width: 80px; text-align: center;">PART 1–2</span>
+            <span style="color: var(--muted);">신입 사원·비개발자용 — 실생활 비유 중심</span>
         </div>
-        <div class="card" style="text-align: center;">
-            <span class="icon-emoji">📱</span>
-            <h3>플랫폼</h3>
-            <p style="margin: 0;">iOS · Android</p>
-        </div>
-        <div class="card" style="text-align: center;">
-            <span class="icon-emoji">🏆</span>
-            <h3>스테이지</h3>
-            <p style="margin: 0;">최대 20단계<br>+ 자동 저장·복원</p>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="badge badge-purple" style="min-width: 80px; text-align: center;">PART 3</span>
+            <span style="color: var(--muted);">개발자 기술 참조 — 클래스·메서드·코드 예제</span>
         </div>
     </div>
-    <p class="footnote">🔧 개발 도구: Unity (게임을 만드는 전문 프로그램) · 개발 언어: C# · 대상 기기: 스마트폰</p>
+    <p class="footnote">왼쪽 상단 ☰ 목차로 슬라이드 이동 · 키보드 ←/→로 페이지 넘김</p>
 </section>
 
-<!-- ═════════════ 게임 루프 ═════════════ -->
+<!-- ═════════════════════ 2. 개요-1: 무엇인가 ═════════════════════ -->
 <section>
-    <span class="slide-label">개요 2/3</span>
-    <h2>게임이 어떻게 돌아가나요?</h2>
-    <div class="arrow-flow">앱 시작
-   ↓
-초기화 담당자(BootLoader)가 실행됨
-   ↓ 저장된 진행 상황 불러오기 → "이전에 5스테이지까지 했구나"
-   ↓ 다음 도전 스테이지 = 6으로 설정
-   ↓ 메인 화면으로 이동
-   ↓
-메인 화면 — "STAGE 6" 표시 + 플레이 버튼
-   ↓ 플레이 버튼 클릭
-   ↓
-게임 화면 — 실제 게임 진행 (현재는 테스트용 버튼으로 대체)
-   ├─ 클리어! → 진행 상황 저장 → 다음 스테이지(7) 메인 화면으로
-   │              └─ 20스테이지 클리어 → 🎉 게임 완료 화면
-   └─ 실패… → 저장 없음 → 같은 스테이지(6) 메인 화면으로 복귀</div>
-    <div class="info-box">
-        <p><strong>핵심 설계 포인트:</strong> "진행 → 판정 → 저장 → 다음 화면"이라는 4단 사이클은 거의 모든 레벨 기반 모바일 게임의 공통 구조입니다. 이 사이클을 미리 완성해 두면, 실제 게임 규칙(퍼즐 풀기, 노래 맞추기 등)이 바뀌어도 뼈대는 그대로 사용할 수 있습니다.</p>
-    </div>
-    <p class="footnote">⚠️ 지금 단계에서는 "클리어 버튼 / 실패 버튼"을 직접 눌러서 판정을 테스트합니다. 실제 게임이 추가되면 이 버튼은 제거됩니다.</p>
-</section>
-
-<!-- ═════════════ 개발 진행 현황 ═════════════ -->
-<section>
-    <span class="slide-label">개요 3/3</span>
-    <h2>개발 진행 현황 한눈에 보기</h2>
-    <div class="progress-bar">
-        <div class="progress-cell pc-done">1단계 ✓</div>
-        <div class="progress-cell pc-done">2단계 ✓</div>
-        <div class="progress-cell pc-done">3단계 ✓</div>
-        <div class="progress-cell pc-done">4단계 ✓</div>
-        <div class="progress-cell pc-done">5단계 ✓</div>
-        <div class="progress-cell pc-done">6단계 ✓</div>
-        <div class="progress-cell pc-current">7단계 진행 중</div>
-    </div>
-    <table>
-        <thead><tr><th>단계</th><th>무엇을 했나</th><th>상태</th></tr></thead>
-        <tbody>
-            <tr><td>1단계 (M1)</td><td>파일 정리 방식 확정 + 화면 해상도 기준 설정</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>2단계 (M2)</td><td>스테이지 데이터 관리 + 게임 진행 저장 시스템</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>3단계 (M3)</td><td>앱 시작 시 저장 파일 불러오는 초기화 흐름</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>4단계 (M4)</td><td>5개 화면 전환 관리자 + 노치·홈바 자동 대응</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>5단계 (M5)</td><td>클리어·실패 판정 처리 + 다음 스테이지 진행</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>6단계 (M6)</td><td>클리어·실패 DOTween 연출 + 자동 화면 전환 통합</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>7단계 (M7)</td><td>안정성 보강·코드 정리·성능 최적화·I/O 견고화 (사용자 눈에는 변화 없음)</td><td><span class="badge badge-now">진행 중</span></td></tr>
-        </tbody>
-    </table>
-</section>
-
-<!-- ═════════════ PART 1 구분 ═════════════ -->
-<section class="center-slide divider-section">
-    <h1>PART 1</h1>
-    <h2 style="color: #fff;">지금까지 무엇을 만들었나</h2>
-    <p class="sub">1단계(M1) → 2단계(M2) → 3단계(M3) → 4단계(M4) → 5단계(M5) → 6단계(M6) 완료</p>
-</section>
-
-<!-- ═════════════ M1 ═════════════ -->
-<section>
-    <span class="slide-label">PART 1 · M1</span>
-    <h2><span class="badge badge-ok">1단계 완료</span> 프로젝트 기반 만들기</h2>
-    <div class="grid-2">
-        <div class="card">
-            <h3>📁 파일 정리 방식 — 왜 "_Project" 폴더?</h3>
-            <ul>
-                <li>모든 게임 파일을 <strong>_Project</strong> 폴더 하나에 모아서 관리</li>
-                <li>외부에서 구매하거나 다운로드하는 도구들과 섞이지 않도록 분리</li>
-                <li>Scripts(코드) / Scenes(화면) / Data(데이터) 등 역할별로 분류</li>
-                <li><code>_</code> 접두사를 붙이면 폴더 목록 맨 위에 고정되어 찾기 쉬움</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h3>📱 화면 해상도 기준 설정 — 왜 1080×1920?</h3>
-            <ul>
-                <li><strong>1080×1920</strong>: 모바일 세로 화면 표준 크기</li>
-                <li>가로·세로 비율이 달라도 화면 중심 기준으로 자연스럽게 대응</li>
-                <li>16:9 / 19.5:9 / 20:9 어떤 폰이든 UI가 잘려 보이지 않음</li>
-                <li>노치·홈바 대응을 위한 안전 영역도 이 단계에서 미리 자리 잡아 둠</li>
-                <li>5개 화면 골격(메인·게임·클리어·실패·게임완료)을 미리 배치</li>
-            </ul>
-        </div>
-    </div>
-    <div class="info-box" style="margin-top: 10px;">
-        <p><strong>왜 가장 먼저 했나?</strong> — 화면 해상도 기준은 집을 지을 때 "기초공사"와 같습니다. 나중에 바꾸면 이미 배치된 모든 UI 위치가 틀어져서 전부 다시 해야 합니다. 이 설정을 제일 먼저 확정해야 이후 모든 UI 작업이 올바른 위치에 자리를 잡을 수 있습니다.</p>
-    </div>
-</section>
-
-<!-- ═════════════ M2 개요 ═════════════ -->
-<section>
-    <span class="slide-label">PART 1 · M2 (1/2)</span>
-    <h2><span class="badge badge-ok">2단계 완료</span> 데이터 & 저장 시스템 개요</h2>
-    <div class="info-box" style="margin-bottom: 10px;">
-        <p><strong>왜 화면보다 데이터를 먼저?</strong> — 데이터 담당자들이 먼저 완성되어야 화면을 만들 때 "스테이지 번호 어디서 가져오지?" 같은 막힘이 없습니다. 설계도(데이터)를 먼저 그리고 벽(화면)을 세우는 것과 같습니다.</p>
-    </div>
+    <span class="slide-label">2 / 32 · 개요</span>
+    <h2>이 프로젝트는 무엇인가요?</h2>
     <div class="grid-3">
         <div class="card">
-            <h3>📦 스테이지 데이터 파일</h3>
-            <p>각 스테이지의 정보(번호, 이름, 연출 종류)를 저장하는 <strong>엑셀 시트 같은 파일</strong>. 20개가 미리 만들어져 있어, 개발자가 코드를 수정하지 않아도 기획자가 직접 내용을 바꿀 수 있습니다.</p>
+            <h4>장르</h4>
+            <p>모바일 캐주얼 퍼즐</p>
+            <p>스테이지 진행 프로토타입</p>
         </div>
         <div class="card">
-            <h3>🗂 진행 상황 기록원</h3>
-            <p>게임 내 어디서든 "지금 몇 번째 스테이지야?"를 물어볼 수 있는 <strong>1개만 존재하는 관리자</strong>. 1~20 범위를 벗어나면 자동으로 보정합니다.</p>
+            <h4>플랫폼</h4>
+            <p>iOS · Android</p>
+            <p>세로 화면 (1080×1920)</p>
         </div>
         <div class="card">
-            <h3>💾 세이브 파일 담당자</h3>
-            <p>게임 진행 상황을 <strong>저장·불러오는 전담 담당자</strong>. 앱을 껐다 켜도 어디까지 했는지 기억합니다. 저장 방식을 바꿔도 다른 코드는 영향받지 않습니다.</p>
+            <h4>구성</h4>
+            <p>총 20스테이지</p>
+            <p>진행 상태 자동 저장</p>
         </div>
     </div>
-    <p class="footnote">다음 슬라이드에서 각 담당자의 역할을 자세히 설명합니다.</p>
+    <div class="info-box">
+        <strong>비유 — 집을 짓는 데 벽돌부터 만들지 않는 것처럼.</strong><br>
+        새 캐주얼 게임을 만들 때마다 매번 똑같이 작업하는 부분(앱 시작 흐름, 화면 전환, 저장 시스템, 클리어 연출 등)을 <strong>미리 만들어 둔 자재 세트</strong>입니다. 게임의 "재미 부분"에 집중하기 위해 반복 작업을 한 번에 해결합니다.
+    </div>
 </section>
 
-<!-- ═════════════ M2 상세 ═════════════ -->
+<!-- ═════════════════════ 3. 개요-2: 게임 루프 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M2 (2/2)</span>
-    <h2>2단계 — 각 담당자 역할 상세</h2>
+    <span class="slide-label">3 / 32 · 개요</span>
+    <h2>게임이 어떻게 돌아가나요?</h2>
+    <div class="arrow-flow" style="margin-bottom: 12px;">
+        <span class="step">앱 시작</span>
+        <span class="arrow">→</span>
+        <span class="step">저장 데이터 불러오기</span>
+        <span class="arrow">→</span>
+        <span class="step">메인 화면</span>
+        <span class="arrow">→</span>
+        <span class="step">인게임 화면</span>
+    </div>
+    <div class="arrow-flow" style="margin-bottom: 12px;">
+        <span class="step">인게임 화면</span>
+        <span class="arrow">→</span>
+        <span class="branch">클리어 판정</span>
+        <span class="arrow">→</span>
+        <span class="step">클리어 연출</span>
+        <span class="arrow">→</span>
+        <span class="step">다음 스테이지 메인 화면</span>
+    </div>
+    <div class="arrow-flow" style="margin-bottom: 12px;">
+        <span class="step">인게임 화면</span>
+        <span class="arrow">→</span>
+        <span class="branch">실패 판정</span>
+        <span class="arrow">→</span>
+        <span class="step">실패 연출</span>
+        <span class="arrow">→</span>
+        <span class="step">동일 스테이지 메인 화면</span>
+    </div>
+    <div class="arrow-flow">
+        <span class="step">20스테이지 클리어</span>
+        <span class="arrow">→</span>
+        <span class="step" style="border-color: var(--green);">게임 완료 화면</span>
+    </div>
+    <div class="info-box">
+        <strong>4단 사이클</strong> — 진행(인게임) → 판정(클리어/실패) → 연출(애니메이션) → 다음(메인 또는 완료). 이 네 단계의 순환이 게임의 뼈대입니다. 사이클이 명확하니 "어디에 어떤 코드를 넣어야 하는지"가 자명해집니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 4. 개요-3: 진행 현황 ═════════════════════ -->
+<section>
+    <span class="slide-label">4 / 32 · 개요</span>
+    <h2>개발 진행 현황 — 7 / 7 마일스톤 완료</h2>
+    <div style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: var(--text2); margin-bottom: 4px;">
+            <span>전체 진행률</span><span>100%</span>
+        </div>
+        <div class="progress-bar"><div class="fill" style="width: 100%;"></div></div>
+    </div>
     <table class="api-table">
-        <thead><tr><th>담당자 이름</th><th>하는 일</th><th>실생활 비유</th></tr></thead>
+        <colgroup><col style="width: 8%;"><col style="width: 42%;"><col style="width: 30%;"><col style="width: 20%;"></colgroup>
+        <thead><tr><th>번호</th><th>주제</th><th>핵심 산출물</th><th>상태</th></tr></thead>
         <tbody>
-            <tr>
-                <td>스테이지 데이터 파일<br><span class="key-tag">StageDataSO</span></td>
-                <td>스테이지 번호·이름·클리어 연출 종류·실패 연출 종류를 파일에 저장. 20개 파일이 미리 생성되어 있음. 인스펙터(설정 창)에서 클릭 한 번으로 값 변경 가능</td>
-                <td>영화 시나리오처럼, 각 "스테이지 1편·2편·…" 내용이 파일로 정리되어 있어 기획자가 직접 수정 가능</td>
-            </tr>
-            <tr>
-                <td>진행 상황 기록원<br><span class="key-tag">StageManager</span></td>
-                <td>현재 스테이지 번호를 기억. 다음 단계로 넘기기, 특정 단계로 이동, 마지막 단계인지 확인하는 기능 제공. 게임 전체에서 딱 1개만 존재</td>
-                <td>회사의 진도 관리 담당자처럼, "우리 팀은 지금 몇 번 업무 중이야?"를 언제든 물어볼 수 있음</td>
-            </tr>
-            <tr>
-                <td>세이브 파일 담당자<br><span class="key-tag">SaveManager</span></td>
-                <td>클리어한 최고 스테이지 번호를 폰의 메모장(PlayerPrefs)에 저장. 불러오기(앱 재시작 시), 초기화("처음부터 다시" 버튼)도 담당. 저장 방식 변경 시 이 파일만 수정하면 됨</td>
-                <td>가계부 담당자처럼, 저장·불러오기·초기화는 이 사람을 통해서만 처리. 다른 팀원은 저장 방식을 몰라도 됨</td>
-            </tr>
+            <tr><td>M1</td><td>프로젝트 기반 & 씬 구조</td><td>Canvas 1080×1920, Boot/Main 씬</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M2</td><td>데이터 & 저장 시스템</td><td>StageDataSO 20개, StageManager, SaveManager</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M3</td><td>Boot 씬 진입 흐름</td><td>BootLoader (UniTask 비동기)</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M4</td><td>UIManager & 화면 전환</td><td>5개 패널 전환, SafeAreaHandler</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M5</td><td>GameFlowController</td><td>클리어/실패 판정, 버튼 연결</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M6</td><td>클리어·실패 연출</td><td>AnimationController (DOTween)</td><td><span class="badge badge-green">완료</span></td></tr>
+            <tr><td>M7</td><td>중규모 확장 리팩토링</td><td>안정성·정리·UI성능·데이터I/O</td><td><span class="badge badge-green">완료</span></td></tr>
         </tbody>
     </table>
     <div class="info-box">
-        <p><strong>왜 각 담당자를 분리했나?</strong> — 저장 방식을 "폰 내부 메모장"에서 "클라우드 서버"로 바꿔도 세이브 파일 담당자 내부만 수정하면 됩니다. 다른 담당자들은 "저장해줘", "불러와줘"만 말할 뿐 저장 방식을 알 필요가 없습니다.</p>
+        <strong>MVP 범위 100% 완료.</strong> 실제 게임 콘텐츠(퍼즐 규칙 등)만 추가하면 바로 출시 가능한 상태입니다. 이후 변경은 새 마일스톤(M8+)으로 별도 관리됩니다.
     </div>
 </section>
 
-<!-- ═════════════ M3 흐름 ═════════════ -->
-<section>
-    <span class="slide-label">PART 1 · M3 (1/2)</span>
-    <h2><span class="badge badge-ok">3단계 완료</span> 앱 시작 초기화 흐름</h2>
-    <div class="card" style="margin-bottom: 8px;">
-        <h3>🚀 초기화 전문가 (BootLoader) — "사라지는 담당자"</h3>
-        <p style="margin: 0;">앱이 시작될 때 딱 한 번 실행되고, 역할이 끝나면 스스로 사라지는 진입점. 로딩 화면에서 뒤에서 조용히 일하는 담당자입니다.</p>
-    </div>
-    <div class="arrow-flow">앱 켜짐 → "로딩 중…" 화면(Boot 화면)
-   ↓
-초기화 전문가(BootLoader) 실행
-   ↓
-세이브 파일 담당자에게 물어봄 → "저장된 진행 상황 있어?"
-   ↓ 있으면: "5단계까지 클리어했구나 → 다음 도전 = 6단계"
-   ↓ 없으면: "처음 시작이구나 → 1단계부터"
-   ↓
-진행 상황 기록원에게 현재 스테이지 전달
-   ↓
-메인 화면으로 이동 (이 순간 초기화 전문가는 사라짐)
-   ↓
-메인 화면에서 "STAGE 6" 표시</div>
-    <div class="info-box">
-        <p><strong>왜 "사라지는 담당자"인가?</strong> — 초기화는 딱 한 번만 필요합니다. 이후에는 메인 화면이 알아서 동작하기 때문에 초기화 담당자가 계속 남아 있을 필요가 없습니다. 이렇게 하면 메모리를 아낄 수 있고, 실수로 두 번 초기화되는 사고도 방지됩니다.</p>
+<!-- ═════════════════════ 5. PART 1 구분 ═════════════════════ -->
+<section class="center-slide">
+    <h1 style="font-size: 2.0em;">PART 1</h1>
+    <div class="divider-section" style="max-width: 720px; margin: 1em auto 0;">
+        <h3 style="color: var(--accent); font-size: 1.1em; margin-bottom: 12px;">무엇을 만들었나</h3>
+        <p style="color: var(--text2); font-size: 0.85em; line-height: 1.7;">
+            마일스톤 1번부터 7번까지, 어떤 부품을 어떤 순서로 만들었는지<br>
+            기술 용어 없이 살펴봅니다.
+        </p>
+        <p class="footnote">슬라이드 6~18</p>
     </div>
 </section>
 
-<!-- ═════════════ M3 설계 결정 ═════════════ -->
+<!-- ═════════════════════ 6. M1 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M3 (2/2)</span>
-    <h2>3단계 — 설계 결정 풀어보기</h2>
-    <table class="api-table">
-        <thead><tr><th>설계 포인트</th><th>왜 이렇게 했나</th><th>나중에 어떻게 활용되나</th></tr></thead>
-        <tbody>
-            <tr>
-                <td>딱 1번만 실행되고 사라짐</td>
-                <td>초기화는 앱 시작 때 한 번만 필요. 끝나면 스스로 사라져 메모리를 낭비하지 않음</td>
-                <td>새로운 초기화 작업(예: 서버 데이터 받아오기)을 이 단계에 그냥 추가하면 됨</td>
-            </tr>
-            <tr>
-                <td>여러 일을 동시에 처리하는 방식(UniTask)</td>
-                <td>저장 파일 읽는 동안 다른 준비도 동시에 할 수 있어 로딩이 빠름. 앱이 갑자기 종료돼도 작업이 안전하게 정리됨</td>
-                <td>광고 불러오기, 서버 업데이트 확인 같은 비동기 작업도 같은 방식으로 추가 가능</td>
-            </tr>
-            <tr>
-                <td>저장값 + 1 = 현재 도전 스테이지</td>
-                <td>"5단계까지 클리어했다"는 저장값으로부터 "다음 도전은 6단계"라고 변환하는 로직을 이 담당자가 한 곳에서만 처리</td>
-                <td>저장 방식이 바뀌어도 이 변환 로직만 수정하면 됨 — 화면 담당자는 영향받지 않음</td>
-            </tr>
-            <tr>
-                <td>비동기 방식으로 메인 화면 이동</td>
-                <td>로딩 진행률 표시나 로딩 애니메이션을 나중에 추가하기 쉬움</td>
-                <td>스플래시 화면, 로딩 진행 바 등을 이 단계에서 추가 가능</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="info-box">
-        <p><strong>확장 예시:</strong> 나중에 서버에서 패치 데이터를 받아오거나, A/B 테스트 설정을 가져오거나, 광고 SDK를 초기화하는 작업들을 모두 이 초기화 단계 안에서 처리할 수 있습니다. 메인 화면이 뜨기 전에 모든 준비가 완료되는 구조입니다.</p>
-    </div>
-</section>
-
-<!-- ═════════════ M4 UIManager ═════════════ -->
-<section>
-    <span class="slide-label">PART 1 · M4 (1/2)</span>
-    <h2><span class="badge badge-ok">4단계 완료</span> 화면 전환 관리자 & 안전 영역</h2>
-    <div class="info-box" style="margin-bottom: 10px;">
-        <p><strong>핵심 아이디어:</strong> 화면을 통째로 바꾸는 대신, 5개의 패널(화면 영역)을 켜고 끄는 방식으로 전환합니다. 이렇게 하면 화면 전환 비용이 거의 0이고, 패널 간에 데이터를 주고받기도 쉽습니다.</p>
-    </div>
+    <span class="slide-label">6 / 32 · M1 — 프로젝트 기반</span>
+    <h2>M1 · 프로젝트의 뼈대 만들기</h2>
     <div class="grid-2">
         <div class="card">
-            <h3>🖼 화면 전환 관리자 (UIManager)</h3>
-            <ul>
-                <li>5개 화면(메인·게임·클리어·실패·게임완료)을 관리</li>
-                <li>"메인 화면 보여줘" 명령 한 번으로 나머지는 자동 비활성화</li>
-                <li>현재 스테이지 번호를 화면에 표시하는 기능</li>
-                <li>플레이 버튼 / 처음부터 다시 버튼 이벤트 처리</li>
-                <li>게임 전체에서 딱 1개만 존재하는 관리자</li>
-            </ul>
+            <h4>폴더 구조</h4>
+            <p>스크립트, 화면 설정, 씬, 데이터 파일을 종류별로 정리할 서랍을 먼저 만들었습니다. 나중에 부품이 100개 넘어가도 어디서 찾을지 헷갈리지 않게요.</p>
         </div>
         <div class="card">
-            <h3>📐 안전 영역 자동 조정 (SafeAreaHandler)</h3>
-            <ul>
-                <li>아이폰처럼 카메라 구멍(노치)이나 하단 홈바가 있는 폰 자동 대응</li>
-                <li>게임 UI가 그 영역에 가려지지 않도록 화면 영역을 실시간 조정</li>
-                <li>코드 한 줄 없이 컴포넌트를 붙이는 것만으로 모든 기기에 자동 적용</li>
-                <li>일반 베젤 폰에서는 영향 없음 (전체 화면 그대로 사용)</li>
-            </ul>
+            <h4>화면 해상도 기준</h4>
+            <p>가로 1080 × 세로 1920 픽셀을 기준 크기로 정했습니다. 다른 크기 화면(아이폰·갤럭시·태블릿)에서도 자동으로 비율 맞춰 보이도록 설정했습니다.</p>
         </div>
     </div>
-    <p class="footnote">다음 슬라이드에서 5개 화면과 각 전환 조건을 자세히 설명합니다.</p>
+    <div class="info-box">
+        <strong>왜 맨 처음에 이걸 했나요?</strong><br>
+        화면 기준을 늦게 바꾸면 이미 배치한 모든 버튼·텍스트를 다시 옮겨야 합니다. 집을 다 지은 뒤에 "1층을 30cm 올릴까?"를 결정하는 것과 같죠. 그래서 가장 먼저 정합니다.
+    </div>
 </section>
 
-<!-- ═════════════ M4 화면 전환 조건 ═════════════ -->
+<!-- ═════════════════════ 7. M2-1 데이터/저장 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M4 (2/2)</span>
-    <h2>4단계 — 5개 화면과 전환 조건</h2>
+    <span class="slide-label">7 / 32 · M2 — 데이터 & 저장</span>
+    <h2>M2 · 스테이지 정보와 진행 기록</h2>
+    <div class="grid-3">
+        <div class="card">
+            <h4>스테이지 데이터 파일</h4>
+            <p>각 스테이지가 몇 번인지, 어떤 이름인지, 어떤 연출이 재생될지를 적은 <strong style="color: var(--accent);">설정 카드</strong> 20장을 만들었습니다.</p>
+        </div>
+        <div class="card">
+            <h4>진행 상황 기록원</h4>
+            <p>"지금 몇 번째 스테이지인지"를 항상 기억하는 담당자입니다. 메인 화면에 "STAGE 5"라고 띄울 때 이 담당자에게 물어봅니다.</p>
+        </div>
+        <div class="card">
+            <h4>세이브 파일 담당자</h4>
+            <p>"몇 번까지 깼는지"를 앱이 꺼져도 기억하도록 메모해 두는 담당자입니다. 앱을 다시 켜면 이 메모를 읽어서 이어서 시작하게 합니다.</p>
+        </div>
+    </div>
+    <div class="info-box">
+        <strong>왜 데이터 담당자부터 만들었나요?</strong><br>
+        화면을 만들기 전에 "보여줄 정보"가 먼저 있어야 합니다. 신문을 만들 때 글을 먼저 쓰고 인쇄소에 넘기는 것과 같죠. 데이터가 준비되면 화면 만들기가 훨씬 쉬워집니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 8. M2-2 담당자 역할 ═════════════════════ -->
+<section>
+    <span class="slide-label">8 / 32 · M2 — 데이터 & 저장</span>
+    <h2>각 담당자가 하는 일</h2>
     <table class="api-table">
-        <thead><tr><th>화면 이름</th><th>어떤 화면인가</th><th>언제 표시되나</th></tr></thead>
+        <colgroup><col style="width: 28%;"><col style="width: 42%;"><col style="width: 30%;"></colgroup>
+        <thead><tr><th>담당자</th><th>역할</th><th>실제로 언제 쓰이나</th></tr></thead>
         <tbody>
-            <tr>
-                <td>메인 화면<br><span class="key-tag">MainPanel</span></td>
-                <td>타이틀 + 현재 스테이지 번호 + 플레이 버튼이 있는 시작 화면</td>
-                <td>앱 시작 직후 / 클리어 또는 실패 후 다음 도전 전 / "처음부터 다시" 버튼 클릭 후</td>
-            </tr>
-            <tr>
-                <td>게임 화면<br><span class="key-tag">InGamePanel</span></td>
-                <td>실제 게임이 진행되는 공간 (현재는 테스트용 클리어/실패 버튼)</td>
-                <td>메인 화면에서 플레이 버튼을 눌렀을 때</td>
-            </tr>
-            <tr>
-                <td>클리어 화면<br><span class="key-tag">ClearPanel</span></td>
-                <td>스테이지 성공 시 나타나는 화면. <strong style="color: var(--ok);">M6 완료:</strong> 페이드인 + 텍스트 스케일 인 연출 적용</td>
-                <td>게임 화면에서 클리어 판정이 발생했을 때 (일반 스테이지)</td>
-            </tr>
-            <tr>
-                <td>실패 화면<br><span class="key-tag">FailPanel</span></td>
-                <td>스테이지 실패 시 나타나는 화면. <strong style="color: var(--ok);">M6 완료:</strong> 페이드인 + 텍스트 흔들기(shake) 연출 적용</td>
-                <td>게임 화면에서 실패 판정이 발생했을 때</td>
-            </tr>
-            <tr>
-                <td>게임 완료 화면<br><span class="key-tag">GameClearPanel</span></td>
-                <td>20스테이지를 모두 클리어했을 때의 엔딩 화면 + 처음부터 다시 버튼</td>
-                <td>20스테이지 클리어 판정 시</td>
-            </tr>
+            <tr><td>스테이지 데이터 파일</td><td>각 스테이지의 고정 정보 보관 (번호, 이름, 연출 종류)</td><td>화면에 스테이지 정보를 표시할 때</td></tr>
+            <tr><td>진행 상황 기록원</td><td>현재 도전 중인 스테이지 번호 기억, 다음 스테이지로 넘기기, 1~20 범위 강제</td><td>"STAGE 5" 글씨 표시, 클리어 후 +1</td></tr>
+            <tr><td>세이브 파일 담당자</td><td>"최고 클리어 스테이지" 한 가지 숫자만 저장·불러오기·초기화</td><td>앱 시작·클리어 직후·다시 시작 누를 때</td></tr>
         </tbody>
     </table>
     <div class="info-box">
-        <p><strong>안전 영역(Safe Area) 비유:</strong> 아이폰의 카메라 구멍(노치)을 마스킹 테이프로 가려놨다고 생각해보세요. SafeAreaHandler는 그 테이프 바깥에만 UI를 그리도록 자동으로 영역을 잡아줍니다. 개발자가 기기마다 따로 조정할 필요가 없습니다.</p>
+        <strong>왜 세이브를 캡슐화했나요?</strong><br>
+        저장 방법은 나중에 바뀔 수 있습니다. 처음엔 메모장(PlayerPrefs)이지만, 나중에 클라우드 동기화를 추가할 수도 있습니다. 그때 게임의 다른 부분을 안 건드려도 되도록 <strong>"세이브 담당자"한 명에게만 저장 방식을 알려줍니다.</strong>
     </div>
 </section>
 
-<!-- ═════════════ M5 GFC 흐름 ═════════════ -->
+<!-- ═════════════════════ 9. M3-1 BootLoader 흐름 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M5 (1/2)</span>
-    <h2><span class="badge badge-ok">5단계 완료</span> 게임 진행 컨트롤러</h2>
-    <p style="color: var(--muted);">게임 교통 정리 담당자(GameFlowController) — 클리어·실패 신호를 받아서 다음 화면으로 이동시키는 지휘자</p>
-    <div class="grid-2" style="margin-bottom: 8px;">
-        <div>
-            <div class="arrow-flow">🏆 클리어 신호 수신
-   ↓
-세이브 파일 담당자에게 저장 요청 (즉시!)
-   ↓
-마지막 스테이지(20단계)?
-   ├─ 예 → 게임 완료 화면으로
-   └─ 아니오 → 다음 스테이지로 +1
-              ↓ 화면의 스테이지 번호 갱신
-              ↓ 메인 화면으로</div>
-        </div>
-        <div>
-            <div class="arrow-flow">💥 실패 신호 수신
-   ↓
-저장 없음 (스테이지 번호 그대로 유지)
-   ↓
-화면의 스테이지 번호 확인 (변화 없음)
-   ↓
-메인 화면으로 복귀
-(같은 스테이지에서 다시 도전)</div>
-        </div>
+    <span class="slide-label">9 / 32 · M3 — Boot 씬 진입</span>
+    <h2>M3 · 앱 시작 시 가장 먼저 일어나는 일</h2>
+    <div class="arrow-flow" style="margin-bottom: 14px;">
+        <span class="step">앱 실행</span>
+        <span class="arrow">→</span>
+        <span class="step">초기화 전문가 호출</span>
+        <span class="arrow">→</span>
+        <span class="step">세이브 파일 확인</span>
+        <span class="arrow">→</span>
+        <span class="step">스테이지 번호 설정</span>
+        <span class="arrow">→</span>
+        <span class="step">메인 화면 띄우기</span>
     </div>
+    <div class="card">
+        <h4>초기화 전문가 (BootLoader)</h4>
+        <p>앱이 켜지자마자 0.5초 안에 다음 일을 끝내는 담당자입니다.</p>
+        <ol>
+            <li>세이브 파일 담당자에게 "마지막 클리어 몇 번?"을 물어봄</li>
+            <li>진행 상황 기록원에게 "그 다음 번호로 설정해줘"라고 지시</li>
+            <li>메인 화면이 있는 씬으로 화면을 전환</li>
+            <li>자기 자신은 사라짐 (역할 끝)</li>
+        </ol>
+    </div>
+    <div class="info-box">
+        <strong>"사라지는 담당자"라는 게 무슨 뜻인가요?</strong><br>
+        대부분의 담당자는 게임이 끝날 때까지 살아 있지만, 초기화 전문가는 일이 끝나면 자기 자신을 정리합니다. 호텔 체크인 직원처럼 "처음에만 필요한 사람"이라 메모리를 차지하지 않게 설계했습니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 10. M3-2 설계 결정 ═════════════════════ -->
+<section>
+    <span class="slide-label">10 / 32 · M3 — Boot 씬 진입</span>
+    <h2>왜 초기화 전문가를 따로 두었나</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 30%;"><col style="width: 40%;"><col style="width: 30%;"></colgroup>
+        <thead><tr><th>설계 포인트</th><th>왜 이렇게 했나</th><th>나중에 어떻게 확장될까</th></tr></thead>
+        <tbody>
+            <tr><td>Boot 씬을 별도로 만들기</td><td>"앱이 시작되는 진입점"을 명확히 하나로 고정</td><td>광고 SDK, 분석 도구 등 시작 시점 작업을 여기에 추가</td></tr>
+            <tr><td>한 번 쓰고 사라지게</td><td>메인 화면으로 가면 더 이상 필요 없음 — 메모리 절약</td><td>로딩 진행률 표시, 스플래시 화면 등을 자연스럽게 끼워 넣기</td></tr>
+            <tr><td>비동기로 설계 (UniTask)</td><td>저장 읽기·씬 로드를 동시에 처리할 수 있고 끊김 없음</td><td>네트워크 인증, 클라우드 세이브 등 시간 걸리는 작업 추가 시 안전</td></tr>
+        </tbody>
+    </table>
+    <div class="info-box">
+        <strong>비유 — 비행기 이륙 전 점검.</strong><br>
+        승무원이 안전벨트·비상구·산소마스크를 안내하는 시간이 "Boot 씬"입니다. 이륙 후엔 안내방송이 사라지죠. 게임도 똑같습니다. 시작에만 필요한 일을 따로 두면 본 게임이 깔끔해집니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 11. M4-1 화면 전환 관리자 ═════════════════════ -->
+<section>
+    <span class="slide-label">11 / 32 · M4 — 화면 전환</span>
+    <h2>M4 · 5개의 화면을 깔끔하게 갈아끼우기</h2>
     <div class="grid-2">
         <div class="card">
-            <h3>🔑 저장을 먼저 하는 이유</h3>
-            <p>클리어 직후 바로 저장합니다. 연출 화면이 나오는 도중에 앱이 꺼져도 진행 데이터가 날아가지 않습니다. "저장 먼저, 연출 나중"이 원칙입니다.</p>
+            <h4>화면 전환 관리자 (UIManager)</h4>
+            <p>5개의 화면(메인·인게임·클리어·실패·완료)을 <strong style="color: var(--accent);">한 명의 담당자</strong>가 관리합니다. "지금 메인 화면 보여줘"라고 말하면 다른 화면들은 자동으로 숨깁니다.</p>
+            <p style="color: var(--text);">5개 화면 = 5개 패널 (한 씬 안에 모두 배치)</p>
         </div>
         <div class="card">
-            <h3>🔑 6단계(M6) 자연스러운 합류</h3>
-            <p>5단계에서 비워뒀던 "연출 자리"에 6단계에서 애니메이션 담당자(AnimationController)가 끼어 들어왔습니다. 콜백(callback) 방식으로 연결되어 연출이 끝나면 자동으로 다음 화면으로 넘어갑니다. <strong style="color: var(--ok);">M6 완료</strong></p>
+            <h4>안전 영역 처리자 (SafeAreaHandler)</h4>
+            <p>아이폰의 <strong style="color: var(--accent);">노치</strong>나 <strong style="color: var(--accent);">홈바</strong>에 버튼이 가려지지 않도록 자동으로 여백을 잡아주는 담당자입니다. 기기마다 다른 안전 영역을 알아서 맞춰줍니다.</p>
         </div>
+    </div>
+    <div class="info-box">
+        <strong>왜 씬 전환 없이 패널만 갈아끼우나요?</strong><br>
+        새 씬을 로드할 때마다 1~2초씩 멈추거나 검은 화면이 보입니다. 한 씬 안에서 패널만 켜고 끄면 <strong>즉시 전환</strong>이 가능합니다. 모바일 캐주얼 게임에선 이 즉시성이 매우 중요합니다.
     </div>
 </section>
 
-<!-- ═════════════ M5 구현 내역 ═════════════ -->
+<!-- ═════════════════════ 12. M4-2 화면별 표시 조건 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M5 (2/2)</span>
-    <h2>5단계 — 구현 완료 내역</h2>
+    <span class="slide-label">12 / 32 · M4 — 화면 전환</span>
+    <h2>각 화면이 언제 나타나나</h2>
     <table class="api-table">
+        <colgroup><col style="width: 22%;"><col style="width: 38%;"><col style="width: 40%;"></colgroup>
+        <thead><tr><th>화면</th><th>어떤 상황에서</th><th>전환 조건</th></tr></thead>
+        <tbody>
+            <tr><td>메인 화면</td><td>앱 시작 직후, 클리어/실패 연출 끝난 후</td><td>플레이 버튼을 누르면 인게임으로</td></tr>
+            <tr><td>인게임 화면</td><td>실제 게임 진행 중</td><td>클리어 또는 실패 버튼 클릭</td></tr>
+            <tr><td>클리어 화면</td><td>스테이지 클리어 직후</td><td>1.4초 연출 후 다음 메인으로 자동</td></tr>
+            <tr><td>실패 화면</td><td>스테이지 실패 직후</td><td>1.3초 연출 후 동일 메인으로 자동</td></tr>
+            <tr><td>게임 완료 화면</td><td>20스테이지 클리어 시</td><td>다시 시작 버튼으로 메인 복귀</td></tr>
+        </tbody>
+    </table>
+    <div class="info-box">
+        <strong>안전 영역(Safe Area) 비유</strong> — 액자에 그림을 끼울 때 종이 끝까지 그림이 닿으면 액자에 가려집니다. 그래서 <strong>가장자리에 여백</strong>을 둡니다. 휴대폰의 노치·홈바도 똑같이 화면 일부를 가리므로, 미리 그 영역만큼 비워두는 것입니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 13. M5-1 GameFlowController ═════════════════════ -->
+<section>
+    <span class="slide-label">13 / 32 · M5 — 판정 로직</span>
+    <h2>M5 · 클리어/실패 후 어디로 갈지 정하는 담당자</h2>
+    <div class="card" style="margin-bottom: 12px;">
+        <h4>게임 교통 정리 담당자 (GameFlowController)</h4>
+        <p>인게임 화면에서 클리어/실패 판정이 발생하면 <strong style="color: var(--accent);">교차로 신호등</strong>처럼 다음 행선지를 결정합니다. 자기는 직접 화면을 바꾸지 않고, 다른 담당자에게 "이렇게 해줘"라고 지시만 합니다.</p>
+    </div>
+    <div class="arrow-flow" style="margin-bottom: 8px;">
+        <span class="step">클리어 버튼</span><span class="arrow">→</span>
+        <span class="step">즉시 저장</span><span class="arrow">→</span>
+        <span class="step">클리어 연출</span><span class="arrow">→</span>
+        <span class="branch">20번?</span><span class="arrow">→</span>
+        <span class="step">예 / 게임 완료</span><span class="arrow">|</span>
+        <span class="step">아니오 / 다음 메인</span>
+    </div>
+    <div class="arrow-flow">
+        <span class="step">실패 버튼</span><span class="arrow">→</span>
+        <span class="step">실패 연출</span><span class="arrow">→</span>
+        <span class="step">동일 스테이지 메인</span>
+    </div>
+    <div class="info-box">
+        <strong>왜 저장이 연출 전에 이루어지나요?</strong><br>
+        만약 연출 도중에 앱이 갑자기 종료되더라도 <strong>클리어 기록은 남아 있어야</strong> 하기 때문입니다. "성공은 무조건 즉시 기록, 그 다음에 보여주기"가 안전한 순서입니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 14. M5-2 구현 내역 ═════════════════════ -->
+<section>
+    <span class="slide-label">14 / 32 · M5 — 판정 로직</span>
+    <h2>M5에서 완성된 기능</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 30%;"><col style="width: 40%;"><col style="width: 30%;"></colgroup>
         <thead><tr><th>작업</th><th>무엇을 했나</th><th>결과</th></tr></thead>
         <tbody>
-            <tr>
-                <td>게임 교통 정리 담당자 신규 생성</td>
-                <td>클리어·실패 판정 처리, 저장, 다음 화면 이동 로직을 담은 새 파일 작성. 메인 화면 전용으로 딱 1개만 존재</td>
-                <td><span class="badge badge-ok">완료</span> Play Mode 3가지 시나리오 전부 통과</td>
-            </tr>
-            <tr>
-                <td>클리어 버튼 연결</td>
-                <td>게임 화면의 "클리어" 버튼 클릭 → 게임 교통 정리 담당자의 클리어 처리 메서드 호출 고정 등록</td>
-                <td><span class="badge badge-ok">완료</span> 씬 파일에 영구 저장됨</td>
-            </tr>
-            <tr>
-                <td>실패 버튼 연결</td>
-                <td>게임 화면의 "실패" 버튼 클릭 → 실패 처리 메서드 호출 고정 등록</td>
-                <td><span class="badge badge-ok">완료</span> 씬 파일에 영구 저장됨</td>
-            </tr>
-            <tr>
-                <td>"처음부터 다시" 버튼 연결</td>
-                <td>게임 완료 화면의 "처음부터 다시" 버튼 → 저장 초기화 → 1단계 메인 화면으로 복귀</td>
-                <td><span class="badge badge-ok">완료</span> 기존 화면 관리자 재사용</td>
-            </tr>
+            <tr><td>판정 로직 본체</td><td>클리어/실패 후 저장·다음 스테이지·화면 전환을 한 흐름으로 묶음</td><td>1→2→3 자동 진행 확인</td></tr>
+            <tr><td>버튼 연결</td><td>인게임의 초록·빨강 버튼을 판정 메서드에 직접 연결</td><td>버튼 누르면 즉시 작동</td></tr>
+            <tr><td>20스테이지 분기</td><td>마지막 스테이지에서는 다음 스테이지가 아닌 게임 완료 화면으로</td><td>20번 클리어 후 완료 화면 표시</td></tr>
+            <tr><td>다시 시작 버튼</td><td>완료 화면의 버튼이 저장 초기화 + 1스테이지부터 다시</td><td>전체 리셋 PASS</td></tr>
         </tbody>
     </table>
     <div class="info-box">
-        <p><strong>이 설계의 핵심 재사용 포인트:</strong> 나중에 실제 게임(퍼즐, 리듬 등)을 추가할 때 "클리어 조건이 충족되면 → 게임 교통 정리 담당자에게 클리어 신호를 보낸다"만 구현하면 됩니다. 저장·화면 전환·연출은 이미 완성되어 있어서 건드릴 필요가 없습니다.</p>
-    </div>
-    <p class="footnote">✅ "연출 없는 완전한 MVP" 완성 — 앱 시작부터 20단계 클리어까지 끊김 없이 동작. 6단계(M6)에서 DOTween 연출이 합류하여 MVP가 시각적으로도 완성되었습니다.</p>
-</section>
-
-<!-- ═════════════ M6 클리어/실패 연출 ═════════════ -->
-<section>
-    <span class="slide-label">PART 1 · M6 (1/2)</span>
-    <h2><span class="badge badge-ok">6단계 완료</span> 클리어·실패 화면 연출</h2>
-    <p style="color: var(--muted);">애니메이션 담당자(AnimationController) — 부드러운 연출을 재생하고 끝나면 신호를 보내는 전담 담당자</p>
-    <div class="grid-2" style="margin-bottom: 8px;">
-        <div class="card">
-            <h3>🏆 클리어 연출 — 약 1.4초</h3>
-            <ul>
-                <li>밝은 오버레이가 서서히 나타남 (0.4초 페이드인)</li>
-                <li>"CLEAR" 텍스트가 작은 점에서 통통 튀어 나오듯 커짐</li>
-                <li>1초간 멈춰서 보여준 뒤 다음 스테이지로 자동 이동</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h3>💥 실패 연출 — 약 1.3초</h3>
-            <ul>
-                <li>붉은 오버레이가 서서히 나타남 (0.4초 페이드인)</li>
-                <li>"FAIL" 텍스트가 좌우로 흔들리는 효과 (0.5초)</li>
-                <li>0.8초간 멈춰서 보여준 뒤 같은 스테이지로 자동 복귀</li>
-            </ul>
-        </div>
-    </div>
-    <div class="info-box">
-        <p><strong>지휘자 비유:</strong> 게임 교통 정리 담당자(지휘자)는 연출이 몇 초짜리인지 알 필요가 없습니다. "연출 끝났으면 알려줘"라고 부탁만 하고, 애니메이션 담당자가 끝났을 때 신호(callback)를 돌려보내는 구조입니다. 이렇게 하면 나중에 연출 시간을 변경해도 흐름 코드를 건드릴 필요가 없습니다.</p>
+        <strong>프로토타입 버튼은 어떻게 제거하나요?</strong><br>
+        실제 게임 규칙(예: 퍼즐 해결)이 들어오면, 그 규칙이 직접 클리어/실패 메서드를 호출합니다. 버튼만 떼어내면 되고 <strong>판정 로직은 그대로 재사용</strong>됩니다. 이게 미리 분리해 둔 이유입니다.
     </div>
 </section>
 
-<!-- ═════════════ M6 SceneBootstrapper ═════════════ -->
+<!-- ═════════════════════ 15. M6-1 AnimationController ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · M6 (2/2)</span>
-    <h2>6단계 — 개발자 편의 도구 추가</h2>
+    <span class="slide-label">15 / 32 · M6 — 클리어/실패 연출</span>
+    <h2>M6 · 부드럽게 등장하고 흔들리는 연출</h2>
     <div class="grid-2">
         <div class="card">
-            <h3>🛠 자동 진입점 보정 (SceneBootstrapper)</h3>
-            <ul>
-                <li>개발 중에 메인 화면(Main 씬)에서 직접 Play 버튼을 눌러도 <strong>자동으로 Boot 화면부터 시작</strong></li>
-                <li>"세이브 데이터 불러오기"가 항상 동작하므로 테스트 편의성 향상</li>
-                <li>실제 출시 빌드에서는 자동으로 제거되어 영향 없음 (에디터 전용)</li>
-            </ul>
+            <h4>클리어 연출 (성공)</h4>
+            <p>오버레이가 천천히 어두워지면서(0.4초) "CLEAR!" 글씨가 <strong style="color: var(--green);">탱탱하게 튀어나옵니다</strong>. 1초 정도 보여준 뒤 다음 화면으로.</p>
+            <p style="color: var(--text);">총 1.4초 — 성취감을 주는 시간</p>
         </div>
         <div class="card">
-            <h3>🔧 위임(delegation) 방식의 깔끔한 구조</h3>
-            <ul>
-                <li>게임 교통 정리 담당자 → 화면 전환 관리자 → 애니메이션 담당자 순으로 연결</li>
-                <li>각 담당자는 자기 역할에만 집중 (단방향 위임)</li>
-                <li>나중에 연출 종류를 늘리거나 바꿔도 흐름 코드는 건드릴 필요 없음</li>
-            </ul>
+            <h4>실패 연출 (실패)</h4>
+            <p>오버레이가 어두워지면서 "FAILED" 글씨가 <strong style="color: var(--red);">짧게 흔들립니다</strong>(0.5초). 0.8초 후 같은 스테이지로 복귀.</p>
+            <p style="color: var(--text);">총 1.3초 — 짧고 명확한 피드백</p>
         </div>
     </div>
     <div class="info-box">
-        <p><strong>왜 5단계에서 흐름을 먼저 검증하고 6단계에서 연출을 얹었나?</strong> — 흐름 버그와 연출 버그가 섞이면 디버깅이 어렵습니다. "스테이지가 제대로 넘어가는가"를 5단계에서 완전히 확인한 뒤, 6단계에서 연출만 얹으니 연출 관련 문제만 따로 추적할 수 있었습니다. 결과적으로 6단계는 빠르게 완료되었습니다.</p>
+        <strong>연출 전담 담당자(AnimationController)를 따로 둔 이유.</strong><br>
+        교통 정리 담당자(GameFlowController)는 "어디로 갈지"만 결정하고, "어떻게 보여줄지"는 연출 담당자에게 맡깁니다. 그래서 나중에 연출을 바꾸고 싶을 때(예: 별점 표시 추가) 다른 담당자를 건드릴 필요가 없습니다.
     </div>
 </section>
 
-<!-- ═════════════ 현재 동작하는 전체 흐름 ═════════════ -->
+<!-- ═════════════════════ 16. M6-2 콜백 체인 비유 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 1 · 정리</span>
-    <h2>지금 실제로 동작하는 전체 흐름 (6단계 완료 기준)</h2>
-    <div class="arrow-flow">[앱 실행]
-   ↓
-초기화 전문가(BootLoader) 실행
-   ↓ 세이브 파일 담당자 → "저장된 최고 단계" 읽기
-   ↓ 진행 상황 기록원 → 다음 도전 스테이지 설정
-   ↓ 메인 화면으로 이동 (초기화 담당자 사라짐)
-   ↓
-화면 전환 관리자(UIManager) — 안전 영역 자동 조정 완료
-   ↓ 스테이지 번호 화면에 표시
-   ↓ 메인 화면 활성화
-   ↓
-[플레이 버튼 클릭]   → 게임 화면으로
-[클리어 버튼 클릭]   → 게임 교통 정리 담당자(GameFlowController)
-                       ├── 즉시 저장
-                       └── 화면 전환 관리자 → 애니메이션 담당자
-                            ├── 클리어 연출 재생 (~1.4초)
-                            └── 콜백 → 20단계? → 게임 완료 화면
-                                       → 아니면 다음 단계 메인 화면
-[실패 버튼 클릭]     → 화면 전환 관리자 → 애니메이션 담당자
-                       ├── 실패 연출 재생 (~1.3초)
-                       └── 콜백 → 저장 없이 같은 단계 메인 화면 복귀
-[처음부터 다시]      → 저장 초기화 → 1단계 메인 화면 복귀</div>
+    <span class="slide-label">16 / 32 · M6 — 클리어/실패 연출</span>
+    <h2>지휘자처럼 일을 시키는 흐름</h2>
+    <div class="arrow-flow" style="margin-bottom: 12px;">
+        <span class="step">교통 정리 담당자</span>
+        <span class="arrow">→</span>
+        <span class="step">화면 전환 관리자에 위임</span>
+        <span class="arrow">→</span>
+        <span class="step">클리어 화면 표시</span>
+        <span class="arrow">→</span>
+        <span class="step">연출 담당자에 위임</span>
+    </div>
+    <div class="arrow-flow">
+        <span class="step">연출 1.4초 재생</span>
+        <span class="arrow">→</span>
+        <span class="step">연출 끝나면 "다 끝났어요" 알림</span>
+        <span class="arrow">→</span>
+        <span class="step">다음 화면 결정 (분기)</span>
+    </div>
+    <div class="card" style="margin-top: 14px;">
+        <h4>왜 "끝나면 알려줘" 방식을 썼나</h4>
+        <p>지휘자가 트럼펫 연주자에게 "8마디 연주해" 라고 말하면, 연주자가 끝났을 때 다음 신호를 줍니다. 지휘자는 8마디가 정확히 몇 초인지 몰라도 됩니다. <strong style="color: var(--accent);">이걸 콜백 체인이라고 부릅니다.</strong></p>
+    </div>
     <div class="info-box">
-        <p>✅ 6단계까지 완료 — 클리어/실패 버튼 클릭부터 부드러운 연출 재생, 자동 화면 전환까지 끊김 없이 동작하는 <strong>시각적으로도 완성된 MVP</strong>입니다. 다음 7단계에서 코드 내부 정리와 안정성 보강을 진행합니다.</p>
+        <strong>실용 효과</strong> — 연출 시간을 1.4초에서 2초로 늘려도 교통 정리 담당자의 코드는 한 줄도 안 바뀝니다. 연출 담당자만 수정하면 됩니다.
     </div>
 </section>
 
-<!-- ═════════════ PART 2 구분 ═════════════ -->
-<section class="center-slide divider-section">
-    <h1>PART 2</h1>
-    <h2 style="color: #fff;">각 담당자가 서로 어떻게 연결되나</h2>
-    <p class="sub">시스템 관계도 & 이 뼈대로 만들 수 있는 게임</p>
-</section>
-
-<!-- ═════════════ 시스템 의존 관계도 ═════════════ -->
+<!-- ═════════════════════ 17. M7-1 리팩토링 비기술 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 2 · 관계도</span>
-    <h2>담당자들 사이의 관계</h2>
-    <div class="arrow-flow">초기화 전문가(BootLoader) — Boot 화면 전용
-  ├── 세이브 파일 담당자(SaveManager)에게 저장값 요청    ✅
-  └── 진행 상황 기록원(StageManager)에게 스테이지 전달   ✅
-
-게임 교통 정리 담당자(GameFlowController) — 메인 화면 전용
-  ├── 진행 상황 기록원(StageManager)    ✅ — 다음 단계로 넘기기, 마지막 단계 확인
-  ├── 화면 전환 관리자(UIManager)       ✅ — 연출 재생 위임 + 화면 전환
-  └── 세이브 파일 담당자(SaveManager)   ✅ — 클리어 직후 저장 요청
-
-화면 전환 관리자(UIManager) — 메인 화면 전용
-  ├── 진행 상황 기록원(StageManager)         ✅ — 스테이지 번호 읽기
-  ├── 세이브 파일 담당자(SaveManager)         ✅ — 처음부터 다시 시 초기화
-  └── 애니메이션 담당자(AnimationController) ✅ — 클리어/실패 연출 위임 (M6)
-
-애니메이션 담당자(AnimationController)  ✅ M6 완료 — DOTween만 사용 (다른 담당자 의존 없음)
-안전 영역 조정기(SafeAreaHandler)        ✅ 독립적으로 동작
-진행 상황 기록원(StageManager)            ✅ 독립적으로 동작
-세이브 파일 담당자(SaveManager)           ✅ 독립적으로 동작
-자동 진입점 보정기(SceneBootstrapper)    ✅ 에디터 전용 유틸 (의존 없음)</div>
-    <div class="info-box">
-        <p><strong>"단방향 연결 규칙"의 의미:</strong> 위에 있는 담당자가 아래 담당자에게 지시를 내리되, 역방향은 없습니다. 예를 들어 애니메이션 담당자는 화면 전환 관리자에게 먼저 말을 걸지 않습니다. 이 규칙 덕분에 아래 담당자(기록원·저장 담당자·애니메이션 담당자)는 독립적으로 테스트할 수 있고, 위 담당자를 교체해도 아래는 영향을 받지 않습니다.</p>
+    <span class="slide-label">17 / 32 · M7 — 안정성·성능</span>
+    <h2>M7 · 100스테이지로 늘려도 견디는 코드 만들기</h2>
+    <div class="grid-2">
+        <div class="card">
+            <h4>왜 했나</h4>
+            <p>현재 20스테이지에서는 잘 돌아가지만, 만약 게임이 잘되어 100스테이지·500스테이지로 늘어나면 <strong>지금 코드는 조금씩 느려집니다.</strong> 그렇게 되기 전에 미리 정리하는 작업입니다.</p>
+        </div>
+        <div class="card">
+            <h4>사용자에게 보이는 차이</h4>
+            <p>거의 없습니다. 외관이나 기능은 그대로입니다. 하지만 개발자에겐 "<strong style="color: var(--accent);">코드를 고치다가 실수해서 망가지는 일</strong>"이 줄어듭니다.</p>
+        </div>
     </div>
-</section>
-
-<!-- ═════════════ 활용 시나리오 ═════════════ -->
-<section>
-    <span class="slide-label">PART 2 · 활용</span>
-    <h2>이 뼈대로 만들 수 있는 게임</h2>
-    <p style="color: var(--muted);">공통: 화면 골격·저장·전환·연출 자리는 그대로 두고, <strong style="color: var(--accent-2);">게임 화면(InGamePanel) 안에 게임 내용만 추가</strong>하면 됩니다</p>
-    <table>
-        <thead><tr><th style="width: 20%;">만들고 싶은 게임</th><th style="width: 40%;">추가할 부분</th><th style="width: 40%;">이 뼈대가 담당해 주는 부분</th></tr></thead>
+    <table class="api-table" style="margin-top: 12px;">
+        <colgroup><col style="width: 14%;"><col style="width: 40%;"><col style="width: 46%;"></colgroup>
+        <thead><tr><th>단계</th><th>주제</th><th>한 줄 요약</th></tr></thead>
         <tbody>
-            <tr>
-                <td>퍼즐 게임<br>(라인 잇기 등)</td>
-                <td>게임 화면에 퍼즐 판 추가. 클리어 조건 충족 시 게임 교통 정리 담당자에게 클리어 신호 전송</td>
-                <td>저장·불러오기, 다음 스테이지 이동, 클리어·실패 화면 전환은 모두 자동 처리</td>
-            </tr>
-            <tr>
-                <td>리듬 게임<br>(스테이지별 곡)</td>
-                <td>스테이지 데이터 파일에 음악 파일 필드 추가. 게임 화면에 노트 시스템 연결</td>
-                <td>스테이지마다 다른 곡 설정을 인스펙터(설정 창)에서 편집 가능. 진행 저장 자동</td>
-            </tr>
-            <tr>
-                <td>아케이드<br>(피하기·점프)</td>
-                <td>게임 화면에 캐릭터·장애물 시스템 추가. 사망 시 실패 신호 전송</td>
-                <td>스테이지 데이터 파일에 난이도(속도·패턴) 필드만 추가하면 20단계 난이도 자동 구성</td>
-            </tr>
-            <tr>
-                <td>퀴즈 게임</td>
-                <td>스테이지 데이터 파일에 질문·정답 필드 추가. 정답이면 클리어 신호, 오답이면 실패 신호</td>
-                <td>20문제 한 세트 자동 구성. 오답 시 같은 문제 재시도, 20문제 전부 정답 시 완료 화면</td>
-            </tr>
-        </tbody>
-    </table>
-</section>
-
-<!-- ═════════════ PART 3 구분 (개발자 기술 참조) ═════════════ -->
-<section class="center-slide divider-section">
-    <h1>PART 3</h1>
-    <h2 style="color: #fff;">개발자 기술 참조</h2>
-    <p class="sub">클래스·메서드 시그니처 / C# 코드 예제 / 설계 의도</p>
-    <p style="font-size: 0.5em; color: rgba(255,255,255,0.5); margin-top: 1em;">이 파트는 개발자 대상입니다. PART 1-2로 돌아가려면 ← 를 누르세요.</p>
-</section>
-
-<!-- ═════════════ Data 레이어: StageDataSO & AnimationType ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · Data 레이어</span>
-    <h2>Data 레이어 — <code>StageDataSO</code> & <code>AnimationType</code></h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.42em;">
-                <thead><tr><th>필드</th><th>타입</th><th>역할</th></tr></thead>
-                <tbody>
-                    <tr><td><code>_stageNumber</code></td><td><code>int</code></td><td>스테이지 번호 (1~20), Inspector 할당</td></tr>
-                    <tr><td><code>_stageName</code></td><td><code>string</code></td><td>화면 표시용 이름 (예: "STAGE 1")</td></tr>
-                    <tr><td><code>_clearAnimationType</code></td><td><code>AnimationType</code></td><td>클리어 연출 종류</td></tr>
-                    <tr><td><code>_failAnimationType</code></td><td><code>AnimationType</code></td><td>실패 연출 종류</td></tr>
-                </tbody>
-            </table>
-            <table class="api-table" style="font-size: 0.42em; margin-top: 8px;">
-                <thead><tr><th>프로퍼티</th><th>접근자</th></tr></thead>
-                <tbody>
-                    <tr><td><code>StageNumber</code>, <code>StageName</code></td><td>get-only</td></tr>
-                    <tr><td><code>ClearAnimationType</code>, <code>FailAnimationType</code></td><td>get-only</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <p style="font-size: 0.52em; color: var(--accent-2); margin: 0 0 4px;"><code>AnimationType</code> enum</p>
-            <pre class="code-block"><span class="kw">public enum</span> <span class="ty">AnimationType</span>
-{
-    <span class="mn">Default</span> = <span class="nu">0</span>,
-    <span class="mn">Special</span> = <span class="nu">1</span>
-}
-
-<span class="cm">// 에셋 경로</span>
-<span class="cm">// Assets/_Project/ScriptableObjects/</span>
-<span class="cm">// Stage01.asset ~ Stage20.asset (20개)</span>
-
-<span class="cm">// 활용 패턴</span>
-<span class="ty">StageDataSO</span> data =
-    <span class="ty">StageManager</span>.Instance
-        .GetCurrentStageData();
-<span class="kw">var</span> anim = data.ClearAnimationType;</pre>
-        </div>
-    </div>
-    <div class="info-box">
-        <p><strong>왜 ScriptableObject인가?</strong> — Inspector에서 직접 할당·편집 가능, 런타임 불변, 핫리로드 지원. 스테이지 20개를 별도 에셋 파일로 분리하면 기획자가 코드 수정 없이 내용 변경 가능. M6에서 <code>AnimationType</code> 분기로 연출 종류를 제어한다.</p>
-    </div>
-</section>
-
-<!-- ═════════════ StageManager 메서드 상세 ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · StageManager</span>
-    <h2><code>StageManager</code> — 싱글턴 · DontDestroyOnLoad</h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.4em;">
-                <thead><tr><th>메서드/프로퍼티</th><th>동작</th></tr></thead>
-                <tbody>
-                    <tr><td><code>CurrentStageNumber: int</code></td><td>현재 스테이지 번호 get-only</td></tr>
-                    <tr><td><code>SetCurrentStage(int)</code></td><td><code>Mathf.Clamp(n, 1, 20)</code> 적용 후 저장</td></tr>
-                    <tr><td><code>AdvanceToNextStage()</code></td><td><code>IsLastStage()</code> 체크 후 +1 (마지막이면 무시)</td></tr>
-                    <tr><td><code>IsLastStage(): bool</code></td><td><code>_currentStageNumber &gt;= 20</code> <span class="badge badge-now" style="font-size: 0.75em;">M7-A에서 == 20으로 수정 예정</span></td></tr>
-                    <tr><td><code>GetCurrentStageData(): StageDataSO</code></td><td>인덱스 범위 체크 후 <code>_stageData[n-1]</code> 반환</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <pre class="code-block"><span class="kw">public class</span> <span class="ty">StageManager</span> : <span class="ty">MonoBehaviour</span>
-{
-    <span class="kw">public static</span> <span class="ty">StageManager</span> Instance
-        { <span class="kw">get</span>; <span class="kw">private set</span>; }
-
-    <span class="kw">void</span> <span class="mn">Awake</span>()
-    {
-        <span class="kw">if</span> (Instance == <span class="kw">null</span>)
-        {
-            Instance = <span class="kw">this</span>;
-            DontDestroyOnLoad(gameObject);
-        }
-        <span class="kw">else</span> Destroy(gameObject);
-    }
-
-    <span class="kw">public bool</span> <span class="mn">IsLastStage</span>() =&gt;
-        _currentStageNumber &gt;= <span class="nu">20</span>;
-}</pre>
-        </div>
-    </div>
-    <div class="info-box">
-        <p><strong>역참조 금지 원칙:</strong> <code>StageManager</code>는 <code>UIManager</code>, <code>GameFlowController</code>, <code>SaveManager</code>를 절대 직접 참조하지 않는다. 상위 레이어가 하위 레이어를 호출하는 단방향만 허용. 위반 시 초기화 순서 버그·순환 의존 발생.</p>
-    </div>
-</section>
-
-<!-- ═════════════ SaveManager 메서드 상세 ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · SaveManager</span>
-    <h2><code>SaveManager</code> — PlayerPrefs 캡슐화</h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.42em;">
-                <thead><tr><th>메서드</th><th>내부 구현</th><th>호출 시점</th></tr></thead>
-                <tbody>
-                    <tr><td><code>Save(int maxCleared)</code></td><td><code>PlayerPrefs.SetInt(SAVE_KEY, n)</code><br><code>PlayerPrefs.Save()</code></td><td>GameFlowController.OnStageClear()</td></tr>
-                    <tr><td><code>Load(): int</code></td><td><code>PlayerPrefs.GetInt(SAVE_KEY, 0)</code><br>기본값 0 (저장 없으면 1단계)</td><td>BootLoader.InitializeAsync()</td></tr>
-                    <tr><td><code>Reset()</code></td><td><code>PlayerPrefs.DeleteKey(SAVE_KEY)</code><br><code>PlayerPrefs.Save()</code></td><td>UIManager.OnRestartButtonClick()</td></tr>
-                </tbody>
-            </table>
-            <div class="info-box" style="margin-top: 8px;">
-                <p><strong>M7-D 준비:</strong> <code>PlayerPrefs</code>를 직접 쓰지 않고 <code>SaveManager</code>로 감싼 이유 — 저장 백엔드를 JSON 파일·클라우드로 교체할 때 이 파일만 수정하면 됨. 인터페이스 추출도 이 단계에서 검토.</p>
-            </div>
-        </div>
-        <div>
-            <pre class="code-block"><span class="kw">public class</span> <span class="ty">SaveManager</span> : <span class="ty">MonoBehaviour</span>
-{
-    <span class="kw">private const string</span> SAVE_KEY =
-        <span class="st">"MaxClearedStage"</span>;
-
-    <span class="kw">public void</span> <span class="mn">Save</span>(<span class="kw">int</span> maxClearedStage)
-    {
-        PlayerPrefs.SetInt(SAVE_KEY, maxClearedStage);
-        PlayerPrefs.Save();
-    }
-
-    <span class="kw">public int</span> <span class="mn">Load</span>() =&gt;
-        PlayerPrefs.GetInt(SAVE_KEY, <span class="nu">0</span>);
-
-    <span class="kw">public void</span> <span class="mn">Reset</span>()
-    {
-        PlayerPrefs.DeleteKey(SAVE_KEY);
-        PlayerPrefs.Save();
-    }
-}</pre>
-        </div>
-    </div>
-</section>
-
-<!-- ═════════════ BootLoader 설계 결정 ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · BootLoader</span>
-    <h2><code>BootLoader</code> — UniTask + CancellationToken</h2>
-    <div class="grid-2">
-        <table class="api-table" style="font-size: 0.4em; align-self: start;">
-            <thead><tr><th>설계 포인트</th><th>선택 이유</th><th>대안</th></tr></thead>
-            <tbody>
-                <tr><td>싱글턴 아님</td><td>Boot 씬과 생사를 같이하므로 DontDestroyOnLoad 불필요. 중복 실행 위험 없음</td><td>싱글턴으로 만들면 씬 전환 후 남아서 메모리 낭비</td></tr>
-                <tr><td><code>Start()</code>에서 시작 <span class="badge badge-info" style="font-size: 0.75em;">M6 변경</span></td><td>모든 매니저의 <code>Awake()</code> 완료 후 실행 보장 → <code>SaveManager.Instance</code> null 참조 방지</td><td>Awake에서 직접 호출 시 매니저 초기화 순서 의존</td></tr>
-                <tr><td><code>UniTask</code> + <code>CancellationToken</code></td><td>씬 전환 도중 앱 종료 시 안전하게 작업 취소 가능</td><td>코루틴: 취소 신호 전파 어려움</td></tr>
-                <tr><td><code>InitializeAsync</code> 분리</td><td>진입점을 단순하게 유지, 테스트 시 직접 호출 가능</td><td>Start 직접 구현: 테스트 어렵고 가독성 저하</td></tr>
-                <tr><td><code>OnDestroy</code>에서 <code>_cts.Cancel()</code></td><td>씬 전환 중 오브젝트 파괴 시 진행 중인 UniTask가 예외 없이 종료됨</td><td>미처리 시 OperationCanceledException 발생 가능</td></tr>
-            </tbody>
-        </table>
-        <pre class="code-block"><span class="kw">private</span> <span class="ty">CancellationTokenSource</span> _cts;
-
-<span class="cm">// M6: Awake → Start로 이동</span>
-<span class="cm">// 모든 매니저 Awake 완료 후 호출 보장</span>
-<span class="kw">void</span> <span class="mn">Start</span>()
-{
-    _cts = <span class="kw">new</span> <span class="ty">CancellationTokenSource</span>();
-    InitializeAsync(_cts.Token).Forget();
-}
-
-<span class="kw">private async</span> <span class="ty">UniTask</span> <span class="mn">InitializeAsync</span>(
-    <span class="ty">CancellationToken</span> ct)
-{
-    <span class="kw">int</span> maxCleared = <span class="ty">SaveManager</span>.Instance.Load();
-    <span class="ty">StageManager</span>.Instance
-        .SetCurrentStage(maxCleared + <span class="nu">1</span>);
-    <span class="kw">await</span> SceneManager
-        .LoadSceneAsync(<span class="st">"Main"</span>)
-        .WithCancellation(ct);
-}
-
-<span class="kw">void</span> <span class="mn">OnDestroy</span>()
-{
-    _cts?.Cancel();
-    _cts?.Dispose();
-}</pre>
-    </div>
-</section>
-
-<!-- ═════════════ UIManager 메서드 상세 ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · UIManager</span>
-    <h2><code>UIManager</code> — <code>PanelType</code> Dictionary 전환</h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.4em;">
-                <thead><tr><th>메서드</th><th>역할</th><th>호출 시점</th></tr></thead>
-                <tbody>
-                    <tr><td><code>ShowPanel(PanelType)</code></td><td><code>_panelMap</code> 전체 순회, 지정 패널만 활성화</td><td>GameFlowController, OnPlayButtonClick</td></tr>
-                    <tr><td><code>RefreshStageDisplay()</code></td><td>StageManager에서 번호 읽어 TMP_Text 2개 갱신</td><td>Start(), GameFlowController 콜백</td></tr>
-                    <tr><td><code>OnPlayButtonClick()</code></td><td>RefreshStageDisplay → ShowPanel(InGame)</td><td>Inspector 버튼 이벤트</td></tr>
-                    <tr><td><code>OnRestartButtonClick()</code></td><td>SaveManager.Reset → StageManager.SetCurrentStage(1) → ShowPanel(Main)</td><td>Inspector 버튼 이벤트</td></tr>
-                    <tr><td><code>PlayClearAndThen(Action)</code> <span class="badge badge-ok" style="font-size: 0.75em;">M6</span></td><td>ShowPanel(Clear) → AnimationController.PlayClear(콜백) 위임</td><td>GameFlowController.OnStageClear()</td></tr>
-                    <tr><td><code>PlayFailAndThen(Action)</code> <span class="badge badge-ok" style="font-size: 0.75em;">M6</span></td><td>ShowPanel(Fail) → AnimationController.PlayFail(콜백) 위임</td><td>GameFlowController.OnStageFail()</td></tr>
-                </tbody>
-            </table>
-            <p style="font-size: 0.46em; color: var(--accent-2); margin: 6px 0 2px;"><code>PanelType</code> enum: <code>Main · InGame · Clear · Fail · GameClear</code></p>
-            <div class="info-box" style="margin-top: 4px;">
-                <p><strong>M7-C:</strong> 현재 <code>ShowPanel</code>은 <code>foreach</code>로 전체 순회 O(n). Dictionary 직접 접근 O(1)로 개선 예정.</p>
-            </div>
-        </div>
-        <pre class="code-block"><span class="kw">private</span> Dictionary&lt;<span class="ty">PanelType</span>, <span class="ty">GameObject</span>&gt;
-    _panelMap;
-[<span class="ty">SerializeField</span>] <span class="kw">private</span> <span class="ty">AnimationController</span>
-    _animationController;  <span class="cm">// M6 추가</span>
-
-<span class="kw">public void</span> <span class="mn">ShowPanel</span>(<span class="ty">PanelType</span> type)
-{
-    <span class="kw">foreach</span> (<span class="kw">var</span> kv <span class="kw">in</span> _panelMap)
-        kv.Value.SetActive(kv.Key == type);
-}
-
-<span class="cm">// M6: 위임 메서드</span>
-<span class="kw">public void</span> <span class="mn">PlayClearAndThen</span>(<span class="ty">Action</span> onComplete)
-{
-    ShowPanel(<span class="ty">PanelType</span>.Clear);
-    _animationController.PlayClear(onComplete);
-}
-
-<span class="kw">public void</span> <span class="mn">PlayFailAndThen</span>(<span class="ty">Action</span> onComplete)
-{
-    ShowPanel(<span class="ty">PanelType</span>.Fail);
-    _animationController.PlayFail(onComplete);
-}</pre>
-    </div>
-</section>
-
-<!-- ═════════════ GameFlowController 메서드 상세 ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · GameFlowController</span>
-    <h2><code>GameFlowController</code> — 오케스트레이터</h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.42em; margin-bottom: 8px;">
-                <thead><tr><th>메서드</th><th>흐름 <span class="badge badge-ok" style="font-size: 0.75em;">M6 통합</span></th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><code>OnStageClear()</code></td>
-                        <td>① <code>SaveManager.Save(현재)</code> 즉시 저장 → ② <code>UIManager.PlayClearAndThen(콜백)</code> → ③ 콜백: <code>IsLastStage()</code>? → ③-a <code>ShowPanel(GameClear)</code> / ③-b <code>AdvanceToNextStage</code> → <code>RefreshStageDisplay</code> → <code>ShowPanel(Main)</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>OnStageFail()</code></td>
-                        <td>① <code>UIManager.PlayFailAndThen(콜백)</code> → ② 콜백: <code>RefreshStageDisplay</code> → <code>ShowPanel(Main)</code> (스테이지 번호 변경 없음)</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="info-box">
-                <p><strong>M6 통합 완료:</strong> 콜백(<code>Action</code>) 기반 위임 방식으로 구현됨. GFC는 애니메이션 길이·종류를 몰라도 되고, AnimationController는 호출자의 후속 처리 로직을 몰라도 된다. <code>UIManager</code>가 중간 위임 계층 역할을 하므로 GFC와 AnimationController 사이 직접 의존이 발생하지 않는다.</p>
-            </div>
-        </div>
-        <pre class="code-block"><span class="kw">public void</span> <span class="mn">OnStageClear</span>()
-{
-    <span class="cm">// 저장 먼저 — 연출 중 앱 종료 대비</span>
-    <span class="ty">SaveManager</span>.Instance.Save(
-        <span class="ty">StageManager</span>.Instance
-            .CurrentStageNumber);
-
-    <span class="cm">// 클리어 연출 위임 + 완료 콜백</span>
-    <span class="ty">UIManager</span>.Instance.PlayClearAndThen(() =&gt;
-    {
-        <span class="kw">if</span> (<span class="ty">StageManager</span>.Instance.IsLastStage())
-        {
-            <span class="ty">UIManager</span>.Instance
-                .ShowPanel(<span class="ty">PanelType</span>.GameClear);
-        }
-        <span class="kw">else</span>
-        {
-            <span class="ty">StageManager</span>.Instance
-                .AdvanceToNextStage();
-            <span class="ty">UIManager</span>.Instance
-                .RefreshStageDisplay();
-            <span class="ty">UIManager</span>.Instance
-                .ShowPanel(<span class="ty">PanelType</span>.Main);
-        }
-    });
-}
-
-<span class="kw">public void</span> <span class="mn">OnStageFail</span>()
-{
-    <span class="ty">UIManager</span>.Instance.PlayFailAndThen(() =&gt;
-    {
-        <span class="ty">UIManager</span>.Instance.RefreshStageDisplay();
-        <span class="ty">UIManager</span>.Instance
-            .ShowPanel(<span class="ty">PanelType</span>.Main);
-    });
-}</pre>
-    </div>
-</section>
-
-<!-- ═════════════ AnimationController 메서드 상세 (M6 신규) ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · AnimationController</span>
-    <h2><code>AnimationController</code> — DOTween Sequence 위임자 <span class="badge badge-ok" style="font-size: 0.55em;">M6 신규</span></h2>
-    <div class="grid-2">
-        <div>
-            <table class="api-table" style="font-size: 0.4em;">
-                <thead><tr><th>메서드</th><th>Sequence 구성</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><code>PlayClear(Action onComplete)</code></td>
-                        <td><code>_clearOverlay.DOFade(0.85f, 0.4f)</code> + <code>_clearTextTransform.DOScale(1f, 0.4f).From(0).SetEase(OutBack)</code> → <code>AppendInterval(1.0f)</code> → <code>OnComplete(콜백)</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>PlayFail(Action onComplete)</code></td>
-                        <td><code>_failOverlay.DOFade(0.85f, 0.4f)</code> + <code>_failTextTransform.DOShakePosition(0.5f, 20f)</code> → <code>AppendInterval(0.8f)</code> → <code>OnComplete(콜백)</code></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="api-table" style="font-size: 0.4em; margin-top: 6px;">
-                <thead><tr><th>SerializeField</th><th>역할</th></tr></thead>
-                <tbody>
-                    <tr><td><code>_clearOverlay</code> / <code>_failOverlay</code></td><td>CanvasGroup — 페이드 인/아웃 대상</td></tr>
-                    <tr><td><code>_clearTextTransform</code> / <code>_failTextTransform</code></td><td>Transform — 스케일/흔들기 대상</td></tr>
-                    <tr><td><code>_activeSequence</code> (private)</td><td>이전 Sequence가 살아있으면 <code>Kill()</code>로 강제 종료 (중복 재생 방지)</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <pre class="code-block"><span class="kw">public void</span> <span class="mn">PlayClear</span>(<span class="ty">Action</span> onComplete)
-{
-    _activeSequence?.Kill();
-
-    _activeSequence = DOTween.Sequence()
-        .Join(_clearOverlay
-            .DOFade(<span class="nu">0.85f</span>, <span class="nu">0.4f</span>)
-            .From(<span class="nu">0f</span>))
-        .Join(_clearTextTransform
-            .DOScale(<span class="nu">1f</span>, <span class="nu">0.4f</span>)
-            .From(<span class="ty">Vector3</span>.zero)
-            .SetEase(<span class="ty">Ease</span>.OutBack))
-        .AppendInterval(<span class="nu">1.0f</span>)
-        .OnComplete(() =&gt; onComplete?.Invoke());
-}
-
-<span class="kw">public void</span> <span class="mn">PlayFail</span>(<span class="ty">Action</span> onComplete)
-{
-    _activeSequence?.Kill();
-
-    _activeSequence = DOTween.Sequence()
-        .Join(_failOverlay
-            .DOFade(<span class="nu">0.85f</span>, <span class="nu">0.4f</span>)
-            .From(<span class="nu">0f</span>))
-        .Join(_failTextTransform
-            .DOShakePosition(<span class="nu">0.5f</span>, <span class="nu">20f</span>))
-        .AppendInterval(<span class="nu">0.8f</span>)
-        .OnComplete(() =&gt; onComplete?.Invoke());
-}</pre>
-    </div>
-    <div class="info-box">
-        <p><strong>설계 의도:</strong> AnimationController는 "재생 + 완료 시 콜백 호출"만 담당한다. 어떤 화면으로 넘어갈지, 다음 스테이지가 무엇인지 모른다 — 호출자(UIManager → GameFlowController)가 콜백 안에서 결정한다. 이렇게 책임을 분리하면 연출 종류가 늘어도 GFC는 영향을 받지 않는다. <code>_activeSequence?.Kill()</code> 패턴으로 빠른 연속 클릭 시 잔여 Tween이 누적되는 문제를 방지한다.</p>
-    </div>
-</section>
-
-<!-- ═════════════ 시스템 의존 관계도 (기술 버전) ═════════════ -->
-<section>
-    <span class="slide-label">PART 3 · 의존 관계도</span>
-    <h2>시스템 의존 관계도 — 기술 버전</h2>
-    <pre class="code-block" style="font-size: 0.44em; border-left-color: var(--accent-2);">
-BootLoader            [Boot 씬 전용, 싱글턴 아님, DontDestroyOnLoad X]
-  ├── SaveManager.Instance.Load()
-  └── StageManager.Instance.SetCurrentStage(maxCleared + 1)
-
-GameFlowController    [Main 씬 전용, 싱글턴, DontDestroyOnLoad X]
-  ├── StageManager.Instance  ← AdvanceToNextStage(), IsLastStage()
-  ├── UIManager.Instance     ← PlayClearAndThen, PlayFailAndThen, ShowPanel
-  └── SaveManager.Instance   ← Save(stageNumber)
-
-UIManager             [Main 씬 전용, 싱글턴, DontDestroyOnLoad X]
-  ├── StageManager.Instance         ← CurrentStageNumber (읽기 전용)
-  ├── SaveManager.Instance          ← Reset() (처음부터 다시 버튼)
-  └── AnimationController (SerializeField) ← PlayClear/PlayFail 위임  [M6]
-
-AnimationController   [Main 씬 전용, 싱글턴, M6 신규]
-  └── (DOTween만 사용, 다른 매니저 의존 없음)
-
-SafeAreaHandler       [독립, 의존 없음, Awake()에서 ApplySafeArea() 1회 실행]
-SceneBootstrapper     [Static, RuntimeInitializeOnLoadMethod, #if UNITY_EDITOR]
-StageManager          [Boot+Main 씬 공유, DontDestroyOnLoad O]
-SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
-</pre>
-    <table class="api-table" style="font-size: 0.4em; margin-top: 8px;">
-        <thead><tr><th>클래스</th><th>계층 / DontDestroyOnLoad</th><th>씬 범위</th></tr></thead>
-        <tbody>
-            <tr><td><code>BootLoader</code></td><td>진입점 / X</td><td>Boot 씬 전용</td></tr>
-            <tr><td><code>GameFlowController</code></td><td>오케스트레이터 / X</td><td>Main 씬 전용</td></tr>
-            <tr><td><code>UIManager</code></td><td>View 제어 / X</td><td>Main 씬 전용</td></tr>
-            <tr><td><code>AnimationController</code> <span class="badge badge-ok" style="font-size: 0.7em;">M6</span></td><td>연출 위임자 / X</td><td>Main 씬 전용</td></tr>
-            <tr><td><code>StageManager</code></td><td>도메인 모델 / O</td><td>Boot → Main 유지</td></tr>
-            <tr><td><code>SaveManager</code></td><td>인프라 / O</td><td>Boot → Main 유지</td></tr>
-            <tr><td><code>SafeAreaHandler</code></td><td>UI 유틸 / X</td><td>Main 씬 SafeArea</td></tr>
-            <tr><td><code>SceneBootstrapper</code> <span class="badge badge-ok" style="font-size: 0.7em;">M6</span></td><td>Static 유틸 / —</td><td>에디터 전용 (#if UNITY_EDITOR)</td></tr>
+            <tr><td>M7-A</td><td>안전망 추가</td><td>잘못 설정해도 에러 메시지가 명확히 뜨도록</td></tr>
+            <tr><td>M7-B</td><td>코드 청소</td><td>안 쓰는 부품 제거, 텍스트는 한 곳에 모음</td></tr>
+            <tr><td>M7-C</td><td>화면 전환 속도</td><td>패널이 100개로 늘어나도 즉시 전환</td></tr>
+            <tr><td>M7-D</td><td>저장·로딩 안전성</td><td>매 프레임 호출돼도 빠름, 저장 중에도 끊김 없음</td></tr>
         </tbody>
     </table>
     <div class="info-box">
-        <p><strong>단방향 규칙 위반 시:</strong> 하위 레이어(StageManager)가 상위(GameFlowController)를 참조하면 초기화 순서 불확정 → NullReferenceException. 또한 하위 레이어의 단독 테스트가 불가능해짐.</p>
+        <strong>비유 — 정기 점검 받은 자동차.</strong><br>
+        주행감은 똑같지만 부품을 미리 점검·교체하면 멀리 가도 멈추지 않습니다. M7도 같은 성격의 작업입니다.
     </div>
 </section>
 
-<!-- ═════════════ 에셋 구조 & 씬 계층 ═════════════ -->
+<!-- ═════════════════════ 18. M7-2 미래 시나리오 ═════════════════════ -->
 <section>
-    <span class="slide-label">PART 3 · 에셋 구조</span>
-    <h2>에셋 구조 & Main 씬 계층</h2>
+    <span class="slide-label">18 / 32 · M7 — 안정성·성능</span>
+    <h2>이 정리가 미래에 어떻게 도움이 될까</h2>
     <div class="grid-2">
-        <pre class="code-block" style="font-size: 0.42em;">Assets/_Project/
-├── Scripts/
-│   ├── Data/
-│   │   ├── AnimationType.cs       ← M2 ✅
-│   │   └── StageDataSO.cs         ← M2 ✅
-│   ├── Managers/
-│   │   ├── StageManager.cs        ← M2 ✅
-│   │   ├── SaveManager.cs         ← M2 ✅
-│   │   ├── BootLoader.cs          ← M3 ✅
-│   │   ├── UIManager.cs           ← M4 ✅ (M6 위임 통합)
-│   │   ├── GameFlowController.cs  ← M5 ✅ (M6 콜백 통합)
-│   │   ├── AnimationController.cs ← M6 ✅ 신규
-│   │   └── SceneBootstrapper.cs   ← M6 ✅ 신규
-│   └── UI/
-│       └── SafeAreaHandler.cs     ← M4 ✅
-├── ScriptableObjects/
-│   └── Stage01~Stage20.asset      ← M2 (20개)
-├── Scenes/
-│   ├── Boot.unity
-│   └── Main.unity
-└── Editor/
-    └── ButtonWireSetup.cs  ← M5 에디터 툴</pre>
-        <pre class="code-block" style="font-size: 0.42em;">Main.unity
-└── Canvas
-    [CanvasScaler: ScaleWithScreenSize]
-    [1080×1920 / Match 0.5]
-    │
-    ├── SafeArea
-    │   [SafeAreaHandler 부착]
-    │   ├── MainPanel       [비활성]
-    │   │   ├── StageText   (TMP_Text)
-    │   │   └── PlayButton  → OnPlayButtonClick()
-    │   ├── InGamePanel     [비활성]
-    │   │   ├── StageText   (TMP_Text)
-    │   │   ├── ClearButton → OnStageClear()
-    │   │   └── FailButton  → OnStageFail()
-    │   ├── ClearPanel      [비활성, CanvasGroup + 텍스트]
-    │   ├── FailPanel       [비활성, CanvasGroup + 텍스트]
-    │   └── GameClearPanel  [비활성]
-    │       └── RestartButton → OnRestartButtonClick()
-    ├── [UIManager 부착, AnimationController 참조 (M6)]
-    └── [AnimationController 부착 (M6)]
-GameFlowController (Canvas 외부, Main 씬 루트)
-    └── [GameFlowController 부착]</pre>
-    </div>
-</section>
-
-<!-- ═════════════ PART 4 구분 ═════════════ -->
-<section class="center-slide divider-section">
-    <h1>PART 4</h1>
-    <h2 style="color: #fff;">앞으로의 계획</h2>
-    <p class="sub">7단계(M7) — 중규모 확장 대비 리팩토링</p>
-</section>
-
-<!-- ═════════════ M6 완료 회고 ═════════════ -->
-<section>
-    <span class="slide-label">PART 4 · M6 완료 회고</span>
-    <h2><span class="badge badge-ok">6단계 완료</span> 화면 전환 애니메이션 (실측 결과)</h2>
-    <p style="color: var(--muted);">실제 구현된 DOTween Sequence 파라미터 — ARCHITECTURE.md / PRD.md 기준</p>
-    <div class="grid-2" style="margin-bottom: 10px;">
         <div class="card">
-            <h3>🏆 클리어 연출 — 실측 1.4초</h3>
-            <ul>
-                <li><code>CanvasGroup.DOFade(0 → 0.85, 0.4초)</code> — 오버레이 페이드인</li>
-                <li><code>Transform.DOScale(0 → 1, 0.4초)</code> + <code>Ease.OutBack</code> — 텍스트 통통 튀어오름</li>
-                <li><code>AppendInterval(1.0초)</code> — 결과 인지 시간</li>
-                <li>완료 콜백 → IsLastStage 분기 → 다음 화면</li>
-            </ul>
+            <h4>스테이지 100개로 확장</h4>
+            <p>패널·데이터 카드가 5배 늘어도 화면 전환과 데이터 조회 속도가 <strong style="color: var(--green);">동일하게 유지</strong>됩니다. M7-C/D 덕분.</p>
         </div>
         <div class="card">
-            <h3>💥 실패 연출 — 실측 1.3초</h3>
-            <ul>
-                <li><code>CanvasGroup.DOFade(0 → 0.85, 0.4초)</code> — 오버레이 페이드인</li>
-                <li><code>Transform.DOShakePosition(0.5초, 강도 20)</code> — 텍스트 좌우 흔들기</li>
-                <li><code>AppendInterval(0.8초)</code> — 결과 인지 시간</li>
-                <li>완료 콜백 → 같은 스테이지 메인 복귀</li>
-            </ul>
+            <h4>iCloud·구글플레이 동기화 추가</h4>
+            <p>저장 부분이 캡슐화되어 있어 <strong>"세이브 담당자"만 교체</strong>하면 됩니다. 게임 흐름 코드는 한 줄도 안 바뀝니다.</p>
+        </div>
+        <div class="card">
+            <h4>화면 회전 지원</h4>
+            <p>안전 영역 처리자에 동적 모니터링을 켜면(현재 OFF) 회전·접이식 화면도 즉시 대응합니다.</p>
+        </div>
+        <div class="card">
+            <h4>다국어 지원</h4>
+            <p>"STAGE" 같은 텍스트가 한 상수에 모여 있어 <strong>한 줄 수정으로 영어→한국어→일본어</strong> 전환 가능. M7-B 덕분.</p>
         </div>
     </div>
     <div class="info-box">
-        <p><strong>5→6단계 분리의 효과:</strong> M5에서 흐름을 완전히 검증한 뒤 M6에서 연출을 얹는 단계 분리 덕분에 6단계는 빠르게 완료되었습니다. 흐름 버그(스테이지 +1 누락 등)는 M5에서 이미 잡혀 있었고, M6에서는 "연출이 잘 보이는가"만 추적하면 되었습니다.<br><br><strong>위임 패턴의 효과:</strong> <code>GameFlowController → UIManager → AnimationController</code> 단방향 위임 구조로 인해 향후 연출 종류를 늘려도 GFC를 건드릴 필요가 없습니다. M5 단계의 TODO 주석 자리가 자연스럽게 콜백 호출로 대체되었습니다.</p>
+        <strong>핵심 — "지금 잘 돌아간다"가 끝이 아닙니다.</strong> 6개월 뒤 다른 사람이 코드를 보고도 빠르게 이해하고, 문제 없이 추가 작업을 할 수 있어야 진짜 완성입니다.
     </div>
 </section>
 
-<!-- ═════════════ M7 ═════════════ -->
-<section>
-    <span class="slide-label">PART 4 · M7</span>
-    <h2><span class="badge badge-now">7단계 진행 중</span> 안정성·최적화·코드 정리</h2>
-    <div class="info-box" style="margin-bottom: 8px;">
-        <p><strong>사용자 눈에는 차이 없음 — 개발자를 위한 작업입니다.</strong> 7단계 완료 후에야 실제 게임 콘텐츠(퍼즐·리듬 등) 개발을 시작합니다. 현재 4개 서브태스크(M7-A/B/C/D) 모두 착수 전.</p>
-    </div>
-    <table class="api-table" style="font-size: 0.42em;">
-        <colgroup>
-            <col style="width: 11%;">
-            <col style="width: 60%;">
-            <col style="width: 29%;">
-        </colgroup>
-        <thead><tr><th>태스크</th><th>기술 변경 내용 <span style="color: rgba(255,255,255,0.4); font-weight: 400;">(기울임체: 사용자 관점 효과)</span></th><th>대상 파일</th></tr></thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center;"><span class="badge badge-info" style="display:block; margin-bottom:4px;">M7-A</span>안정성</td>
-                <td>
-                    <code>IsLastStage()</code>: <code>&gt;=20</code> → <code>==20</code>으로 수정<br>
-                    UIManager 패널 레퍼런스 null 체크 추가<br>
-                    SafeAreaHandler null 방어 처리<br>
-                    <em style="color: rgba(255,255,255,0.45); font-size: 0.9em;">→ 21단계 추가 시 오작동 방지, Inspector 미할당 시 명확한 에러</em>
-                </td>
-                <td><code>StageManager.cs</code><br><code>UIManager.cs</code><br><code>SafeAreaHandler.cs</code></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;"><span class="badge badge-info" style="display:block; margin-bottom:4px;">M7-B</span>코드 정리</td>
-                <td>
-                    미사용 <code>_cts</code> 필드 제거<br>
-                    magic string → <code>const SAVE_KEY</code> 상수화<br>
-                    불필요 주석 정리<br>
-                    <em style="color: rgba(255,255,255,0.45); font-size: 0.9em;">→ 가독성 향상, 문자열 오타로 인한 저장 키 불일치 버그 예방</em>
-                </td>
-                <td><code>BootLoader.cs</code><br><code>SaveManager.cs</code></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;"><span class="badge badge-info" style="display:block; margin-bottom:4px;">M7-C</span>UI 성능</td>
-                <td>
-                    <code>ShowPanel</code>: <code>foreach</code> O(n) → Dictionary 직접 접근 O(1)<br>
-                    <code>SafeAreaHandler</code>: 기기 회전 감지 후 동적 재조정<br>
-                    <em style="color: rgba(255,255,255,0.45); font-size: 0.9em;">→ 화면 전환 속도 개선, 태블릿·기기 회전 시 Safe Area 자동 재계산</em>
-                </td>
-                <td><code>UIManager.cs</code><br><code>SafeAreaHandler.cs</code></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;"><span class="badge badge-info" style="display:block; margin-bottom:4px;">M7-D</span>데이터·I/O</td>
-                <td>
-                    <code>StageManager.GetCurrentStageData()</code> 결과 캐싱<br>
-                    <code>SaveManager</code>: async Save 방식 검토<br>
-                    <code>BootLoader</code>: scene load sync 옵션 검토<br>
-                    <em style="color: rgba(255,255,255,0.45); font-size: 0.9em;">→ 저장 백엔드를 클라우드·JSON으로 교체 가능한 구조 준비</em>
-                </td>
-                <td><code>StageManager.cs</code><br><code>SaveManager.cs</code><br><code>BootLoader.cs</code></td>
-            </tr>
-        </tbody>
-    </table>
-</section>
-
-<!-- ═════════════ 마무리 ═════════════ -->
+<!-- ═════════════════════ 19. PART 2 구분 ═════════════════════ -->
 <section class="center-slide">
-    <h2 style="font-size: 1.4em;">이 뼈대가 완성되면 무엇이 가능한가</h2>
-    <div class="grid-2" style="margin: 0.8em 0; text-align: left; max-width: 860px;">
-        <div class="card">
-            <h3>신입 사원이 기억해야 할 것</h3>
-            <ul>
-                <li>새 게임은 <strong>InGamePanel 안에 내용만 추가</strong></li>
-                <li>스테이지 설정은 Inspector에서 코드 없이 조정</li>
-                <li>저장·화면 전환·해상도 대응은 이미 완성</li>
-                <li>퍼즐·리듬·아케이드·퀴즈 어떤 장르든 재사용 가능</li>
-            </ul>
-        </div>
-        <div class="card">
-            <h3>개발자가 다음에 할 일</h3>
-            <ul>
-                <li><strong>M7-A 안정성 보강:</strong> <code>IsLastStage() &gt;=20</code> → <code>==20</code>, 패널 null 체크</li>
-                <li><strong>M7-B 코드 정리:</strong> 미사용 <code>_cts</code> 정리, magic string 상수화</li>
-                <li><strong>M7-C UI 성능:</strong> <code>ShowPanel</code> O(n)→O(1) Dictionary 최적화</li>
-                <li><strong>M7-D 데이터·I/O:</strong> <code>StageData</code> 캐싱, async <code>SaveAsync</code> 옵션</li>
-                <li><strong>M7 완료 후:</strong> 실제 게임 콘텐츠(퍼즐·리듬·아케이드) 개발 시작</li>
-            </ul>
-        </div>
-    </div>
-    <div class="info-box" style="max-width: 860px;">
-        <p style="font-size: 0.62em;">
-            <strong>현재 상태:</strong> Boot 씬 초기화 → 저장 복원 → 메인 → 게임 → 클리어/실패 판정 → 즉시 저장 → DOTween 연출 → 자동 화면 전환까지 <strong style="color: var(--accent-2);">M6 통합 완료, MVP 시각적으로도 완성</strong>. 남은 작업: M7 리팩토링 4개 서브태스크 → 그 후 실제 게임 콘텐츠 개발.
+    <h1 style="font-size: 2.0em;">PART 2</h1>
+    <div class="divider-section" style="max-width: 720px; margin: 1em auto 0;">
+        <h3 style="color: var(--accent); font-size: 1.1em; margin-bottom: 12px;">담당자들이 어떻게 협력하나</h3>
+        <p style="color: var(--text2); font-size: 0.85em; line-height: 1.7;">
+            10명의 담당자가 누구에게 무엇을 부탁하는지,<br>
+            그리고 새 게임을 만들 때 어떻게 활용할지 정리합니다.
         </p>
+        <p class="footnote">슬라이드 20~21</p>
     </div>
-    <p style="font-size: 0.5em; color: var(--muted); margin-top: 0.8em;">궁금한 점이 있으면 언제든지 팀에게 물어보세요!</p>
+</section>
+
+<!-- ═════════════════════ 20. 의존 관계도 (비유) ═════════════════════ -->
+<section>
+    <span class="slide-label">20 / 32 · PART 2</span>
+    <h2>누가 누구에게 부탁하나</h2>
+    <div class="arrow-flow" style="margin-bottom: 8px;">
+        <span class="step">초기화 전문가</span><span class="arrow">→</span>
+        <span class="step">세이브 담당자</span><span class="arrow">·</span>
+        <span class="step">진행 기록원</span>
+    </div>
+    <div class="arrow-flow" style="margin-bottom: 8px;">
+        <span class="step">교통 정리 담당자</span><span class="arrow">→</span>
+        <span class="step">진행 기록원</span><span class="arrow">·</span>
+        <span class="step">세이브 담당자</span><span class="arrow">·</span>
+        <span class="step">화면 전환 관리자</span>
+    </div>
+    <div class="arrow-flow" style="margin-bottom: 8px;">
+        <span class="step">화면 전환 관리자</span><span class="arrow">→</span>
+        <span class="step">진행 기록원</span><span class="arrow">·</span>
+        <span class="step">세이브 담당자</span><span class="arrow">·</span>
+        <span class="step">연출 담당자</span>
+    </div>
+    <div class="arrow-flow">
+        <span class="step">연출 담당자</span><span class="arrow">→</span>
+        <span class="step">DOTween 라이브러리만</span>
+    </div>
+    <div class="info-box">
+        <strong>단방향 규칙</strong> — 화살표는 <strong style="color: var(--accent);">항상 한쪽 방향</strong>으로만 흐릅니다. 진행 기록원이 교통 정리 담당자에게 거꾸로 부탁하는 일은 없습니다. 이걸 어기면 두 사람이 서로를 동시에 부르는 무한 루프나 초기화 순서 버그가 발생합니다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 21. 활용 가이드 ═════════════════════ -->
+<section>
+    <span class="slide-label">21 / 32 · PART 2</span>
+    <h2>이 키트로 어떤 게임을 만들 수 있나</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 30%;"><col style="width: 35%;"><col style="width: 35%;"></colgroup>
+        <thead><tr><th>만들고 싶은 게임</th><th>어디에 추가</th><th>재사용 포인트</th></tr></thead>
+        <tbody>
+            <tr><td>퍼즐 게임 (3-Match)</td><td>인게임 화면에 보드 컴포넌트</td><td>매칭 성공 시 클리어 메서드 호출</td></tr>
+            <tr><td>러너 게임 (Endless Run)</td><td>인게임 화면에 캐릭터/장애물</td><td>거리 기준으로 클리어/실패 자동 호출</td></tr>
+            <tr><td>레벨 풀이 (방탈출)</td><td>인게임에 인터랙션 영역</td><td>마지막 단서 발견 시 클리어</td></tr>
+            <tr><td>스테이지형 액션</td><td>인게임에 적·타이머·체력 시스템</td><td>HP 0 → 실패, 적 처치 → 클리어</td></tr>
+        </tbody>
+    </table>
+    <div class="info-box">
+        <strong>공통 원칙</strong> — 무엇을 만들든 "클리어 판정 메서드"와 "실패 판정 메서드"만 호출하면 됩니다. <strong>화면 전환·저장·연출은 키트가 자동으로 처리</strong>합니다. 게임 규칙을 만드는 데만 집중하세요.
+    </div>
+</section>
+
+<!-- ═════════════════════ 22. PART 3 구분 ═════════════════════ -->
+<section class="center-slide">
+    <h1 style="font-size: 2.0em;">PART 3</h1>
+    <div class="divider-section" style="max-width: 720px; margin: 1em auto 0;">
+        <h3 style="color: var(--accent); font-size: 1.1em; margin-bottom: 12px;">개발자 기술 참조</h3>
+        <p style="color: var(--text2); font-size: 0.85em; line-height: 1.7;">
+            클래스명·메서드 시그니처·코드 예제·설계 의도.<br>
+            ARCHITECTURE.md를 보기 좋게 정리했습니다.
+        </p>
+        <p class="footnote">슬라이드 23~31</p>
+    </div>
+</section>
+
+<!-- ═════════════════════ 23. Data 레이어 ═════════════════════ -->
+<section>
+    <span class="slide-label">23 / 32 · PART 3 · Data</span>
+    <h2><code style="color: var(--purple);">StageDataSO</code> & <code style="color: var(--purple);">AnimationType</code></h2>
+    <table class="api-table">
+        <colgroup><col style="width: 30%;"><col style="width: 22%;"><col style="width: 48%;"></colgroup>
+        <thead><tr><th>필드</th><th>타입</th><th>역할</th></tr></thead>
+        <tbody>
+            <tr><td><code>_stageNumber</code></td><td>int</td><td>스테이지 번호 (1~20). 인스펙터에서 직접 입력</td></tr>
+            <tr><td><code>_stageName</code></td><td>string</td><td>화면 표시용 이름 (예: "STAGE 1")</td></tr>
+            <tr><td><code>_clearAnimationType</code></td><td>AnimationType</td><td>클리어 연출 종류 (Default = 0, Special = 1)</td></tr>
+            <tr><td><code>_failAnimationType</code></td><td>AnimationType</td><td>실패 연출 종류 (Default = 0, Special = 1)</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// StageDataSO.cs — 모든 필드는 [SerializeField] private + get-only 프로퍼티</span>
+[<span class="ty">CreateAssetMenu</span>(fileName = <span class="st">"StageData"</span>, menuName = <span class="st">"Game/Stage Data"</span>)]
+<span class="kw">public class</span> <span class="ty">StageDataSO</span> : <span class="ty">ScriptableObject</span> {
+    [<span class="ty">SerializeField</span>] <span class="kw">private int</span> _stageNumber;
+    [<span class="ty">SerializeField</span>] <span class="kw">private string</span> _stageName;
+    [<span class="ty">SerializeField</span>] <span class="kw">private</span> <span class="ty">AnimationType</span> _clearAnimationType;
+    [<span class="ty">SerializeField</span>] <span class="kw">private</span> <span class="ty">AnimationType</span> _failAnimationType;
+
+    <span class="kw">public int</span> <span class="fn">StageNumber</span> => _stageNumber;
+    <span class="kw">public string</span> <span class="fn">StageName</span> => _stageName;
+    <span class="kw">public</span> <span class="ty">AnimationType</span> <span class="fn">ClearAnimationType</span> => _clearAnimationType;
+    <span class="kw">public</span> <span class="ty">AnimationType</span> <span class="fn">FailAnimationType</span> => _failAnimationType;
+}</pre>
+    <div class="info-box">
+        <strong>왜 ScriptableObject인가</strong> — 인스펙터에서 직접 값 입력, 핫리로드 시 데이터 보존, 런타임 불변(read-only). 20개 에셋(<code>Assets/_Project/ScriptableObjects/Stage01.asset</code> ~ <code>Stage20.asset</code>)은 <code>StageManager._stageData[]</code>에 인스펙터로 할당.
+    </div>
+</section>
+
+<!-- ═════════════════════ 24. StageManager ═════════════════════ -->
+<section>
+    <span class="slide-label">24 / 32 · PART 3 · Manager</span>
+    <h2><code style="color: var(--purple);">StageManager</code> — 스테이지 번호 싱글턴</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 38%;"><col style="width: 62%;"></colgroup>
+        <thead><tr><th>메서드</th><th>역할 / 동작</th></tr></thead>
+        <tbody>
+            <tr><td><code>SetCurrentStage(int)</code></td><td>입력값을 <code>Mathf.Clamp(1, 20)</code>으로 강제 후 캐시 무효화</td></tr>
+            <tr><td><code>AdvanceToNextStage()</code></td><td><code>IsLastStage()</code> false일 때만 +1, 캐시 무효화</td></tr>
+            <tr><td><code>IsLastStage(): bool</code></td><td><code>_currentStageNumber == 20</code> (M7-A: <code>&gt;=</code> → <code>==</code> 정밀화)</td></tr>
+            <tr><td><code>GetCurrentStageData(): StageDataSO</code></td><td>레거시 API. 신규 호출은 <code>CurrentStageData</code> 프로퍼티 사용 권장</td></tr>
+            <tr><td><code>CurrentStageData</code> (M7-D)</td><td>O(1) 캐시 접근, <code>SetCurrentStage</code>에서 무효화</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// StageManager.cs — DontDestroyOnLoad 싱글턴</span>
+<span class="kw">public class</span> <span class="ty">StageManager</span> : <span class="ty">MonoBehaviour</span> {
+    <span class="kw">public static</span> <span class="ty">StageManager</span> Instance { <span class="kw">get</span>; <span class="kw">private set</span>; }
+    [<span class="ty">SerializeField</span>] <span class="kw">private</span> <span class="ty">StageDataSO</span>[] _stageData;
+    <span class="kw">private int</span> _currentStageNumber = <span class="nu">1</span>;
+    <span class="kw">private</span> <span class="ty">StageDataSO</span> _currentStageData;  <span class="cm">// M7-D 캐시</span>
+
+    <span class="kw">private void</span> <span class="fn">Awake</span>() {
+        <span class="kw">if</span> (Instance != <span class="kw">null</span>) { Destroy(gameObject); <span class="kw">return</span>; }
+        Instance = <span class="kw">this</span>;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    <span class="kw">public bool</span> <span class="fn">IsLastStage</span>() => _currentStageNumber == <span class="nu">20</span>;
+}</pre>
+    <div class="info-box">
+        <strong>역참조 금지</strong> — StageManager는 UIManager·GameFlowController·SaveManager를 절대 참조하지 않는다. 다른 매니저가 StageManager에 의존하는 단방향 구조 유지.
+    </div>
+</section>
+
+<!-- ═════════════════════ 25. SaveManager ═════════════════════ -->
+<section>
+    <span class="slide-label">25 / 32 · PART 3 · Manager</span>
+    <h2><code style="color: var(--purple);">SaveManager</code> — PlayerPrefs 캡슐화</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 38%;"><col style="width: 62%;"></colgroup>
+        <thead><tr><th>메서드</th><th>내부 구현</th></tr></thead>
+        <tbody>
+            <tr><td><code>Save(int)</code></td><td><code>PlayerPrefs.SetInt(SAVE_KEY, value)</code> + <code>Save()</code> (동기)</td></tr>
+            <tr><td><code>SaveAsync(int): UniTask</code> (M7-D)</td><td><code>UniTask.RunOnThreadPool</code>로 백그라운드 저장 — 모바일 I/O 프리징 회피</td></tr>
+            <tr><td><code>Load(): int</code></td><td><code>PlayerPrefs.GetInt(SAVE_KEY, 0)</code></td></tr>
+            <tr><td><code>Reset()</code></td><td><code>PlayerPrefs.DeleteKey(SAVE_KEY)</code> + <code>Save()</code></td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// SaveManager.cs — DontDestroyOnLoad 싱글턴, PlayerPrefs 직접 노출 금지</span>
+<span class="kw">public class</span> <span class="ty">SaveManager</span> : <span class="ty">MonoBehaviour</span> {
+    <span class="kw">private const string</span> <span class="ty">SAVE_KEY</span> = <span class="st">"MaxClearedStage"</span>;
+    <span class="kw">public static</span> <span class="ty">SaveManager</span> Instance { <span class="kw">get</span>; <span class="kw">private set</span>; }
+
+    <span class="kw">public void</span> <span class="fn">Save</span>(<span class="kw">int</span> maxClearedStage) {
+        <span class="ty">PlayerPrefs</span>.SetInt(<span class="ty">SAVE_KEY</span>, maxClearedStage);
+        <span class="ty">PlayerPrefs</span>.Save();
+    }
+
+    <span class="kw">public async</span> <span class="ty">UniTask</span> <span class="fn">SaveAsync</span>(<span class="kw">int</span> maxClearedStage) {
+        <span class="kw">await</span> <span class="ty">UniTask</span>.RunOnThreadPool(() => Save(maxClearedStage));
+    }
+
+    <span class="kw">public int</span> <span class="fn">Load</span>() => <span class="ty">PlayerPrefs</span>.GetInt(<span class="ty">SAVE_KEY</span>, <span class="nu">0</span>);
+}</pre>
+    <div class="info-box">
+        <strong>왜 PlayerPrefs를 직접 쓰지 않고 감쌌나</strong> — 향후 SQLite, JSON 파일, 클라우드 동기화로 교체 시 SaveManager 내부만 수정하면 호출자는 무영향. M7-D의 <code>SaveAsync</code> 추가도 같은 캡슐화 덕분에 안전했음.
+    </div>
+</section>
+
+<!-- ═════════════════════ 26. BootLoader ═════════════════════ -->
+<section>
+    <span class="slide-label">26 / 32 · PART 3 · Manager</span>
+    <h2><code style="color: var(--purple);">BootLoader</code> — 진입점 / 비동기 초기화</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 30%;"><col style="width: 35%;"><col style="width: 35%;"></colgroup>
+        <thead><tr><th>설계 포인트</th><th>선택 이유</th><th>대안 / 메모</th></tr></thead>
+        <tbody>
+            <tr><td>싱글턴 아님</td><td>Boot 씬 종료 시 자동 파괴</td><td>DontDestroyOnLoad 불필요 — 메모리 절약</td></tr>
+            <tr><td>UniTask + CancellationToken</td><td>씬 전환 중 안전한 취소</td><td>코루틴 대비 async/await 가독성 ↑</td></tr>
+            <tr><td>Awake → Start 변경 (M6)</td><td>모든 매니저 Awake 완료 보장</td><td>StageManager.Instance NRE 방지</td></tr>
+            <tr><td>씬 이름 상수 (M7-B)</td><td><code>MAIN_SCENE_NAME = "Main"</code></td><td>매직 스트링 제거</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// BootLoader.cs — Boot 씬 전용, M7-D WaitUntil 동기화</span>
+<span class="kw">public class</span> <span class="ty">BootLoader</span> : <span class="ty">MonoBehaviour</span> {
+    <span class="kw">private const string</span> <span class="ty">MAIN_SCENE_NAME</span> = <span class="st">"Main"</span>;
+    <span class="kw">private</span> <span class="ty">CancellationTokenSource</span> _cts = <span class="kw">new</span>();
+
+    <span class="kw">private void</span> <span class="fn">Start</span>() => InitializeAsync(_cts.Token).Forget();
+
+    <span class="kw">private async</span> <span class="ty">UniTask</span> <span class="fn">InitializeAsync</span>(<span class="ty">CancellationToken</span> ct) {
+        <span class="kw">int</span> maxCleared = <span class="ty">SaveManager</span>.Instance.Load();
+        <span class="ty">StageManager</span>.Instance.SetCurrentStage(maxCleared + <span class="nu">1</span>);
+        <span class="kw">await</span> <span class="ty">SceneManager</span>.LoadSceneAsync(<span class="ty">MAIN_SCENE_NAME</span>).WithCancellation(ct);
+        <span class="kw">await</span> <span class="ty">UniTask</span>.WaitUntil(() => <span class="ty">UIManager</span>.Instance != <span class="kw">null</span>, cancellationToken: ct);
+    }
+
+    <span class="kw">private void</span> <span class="fn">OnDestroy</span>() { _cts?.Cancel(); _cts?.Dispose(); }
+}</pre>
+</section>
+
+<!-- ═════════════════════ 27. UIManager ═════════════════════ -->
+<section>
+    <span class="slide-label">27 / 32 · PART 3 · Manager</span>
+    <h2><code style="color: var(--purple);">UIManager</code> — 패널 전환 / 위임</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 38%;"><col style="width: 62%;"></colgroup>
+        <thead><tr><th>메서드</th><th>역할 / 호출 시점</th></tr></thead>
+        <tbody>
+            <tr><td><code>ShowPanel(PanelType)</code></td><td>M7-C: <code>_currentPanelType</code> 캐시로 동일 패널 재호출 시 early return → O(1)</td></tr>
+            <tr><td><code>RefreshStageDisplay()</code></td><td><code>STAGE_PREFIX + StageManager.CurrentStageNumber</code> 갱신</td></tr>
+            <tr><td><code>OnPlayButtonClick()</code></td><td>MainPanel → InGamePanel 전환</td></tr>
+            <tr><td><code>OnRestartButtonClick()</code></td><td><code>SaveManager.Reset</code> + <code>SetCurrentStage(1)</code> + <code>ShowPanel(Main)</code></td></tr>
+            <tr><td><code>PlayClearAndThen(Action)</code> (M6)</td><td><code>ShowPanel(Clear)</code> + <code>AnimationController.PlayClear</code> 위임</td></tr>
+            <tr><td><code>PlayFailAndThen(Action)</code> (M6)</td><td><code>ShowPanel(Fail)</code> + <code>AnimationController.PlayFail</code> 위임</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// UIManager.cs — Dictionary 기반 O(1) 패널 전환 (M7-C)</span>
+<span class="kw">public enum</span> <span class="ty">PanelType</span> { Main, InGame, Clear, Fail, GameClear }
+
+<span class="kw">private</span> <span class="ty">Dictionary</span>&lt;<span class="ty">PanelType</span>, <span class="ty">GameObject</span>&gt; _panelMap;
+<span class="kw">private</span> <span class="ty">PanelType</span>? _currentPanelType = <span class="kw">null</span>;
+<span class="kw">private const string</span> <span class="ty">STAGE_PREFIX</span> = <span class="st">"STAGE "</span>;  <span class="cm">// M7-B</span>
+
+<span class="kw">public void</span> <span class="fn">ShowPanel</span>(<span class="ty">PanelType</span> type) {
+    <span class="kw">if</span> (_currentPanelType == type) <span class="kw">return</span>;  <span class="cm">// M7-C early return</span>
+    <span class="kw">foreach</span> (<span class="kw">var</span> kv <span class="kw">in</span> _panelMap) kv.Value.SetActive(<span class="kw">false</span>);
+    _panelMap[type].SetActive(<span class="kw">true</span>);
+    _currentPanelType = type;
+}</pre>
+</section>
+
+<!-- ═════════════════════ 28. GameFlowController ═════════════════════ -->
+<section>
+    <span class="slide-label">28 / 32 · PART 3 · Manager</span>
+    <h2><code style="color: var(--purple);">GameFlowController</code> — 오케스트레이터</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 32%;"><col style="width: 68%;"></colgroup>
+        <thead><tr><th>메서드</th><th>호출 흐름 (M6 콜백 체인)</th></tr></thead>
+        <tbody>
+            <tr><td><code>OnStageClear()</code></td><td>① <code>SaveManager.Save(currentStage)</code> ② <code>UIManager.PlayClearAndThen(콜백)</code> ③ 콜백: <code>IsLastStage</code> ? <code>ShowPanel(GameClear)</code> : <code>AdvanceToNextStage</code> + <code>RefreshStageDisplay</code> + <code>ShowPanel(Main)</code></td></tr>
+            <tr><td><code>OnStageFail()</code></td><td>① <code>UIManager.PlayFailAndThen(콜백)</code> ② 콜백: <code>RefreshStageDisplay</code> + <code>ShowPanel(Main)</code> (스테이지 번호 미변경, 저장 미발생)</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// GameFlowController.cs — Main 씬 루트 GameObject, Canvas 외부</span>
+<span class="kw">public void</span> <span class="fn">OnStageClear</span>() {
+    <span class="kw">int</span> stage = <span class="ty">StageManager</span>.Instance.CurrentStageNumber;
+    <span class="ty">SaveManager</span>.Instance.Save(stage);  <span class="cm">// 연출 전에 즉시 저장</span>
+
+    <span class="ty">UIManager</span>.Instance.PlayClearAndThen(() => {
+        <span class="kw">if</span> (<span class="ty">StageManager</span>.Instance.IsLastStage()) {
+            <span class="ty">UIManager</span>.Instance.ShowPanel(<span class="ty">PanelType</span>.GameClear);
+        } <span class="kw">else</span> {
+            <span class="ty">StageManager</span>.Instance.AdvanceToNextStage();
+            <span class="ty">UIManager</span>.Instance.RefreshStageDisplay();
+            <span class="ty">UIManager</span>.Instance.ShowPanel(<span class="ty">PanelType</span>.Main);
+        }
+    });
+}</pre>
+    <div class="info-box">
+        <strong>설계 포인트</strong> — GameFlowController는 <code>AnimationController</code>를 직접 참조하지 <strong>않는다</strong>. UIManager 위임 방식으로 직접 의존을 회피했음 (M6).
+    </div>
+</section>
+
+<!-- ═════════════════════ 29. AnimationController ═════════════════════ -->
+<section>
+    <span class="slide-label">29 / 32 · PART 3 · Manager (M6)</span>
+    <h2><code style="color: var(--purple);">AnimationController</code> — DOTween 연출</h2>
+    <table class="api-table">
+        <colgroup><col style="width: 38%;"><col style="width: 62%;"></colgroup>
+        <thead><tr><th>메서드 / 필드</th><th>동작 (DOTween Sequence)</th></tr></thead>
+        <tbody>
+            <tr><td><code>PlayClear(Action onDone)</code></td><td>CanvasGroup 페이드인 (0→0.85, 0.4초) + 텍스트 스케일 인 (0→1, 0.4초, OutBack) + 1.0초 대기 + 콜백</td></tr>
+            <tr><td><code>PlayFail(Action onDone)</code></td><td>CanvasGroup 페이드인 (0→0.85, 0.4초) + 텍스트 DOShakePosition (0.5초, 강도 20) + 0.8초 대기 + 콜백</td></tr>
+            <tr><td><code>_clearOverlay</code> / <code>_failOverlay</code></td><td>CanvasGroup, 인스펙터 할당</td></tr>
+            <tr><td><code>_clearTextTransform</code> / <code>_failTextTransform</code></td><td>Transform, 인스펙터 할당</td></tr>
+            <tr><td><code>_activeSequence</code></td><td>Sequence, 재시작 시 <code>Kill()</code> 호출로 중복 재생 방지</td></tr>
+        </tbody>
+    </table>
+    <pre class="code-block"><span class="cm">// AnimationController.cs — UIManager 위임 호출만 받음</span>
+<span class="kw">public void</span> <span class="fn">PlayClear</span>(<span class="ty">Action</span> onDone) {
+    _activeSequence?.Kill();
+    _clearOverlay.alpha = <span class="nu">0</span>;
+    _clearTextTransform.localScale = <span class="ty">Vector3</span>.zero;
+
+    _activeSequence = <span class="ty">DOTween</span>.Sequence()
+        .Append(_clearOverlay.DOFade(<span class="nu">0.85f</span>, <span class="nu">0.4f</span>))
+        .Join(_clearTextTransform.DOScale(<span class="nu">1f</span>, <span class="nu">0.4f</span>).SetEase(<span class="ty">Ease</span>.OutBack))
+        .AppendInterval(<span class="nu">1.0f</span>)
+        .OnComplete(() => onDone?.Invoke());
+}</pre>
+</section>
+
+<!-- ═════════════════════ 30. 시스템 의존 관계 (기술) ═════════════════════ -->
+<section>
+    <span class="slide-label">30 / 32 · PART 3 · 의존 관계</span>
+    <h2>시스템 의존 관계 — 단방향 규칙</h2>
+    <pre class="code-block" style="font-size: 0.7em;"><span class="ty">BootLoader</span>            → <span class="ty">SaveManager</span>, <span class="ty">StageManager</span>
+<span class="ty">GameFlowController</span>    → <span class="ty">StageManager</span>, <span class="ty">UIManager</span>, <span class="ty">SaveManager</span>
+<span class="ty">UIManager</span>             → <span class="ty">StageManager</span>, <span class="ty">SaveManager</span>, <span class="ty">AnimationController</span>
+<span class="ty">AnimationController</span>   → DOTween (외부 라이브러리만)
+<span class="ty">SafeAreaHandler</span>       → (독립)
+<span class="ty">SceneBootstrapper</span>     → (독립, #if UNITY_EDITOR)
+<span class="ty">StageManager</span>          → (독립)
+<span class="ty">SaveManager</span>           → (독립)</pre>
+    <table class="api-table" style="margin-top: 12px;">
+        <colgroup><col style="width: 30%;"><col style="width: 18%;"><col style="width: 22%;"><col style="width: 30%;"></colgroup>
+        <thead><tr><th>클래스</th><th>계층</th><th>DontDestroyOnLoad</th><th>씬 범위</th></tr></thead>
+        <tbody>
+            <tr><td><code>StageManager</code></td><td>Manager</td><td>✓</td><td>전역 (Boot+Main)</td></tr>
+            <tr><td><code>SaveManager</code></td><td>Manager</td><td>✓</td><td>전역 (Boot+Main)</td></tr>
+            <tr><td><code>BootLoader</code></td><td>Manager</td><td>✗</td><td>Boot 전용</td></tr>
+            <tr><td><code>UIManager</code></td><td>Manager</td><td>✗</td><td>Main 전용</td></tr>
+            <tr><td><code>GameFlowController</code></td><td>Manager</td><td>✗</td><td>Main 전용</td></tr>
+            <tr><td><code>AnimationController</code></td><td>Manager</td><td>✗</td><td>Main 전용</td></tr>
+            <tr><td><code>SafeAreaHandler</code></td><td>UI</td><td>✗</td><td>Main 전용</td></tr>
+        </tbody>
+    </table>
+    <div class="info-box">
+        <strong>단방향 규칙 위반 시 발생하는 문제</strong> — ① 순환 의존(A→B→A)으로 컴파일/초기화 순서 버그, ② 단위 테스트 시 mock 어셈블리 폭증, ③ 한 클래스 변경이 예상치 못한 곳에 파급. 이번 키트는 모든 매니저가 단방향만 따른다.
+    </div>
+</section>
+
+<!-- ═════════════════════ 31. 에셋 구조 ═════════════════════ -->
+<section>
+    <span class="slide-label">31 / 32 · PART 3 · 에셋 구조</span>
+    <h2>에셋 구조 & Main 씬 계층</h2>
+    <pre class="code-block"><span class="ty">Assets/_Project/</span>
+├── <span class="ty">Scripts/</span>
+│   ├── <span class="ty">Data/</span>
+│   │   ├── AnimationType.cs       <span class="cm">// M2 ✅</span>
+│   │   └── StageDataSO.cs         <span class="cm">// M2 ✅</span>
+│   ├── <span class="ty">Managers/</span>
+│   │   ├── StageManager.cs        <span class="cm">// M2 ✅ (M7-D 캐시)</span>
+│   │   ├── SaveManager.cs         <span class="cm">// M2 ✅ (M7-D SaveAsync)</span>
+│   │   ├── BootLoader.cs          <span class="cm">// M3 ✅ (M6 Awake→Start)</span>
+│   │   ├── UIManager.cs           <span class="cm">// M4 ✅ (M7-C O(1))</span>
+│   │   ├── GameFlowController.cs  <span class="cm">// M5 ✅ (M6 콜백 체인)</span>
+│   │   ├── AnimationController.cs <span class="cm">// M6 ✅</span>
+│   │   └── SceneBootstrapper.cs   <span class="cm">// M6 ✅</span>
+│   └── <span class="ty">UI/</span>
+│       └── SafeAreaHandler.cs     <span class="cm">// M4 ✅ (M7-A null 체크)</span>
+├── <span class="ty">ScriptableObjects/</span>
+│   └── Stage01.asset ~ Stage20.asset  <span class="cm">// M2 ✅</span>
+└── <span class="ty">Scenes/</span>
+    ├── Boot.unity
+    └── Main.unity
+
+<span class="ty">Main.unity</span>
+├── <span class="ty">Canvas</span>  [ScaleWithScreenSize 1080×1920 / Match 0.5]
+│   ├── <span class="ty">SafeArea</span>  [SafeAreaHandler 부착]
+│   │   ├── MainPanel       [비활성]
+│   │   ├── InGamePanel     [비활성]
+│   │   ├── ClearPanel      [비활성 / CanvasGroup + 텍스트]
+│   │   ├── FailPanel       [비활성 / CanvasGroup + 텍스트]
+│   │   └── GameClearPanel  [비활성]
+│   └── [UIManager · AnimationController 부착]
+└── <span class="ty">GameFlowController</span>  [Canvas 외부, Main 씬 루트]</pre>
+</section>
+
+<!-- ═════════════════════ 32. 마무리 ═════════════════════ -->
+<section class="center-slide">
+    <span class="slide-label">32 / 32 · 마무리</span>
+    <h2 style="font-size: 1.5em; margin-bottom: 0.5em;">이제 게임을 만들 차례입니다</h2>
+    <div class="grid-2" style="margin: 1em 0;">
+        <div class="card">
+            <h4>신입 사원이 기억할 것</h4>
+            <p>• 5개 화면이 있고 한 명의 관리자가 갈아끼움</p>
+            <p>• 클리어/실패 후의 행선지는 교통 정리 담당자가 결정</p>
+            <p>• 진행 상황은 자동 저장</p>
+            <p>• 단방향 의존 — 거꾸로 부르지 않기</p>
+        </div>
+        <div class="card">
+            <h4>개발자가 다음에 할 일</h4>
+            <p>• 인게임 콘텐츠 시스템 (퍼즐 / 러너 등)</p>
+            <p>• 클리어/실패 판정 규칙을 <code>OnStageClear/Fail</code>에 연결</p>
+            <p>• 프로토타입 버튼 제거</p>
+            <p>• MVP 이후 기능: 사운드 · 광고 · 리더보드 등</p>
+        </div>
+    </div>
+    <div class="info-box" style="max-width: 720px; margin: 1em auto 0; text-align: left;">
+        <strong>이 키트의 가치</strong> — 동일한 인프라(앱 시작 · 화면 전환 · 저장 · 연출)를 매번 다시 만들지 않는 것. 게임 한 편 출시할 때마다 절약되는 1~2주가 누적되면 그것이 곧 경쟁력입니다. 다음에 만들어볼 게임 아이디어를 가져오세요.
+    </div>
+    <p class="footnote" style="margin-top: 2em;">소스 — <code>docs/ARCHITECTURE.md</code> · <code>docs/roadmap.md</code> · <code>docs/PRD.md</code> | 갱신 2026-05-05</p>
 </section>
 
 </div>
@@ -1478,12 +1048,12 @@ GameFlowController (Canvas 외부, Main 씬 루트)
         plugins: [ RevealHighlight ]
     });
 
-    // ── 사이드바 TOC ──────────────────────────────────────
+    // 사이드바 TOC
     (function () {
-        const toggle   = document.getElementById('toc-toggle');
-        const sidebar  = document.getElementById('toc-sidebar');
-        const overlay  = document.getElementById('toc-overlay');
-        const list     = document.getElementById('toc-list');
+        const toggle  = document.getElementById('toc-toggle');
+        const sidebar = document.getElementById('toc-sidebar');
+        const overlay = document.getElementById('toc-overlay');
+        const list    = document.getElementById('toc-list');
 
         function openToc()  { sidebar.classList.add('open');    document.body.classList.add('toc-open'); }
         function closeToc() { sidebar.classList.remove('open'); document.body.classList.remove('toc-open'); }
@@ -1495,12 +1065,8 @@ GameFlowController (Canvas 외부, Main 씬 루트)
         overlay.addEventListener('click', closeToc);
         sidebar.addEventListener('click', function (e) { e.stopPropagation(); });
 
-        // ── TOC 항목 생성 ──
-        var DIVIDER_KEYWORDS = ['PART 1', 'PART 2', 'PART 3', 'PART 4'];
-
         Reveal.on('ready', function () {
             var sections = document.querySelectorAll('.reveal .slides > section');
-
             sections.forEach(function (section, idx) {
                 var h1 = section.querySelector('h1');
                 var h2 = section.querySelector('h2');
@@ -1514,9 +1080,11 @@ GameFlowController (Canvas 외부, Main 씬 루트)
                     title = h1.textContent.trim();
                     isDivider = true;
                 } else if (h2) {
-                    // 배지 텍스트 제거
                     var clone = h2.cloneNode(true);
-                    clone.querySelectorAll('.badge, .slide-label').forEach(function (el) { el.remove(); });
+                    clone.querySelectorAll('.badge, .slide-label, code').forEach(function (el) {
+                        if (el.tagName === 'CODE') el.replaceWith(document.createTextNode(el.textContent));
+                        else el.remove();
+                    });
                     title = clone.textContent.trim().replace(/\s+/g, ' ');
                 }
 
@@ -1542,20 +1110,15 @@ GameFlowController (Canvas 외부, Main 씬 루트)
                 li.appendChild(a);
                 list.appendChild(li);
             });
-
             updateActive();
         });
 
-        // ── 현재 슬라이드 하이라이트 ──
         function updateActive() {
             var cur = Reveal.getIndices().h;
             list.querySelectorAll('a').forEach(function (a) {
                 var isActive = parseInt(a.dataset.idx) === cur;
                 a.classList.toggle('toc-active', isActive);
-                if (isActive) {
-                    // 사이드바 스크롤: 활성 항목이 보이도록
-                    a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                }
+                if (isActive) a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             });
         }
 
