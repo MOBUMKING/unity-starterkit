@@ -6,13 +6,14 @@
 > 2026-05-04 업데이트: M4 완료 반영 (UIManager & SafeAreaHandler 구현)
 > 2026-05-04 업데이트: 코드 리뷰·성능 분석 결과를 토대로 M7(중규모 확장 대비 리팩토링) 신설
 > 2026-05-04 업데이트: M7-A에 StageManager.IsLastStage 비교 연산자 정밀화 항목 추가
+> 2026-05-04 업데이트: M5 완료 반영 (GameFlowController 구현 및 버튼 연결)
 
 ---
 
 ## 현재 단계
 
-- **현재 마일스톤**: M5 — GameFlowController & 판정 로직 연결
-- **전체 진행률**: 4 / 7 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader, M4 UIManager)
+- **현재 마일스톤**: M6 — 클리어·실패 연출 (AnimationController & DOTween)
+- **전체 진행률**: 5 / 7 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader, M4 UIManager, M5 GameFlowController)
 
 ---
 
@@ -87,16 +88,16 @@
 
 ### M5: GameFlowController & 판정 로직 연결 (F003, F004 로직 포함)
 > **목표**: 클리어/실패 버튼 → GameFlowController → UIManager 화면 전환 전체 흐름이 실제로 동작
-> **상태**: 예정
+> **상태**: 완료
 > **선행 조건**: M4 완료 (UIManager, 모든 패널 UI 준비 필요)
 
 | 상태 | 항목 | 설명 |
 |------|------|------|
-| [ ] | GameFlowController 구현 | OnStageClear() / OnStageFail() 메서드, SaveManager 저장 호출, StageManager 스테이지 증가, UIManager 패널 전환 명령, 20스테이지 클리어 분기(→ GameClearPanel) |
-| [ ] | 클리어 버튼 연결 | InGamePanel 클리어 버튼 → GameFlowController.OnStageClear() 호출 |
-| [ ] | 실패 버튼 연결 | InGamePanel 실패 버튼 → GameFlowController.OnStageFail() 호출 |
-| [ ] | 처음부터 다시 시작 연결 | GameClearPanel 버튼 → SaveManager.Reset() → StageManager 초기화 → MainPanel 표시 |
-| [ ] | 전체 흐름 통합 테스트 | 1스테이지 → 클리어 → 2스테이지 메인화면, 실패 → 동일 스테이지 복귀, 20스테이지 클리어 → 완료 화면 |
+| [x] | GameFlowController 구현 | OnStageClear() / OnStageFail() 메서드, SaveManager 저장 호출, StageManager 스테이지 증가, UIManager 패널 전환 명령, 20스테이지 클리어 분기(→ GameClearPanel) |
+| [x] | 클리어 버튼 연결 | InGamePanel 클리어 버튼 → GameFlowController.OnStageClear() 호출 |
+| [x] | 실패 버튼 연결 | InGamePanel 실패 버튼 → GameFlowController.OnStageFail() 호출 |
+| [x] | 처음부터 다시 시작 연결 | GameClearPanel RestartButton → UIManager.OnRestartButtonClick() (SaveManager.Reset → StageManager 초기화 → MainPanel 표시) |
+| [x] | 전체 흐름 통합 테스트 | 1스테이지 → 클리어 → 2스테이지 메인화면, 실패 → 동일 스테이지 복귀, 20스테이지 클리어 → 완료 화면 (Play Mode PASS) |
 
 ---
 
@@ -218,3 +219,4 @@ M7: 중규모 확장 대비 리팩토링 (안정성 보강 / 코드 정리 / 성
 | 2026-05-04 | M3 — Boot 씬 진입 & 초기화 흐름 | BootLoader (UniTask 비동기), Boot 씬 배치, Boot→Main 씬 전환 완성 |
 | 2026-05-04 | M1 — 프로젝트 기반 & 씬 구조 | Canvas CanvasScaler(1080×1920, Match 0.5), SafeArea 패널, MainPanel/InGamePanel/ClearPanel/FailPanel/GameClearPanel 비활성화 배치 |
 | 2026-05-04 | M4 — UIManager & 화면 전환 골격 | UIManager(ShowPanel/RefreshStageDisplay/버튼이벤트), SafeAreaHandler(노치/홈바 대응), 5개 패널 UI 골격, PanelType enum |
+| 2026-05-04 | M5 — GameFlowController & 판정 로직 연결 | GameFlowController(OnStageClear/OnStageFail), 클리어·실패·재시작 버튼 Persistent Listener 연결, Play Mode 3시나리오 PASS |
