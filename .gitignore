@@ -10,6 +10,10 @@
 # MemoryCaptures는 크기가 크므로 제외
 MemoryCaptures/
 
+# Playmode 테스터가 자동 생성하는 검증 스크린샷 (회귀 베이스라인은 docs/screenshots/에 별도 보관)
+Assets/Screenshots/
+Assets/Screenshots.meta
+
 # Asset meta 파일은 유지 (필수)
 # !/[Aa]ssets/**/*.meta
 
