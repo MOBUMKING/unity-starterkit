@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +10,6 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance { get; private set; }
 
     private const string SAVE_KEY = "MaxClearedStage";
-    private CancellationTokenSource _cts;
 
     private void Awake()
     {
@@ -24,13 +22,6 @@ public class SaveManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        _cts = new CancellationTokenSource();
-    }
-
-    private void OnDestroy()
-    {
-        _cts?.Cancel();
-        _cts?.Dispose();
     }
 
     /// <summary>
@@ -40,6 +31,16 @@ public class SaveManager : MonoBehaviour
     {
         PlayerPrefs.SetInt(SAVE_KEY, maxClearedStage);
         PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// 클리어한 최고 스테이지 번호를 비동기로 저장한다.
+    /// 다중 저장 항목 추가 시 PlayerPrefs.Save()를 스레드 풀에서 실행해 메인 스레드 블로킹을 회피한다.
+    /// </summary>
+    public async UniTask SaveAsync(int maxClearedStage)
+    {
+        PlayerPrefs.SetInt(SAVE_KEY, maxClearedStage);
+        await UniTask.RunOnThreadPool(() => PlayerPrefs.Save());
     }
 
     /// <summary>

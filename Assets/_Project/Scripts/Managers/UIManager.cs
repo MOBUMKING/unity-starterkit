@@ -36,6 +36,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AnimationController _animationController;
 
     private Dictionary<PanelType, GameObject> _panelMap;
+    private PanelType? _currentPanelType; // M7-C: 활성 패널 캐시 (O(1) 전환용)
+
+    private const string STAGE_PREFIX = "STAGE "; // M7-B: 매직 스트링 상수화
 
     private void Awake()
     {
@@ -56,6 +59,13 @@ public class UIManager : MonoBehaviour
             { PanelType.Fail,      _failPanel },
             { PanelType.GameClear, _gameClearPanel }
         };
+
+        // M7-A: 인스펙터 할당 누락 패널을 Awake에서 조기 경고
+        foreach (var pair in _panelMap)
+        {
+            if (pair.Value == null)
+                Debug.LogError($"[UIManager] {pair.Key} 패널이 인스펙터에 할당되지 않았습니다.");
+        }
     }
 
     private void Start()
@@ -66,16 +76,30 @@ public class UIManager : MonoBehaviour
 
     /// <summary>
     /// 지정한 패널만 활성화하고 나머지 패널은 비활성화한다.
+    /// 동일 패널 재호출 시 early return으로 불필요한 SetActive를 생략한다 (M7-C).
     /// </summary>
     public void ShowPanel(PanelType type)
     {
-        foreach (var pair in _panelMap)
+        if (_currentPanelType.HasValue && _currentPanelType.Value == type) return;
+
+        // 이전 패널 비활성화
+        if (_currentPanelType.HasValue)
         {
-            if (pair.Value != null)
-            {
-                pair.Value.SetActive(pair.Key == type);
-            }
+            if (_panelMap.TryGetValue(_currentPanelType.Value, out var prevPanel))
+                prevPanel?.SetActive(false);
         }
+        else
+        {
+            // 첫 호출 시 초기 상태를 정리 (씬에서 여러 패널이 켜져 있을 수 있음)
+            foreach (var pair in _panelMap)
+                pair.Value?.SetActive(false);
+        }
+
+        // 새 패널 활성화
+        if (_panelMap.TryGetValue(type, out var nextPanel))
+            nextPanel?.SetActive(true);
+
+        _currentPanelType = type;
     }
 
     /// <summary>
@@ -89,7 +113,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        string stageText = "STAGE " + StageManager.Instance.CurrentStageNumber;
+        string stageText = STAGE_PREFIX + StageManager.Instance.CurrentStageNumber;
 
         if (_mainStageText != null)
             _mainStageText.text = stageText;

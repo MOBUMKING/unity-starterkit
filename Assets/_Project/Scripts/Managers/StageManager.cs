@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -12,10 +10,23 @@ public class StageManager : MonoBehaviour
     [SerializeField] private StageDataSO[] _stageData;
 
     private int _currentStageNumber = 1;
-    private CancellationTokenSource _cts;
+    private StageDataSO _currentStageData; // M7-D: 마지막 조회 결과 캐시
 
     /// <summary>현재 도전 중인 스테이지 번호 (1~20)</summary>
     public int CurrentStageNumber => _currentStageNumber;
+
+    /// <summary>
+    /// 현재 스테이지의 StageDataSO (캐시). SetCurrentStage / AdvanceToNextStage 호출 시 자동 무효화.
+    /// </summary>
+    public StageDataSO CurrentStageData
+    {
+        get
+        {
+            if (_currentStageData == null)
+                _currentStageData = GetCurrentStageData();
+            return _currentStageData;
+        }
+    }
 
     private void Awake()
     {
@@ -28,13 +39,6 @@ public class StageManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        _cts = new CancellationTokenSource();
-    }
-
-    private void OnDestroy()
-    {
-        _cts?.Cancel();
-        _cts?.Dispose();
     }
 
     /// <summary>
@@ -43,6 +47,7 @@ public class StageManager : MonoBehaviour
     public void SetCurrentStage(int stageNumber)
     {
         _currentStageNumber = Mathf.Clamp(stageNumber, 1, 20);
+        _currentStageData = null; // 캐시 무효화
     }
 
     /// <summary>
@@ -53,13 +58,14 @@ public class StageManager : MonoBehaviour
         if (!IsLastStage())
         {
             _currentStageNumber++;
+            _currentStageData = null; // 캐시 무효화
         }
     }
 
     /// <summary>현재 스테이지가 마지막(20)인지 여부를 반환한다.</summary>
     public bool IsLastStage()
     {
-        return _currentStageNumber >= 20;
+        return _currentStageNumber == 20; // M7-A: >= 에서 == 으로 변경 (Clamp 보장 덕분에 의미 동일, 의도가 명확해짐)
     }
 
     /// <summary>

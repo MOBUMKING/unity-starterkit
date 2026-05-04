@@ -18,8 +18,13 @@ public class SafeAreaHandler : MonoBehaviour
     {
         Rect safeArea = Screen.safeArea;
         RectTransform rt = GetComponent<RectTransform>();
-        Canvas canvas = GetComponentInParent<Canvas>();
+        if (rt == null)
+        {
+            Debug.LogError("[SafeAreaHandler] RectTransform 컴포넌트가 없습니다. SafeAreaHandler는 RectTransform이 있는 GameObject에만 부착해야 합니다.");
+            return;
+        }
 
+        Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas == null)
         {
             Debug.LogWarning("[SafeAreaHandler] 부모 Canvas를 찾을 수 없습니다.");

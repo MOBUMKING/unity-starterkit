@@ -105,13 +105,14 @@
 - **설명**: 클리어한 최고 스테이지 번호를 로컬에 저장하고, 앱 재실행 시 복원하여 플레이어가 이어서 플레이해야 할 스테이지 번호를 자동으로 표시한다.
 - **MVP 필수 이유**: 앱을 껐다 켜도 진행 상태를 유지해야 한다.
 - **구현 시스템**: SaveManager, StageManager
-- **저장 방식**: PlayerPrefs 사용 (키: "MaxClearedStage", 기본값: 0)
+- **저장 방식**: PlayerPrefs 사용 (키: `SaveManager.SAVE_KEY` 상수, 기본값: 0)
 - **복원 로직**:
   - 저장된 최고 클리어 스테이지 + 1 = 현재 도전 스테이지
   - 예) MaxClearedStage = 3 → 메인 화면에 "STAGE 4" 표시
   - 예) MaxClearedStage = 0 (초기 상태) → 메인 화면에 "STAGE 1" 표시
   - 예) MaxClearedStage = 20 (전체 클리어) → 게임 완료 화면 표시
 - **저장 타이밍**: 스테이지 클리어 판정 발생 즉시 저장 (연출 재생 전)
+- **저장 방식 (M7 보강)**: 동기 `Save(int)` 외 `SaveAsync(int)` 비동기 메서드(UniTask.RunOnThreadPool 기반) 추가 제공. 모바일 스토리지 I/O로 인한 프리징 방지가 필요한 경우 비동기 경로 사용 가능
 - **상태**: 구현완료
 
 ---
@@ -125,7 +126,9 @@
   - 최소 스테이지: 1
   - 최대 스테이지: 20
   - 20스테이지 클리어 시 다음 스테이지로 진행하지 않고 게임 완료 처리
+  - `IsLastStage()`: `== 20` 등호 단독 비교 (M7 정밀화 — SetCurrentStage의 Clamp로 범위 초과 차단, 의도를 명확히 표현)
 - **데이터 구성**: StageDataSO를 20개 생성하여 각 스테이지 데이터를 정의
+- **데이터 캐싱 (M7 보강)**: `CurrentStageData` 프로퍼티가 `_currentStageData` 필드에 결과를 캐시하여, 매 호출마다 배열 인덱싱 없이 O(1) 접근 가능. `SetCurrentStage()` 호출 시 캐시 무효화
 - **상태**: 구현완료
 
 ---
@@ -151,6 +154,8 @@
 - **적용 방식**:
   - Canvas Scaler: Scale With Screen Size, 기준 해상도 1080×1920, Match Width Or Height = 0.5
   - Safe Area 처리: SafeAreaHandler가 Awake()에서 Screen.safeArea 픽셀 좌표를 0~1 앵커 좌표로 변환하여 RectTransform에 적용
+- **안정성 (M7 보강)**: SafeAreaHandler Awake()에서 RectTransform null 체크 추가. RectTransform이 없는 GameObject에 부착 시 NullReferenceException 대신 Debug.LogError 후 early return 처리
+- **동적 모니터링 범위**: 화면 회전·멀티 윈도우 미지원 방침으로 정적 레이아웃 적용만 수행 (M7 확정)
 - **상태**: 구현완료
 
 ---
@@ -160,11 +165,12 @@
 | 시스템 | 역할 | 관련 기능 |
 |--------|------|-----------|
 | **GameFlowController** | 게임 전체 흐름 제어. `OnStageClear()` / `OnStageFail()` 공개 메서드를 통해 클리어/실패 판정 처리 및 UIManager에 화면 전환 위임 | F002, F003, F004, F007 |
-| **StageManager** | 현재 스테이지 번호 관리, 스테이지 범위(1~20) 제한, 다음 스테이지 계산, StageDataSO 배열 보관 | F001, F002, F005, F006 |
-| **UIManager** | 화면별 UI 패널 활성화/비활성화, 버튼 이벤트 연결, AnimationController 위임(PlayClearAndThen / PlayFailAndThen) | F001, F002, F003, F004, F007, F008 |
-| **SaveManager** | PlayerPrefs 기반 진행 상태 저장/불러오기, 데이터 초기화 | F005, F007 |
+| **StageManager** | 현재 스테이지 번호 관리, 스테이지 범위(1~20) 제한(IsLastStage `==` 정밀화), 다음 스테이지 계산, StageDataSO 배열 보관 및 `CurrentStageData` O(1) 캐시 접근 | F001, F002, F005, F006 |
+| **UIManager** | 화면별 UI 패널 활성화/비활성화(현재 패널 캐시로 O(1) ShowPanel), 버튼 이벤트 연결, AnimationController 위임(PlayClearAndThen / PlayFailAndThen), 인스펙터 패널 할당 검증 | F001, F002, F003, F004, F007, F008 |
+| **SaveManager** | PlayerPrefs 기반 진행 상태 저장/불러오기(`SAVE_KEY` 상수화), 데이터 초기화, `SaveAsync(int)` 비동기 저장 옵션 | F005, F007 |
 | **AnimationController** | DOTween Sequence 기반 클리어/실패 오버레이 연출. UIManager의 위임 요청을 받아 재생하고 완료 콜백 호출 | F003, F004 |
-| **SafeAreaHandler** | 디바이스 Safe Area에 따라 UI RectTransform 앵커를 자동 조정 | F008 |
+| **SafeAreaHandler** | 디바이스 Safe Area에 따라 UI RectTransform 앵커를 자동 조정. RectTransform null 체크 방어 코드 포함 | F008 |
+| **BootLoader** | Boot 씬 전용 진입점. 저장 데이터 복원 후 Main 씬 로드. 씬 이름 `MAIN_SCENE_NAME` 상수화. `WaitUntil(UIManager.Instance != null)` 로 Main 씬 매니저 준비 대기 | — |
 | **SceneBootstrapper** | 에디터 전용 유틸리티. Boot 이외의 씬에서 Play 시 자동으로 Boot 씬으로 리다이렉트 (`#if UNITY_EDITOR`) | — |
 
 ### 시스템 의존 관계
@@ -300,7 +306,7 @@ SceneBootstrapper ── (에디터 전용, 의존 없음)
 | 번호 | 항목 | 결과 |
 |------|------|------|
 | 1 | 모든 기능이 시스템 구성에 매핑되어 있는가? | 통과 (F001~F008 모두 매핑) |
-| 2 | 시스템 구성에 기능 명세 없는 항목이 있는가? | SceneBootstrapper는 에디터 전용 유틸리티로 기능 명세 외 항목 — 정상 |
-| 3 | ARCHITECTURE.md와 구현 상태 일치하는가? | 통과 (M6 완료 기준 동기화 — F001~F008 모두 구현완료, SceneBootstrapper 시스템 추가 반영) |
+| 2 | 시스템 구성에 기능 명세 없는 항목이 있는가? | BootLoader·SceneBootstrapper는 기반 인프라/에디터 전용 유틸리티로 기능 명세 외 항목 — 정상 |
+| 3 | ARCHITECTURE.md와 구현 상태 일치하는가? | 통과 (M7 완료 기준 동기화 — F001~F008 모두 구현완료, M7 보강 사항(SafeAreaHandler null 체크·UIManager 패널 검증·ShowPanel O(1)·STAGE_PREFIX 상수·StageManager CurrentStageData 캐시·SaveAsync·BootLoader WaitUntil·MAIN_SCENE_NAME 상수) 반영) |
 | 4 | 기능 간 의존 관계가 명시되어 있는가? | 통과 (시스템 의존 관계 다이어그램 및 콜백 체인 흐름 포함) |
 | 5 | 누락되거나 고아 상태인 항목이 없는가? | 없음 |
