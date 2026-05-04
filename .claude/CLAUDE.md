@@ -48,6 +48,18 @@
 - 존재 여부가 불확실한 클래스/컴포넌트를 임의로 생성하지 않음 (Grep/Glob으로 먼저 검색)
 - 에러 해결 시 원인 파악 못 하면 추측 수정하지 말고 보고
 - **불확실성 보고 원칙**: 자동 검증·분석 도구(playmode-tester, code-reviewer, perf-analyzer 등)의 결과가 도구 한계로 인한 false negative/positive 가능성이 있거나 신호 간 모순이 있을 때는 단언하지 않는다. "도구 결과는 X이지만 Y 가능성도 있어 확신하기 어렵다"고 솔직히 명시하고, 사용자가 직접 확인해야 할 항목(스크린샷 시각 검증, 실기 클릭 테스트, 데이터 무결성 점검 등)을 구체적으로 안내한다
+- **자가 검증 우선 원칙 [IMPORTANT]**: 도구의 false negative/positive나 검증 누락이 발견됐을 때, 다음 세 조건을 모두 만족하면 사용자에게 컨펌받지 말고 바로 자가 검증을 수행한 뒤 결과를 보고한다.
+  1. **기존 코드를 해치지 않는다** — 프로덕션 스크립트·씬·에셋을 영구 변경하지 않는다 (execute_code 임시 실행, find_gameobjects 조회 등은 허용. 스크립트 파일 수정/저장은 비허용)
+  2. **비용이 적다** — Play Mode 진입/종료 1회, 짧은 코드 실행, 콘솔 조회 등 수 초~수십 초 안에 끝나는 검증
+  3. **자가 검증 가능하다** — Unity MCP의 execute_code, find_gameobjects, read_console, manage_editor(play/stop) 등으로 결과를 직접 확인 가능
+  - 위 조건을 만족하면 "사용자가 직접 확인해야 한다"고 떠넘기지 말고 직접 실행해 PASS/FAIL을 확정한다. 자가 검증 후에도 남은 불확실성(시각적 검증 등)만 사용자에게 안내한다.
+
+## execute_code Roslyn 백엔드 [IMPORTANT]
+- execute_code 자가 검증 시 응답의 `"compiler"` 필드 확인
+  - `"roslyn"` → 정상
+  - `"codedom"` 또는 `"파일 이름이나 확장명이 너무 깁니다"` → Roslyn 손실 신호
+- 손실 감지 시 `docs/roslyn-recovery.md` 절차 참고하여 복구 (자가 검증 우선 원칙 3조건 충족 → 컨펌 없이 진행)
+- Roslyn DLL 위치: `Assets/Plugins/Roslyn/` (4개 DLL, ~12.4MB)
 
 ## 설계 원칙
 - 에디터 친화적 설계: 코드 수정 없이 인스펙터에서 조정 가능하도록 구성

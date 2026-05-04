@@ -13,7 +13,7 @@ description: >
   - 마일스톤(M1~M9 등) 완료 보고 직전 회귀 검증
 context: fork
 agent: Explore
-allowed-tools: Read, Glob, Grep, mcp__UnityMCP__manage_editor, mcp__UnityMCP__manage_scene, mcp__UnityMCP__read_console, mcp__UnityMCP__find_gameobjects, mcp__UnityMCP__manage_camera, mcp__UnityMCP__refresh_unity
+allowed-tools: Read, Glob, Grep, mcp__UnityMCP__manage_editor, mcp__UnityMCP__manage_scene, mcp__UnityMCP__read_console, mcp__UnityMCP__find_gameobjects, mcp__UnityMCP__manage_camera, mcp__UnityMCP__refresh_unity, mcp__UnityMCP__execute_code
 ---
 
 # 플레이 모드 테스터 (playmode-tester)
@@ -52,13 +52,34 @@ Unity Editor를 자동 조작하여 Play Mode 진입 후 런타임 상태를 점
      - DontDestroyOnLoad 매니저 검증은 `mcpforunity://scene/loaded` 리소스나 `find_gameobjects search_method=by_component`로 보강
      - UI 활성 상태는 `activeSelf` 대신 **`activeInHierarchy`**를 기준으로 판정
 
-5. **Play Mode 중지** — *항상 실행 (try-finally 마인드)*
+5. **자가 검증으로 불확실성 해소 [IMPORTANT]** — *Play Mode 종료 전 수행*
+   - 4단계에서 도구 결과 간 모순이 발생하거나 도구 한계 영역(DontDestroyOnLoad 격리, 정적 Instance 필드 검증 등)에 부딪혔다면, 사용자에게 떠넘기기 전에 `execute_code`로 직접 검증을 시도한다
+   - **자가 검증 가능 조건 (3가지 모두 만족 시 직접 실행)**:
+     1. 기존 코드를 해치지 않는다 (스크립트/씬/에셋을 영구 변경하지 않음 — 일회성 실행만)
+     2. 비용이 적다 (수 초 안에 끝남)
+     3. 자가 검증 가능하다 (`execute_code`로 결과를 직접 받을 수 있음)
+   - **사전 확인 — Roslyn 백엔드 [IMPORTANT]**:
+     - 첫 `execute_code` 응답의 `"compiler"` 필드 확인. `"roslyn"`이면 진행. `"codedom"` 또는 mono.exe 에러면 Roslyn 손실 신호 → 자가 검증 중단하고 보고서에 "Roslyn 손실 — 메인 컨텍스트에서 `docs/roslyn-recovery.md` 절차로 복구 필요" 명시 (이 스킬은 fork 컨텍스트라 직접 복구 금지)
+   - **권장 패턴 — 정적 Instance 검증 (DontDestroyOnLoad 매니저용)**:
+     ```csharp
+     // execute_code 'execute' 액션에 전달
+     var sm = SaveManager.Instance;
+     var stm = StageManager.Instance;
+     var um = UIManager.Instance;
+     return $"SaveManager={(sm != null ? sm.gameObject.scene.name : "NULL")}, " +
+            $"StageManager={(stm != null ? $"{stm.gameObject.scene.name} stage={stm.CurrentStageNumber}" : "NULL")}, " +
+            $"UIManager={(um != null ? um.gameObject.scene.name : "NULL")}";
+     ```
+   - 결과 문자열에 `scene.name == "DontDestroyOnLoad"` 가 찍히면 매니저 정상 격리 확정 → "⚠️ 불확실"을 "✅ PASS"로 승격
+   - 자가 검증 후에도 남은 불확실성(시각적 디테일, 인터랙션 후 동작 등)만 사용자 확인 요청에 포함
+
+6. **Play Mode 중지** — *항상 실행 (try-finally 마인드)*
    - `manage_editor` action으로 Play 중지
    - 도중 어떤 단계가 실패하더라도 Editor를 Play Mode 상태로 방치하지 않는다
 
-6. **보고서 작성**
+7. **보고서 작성**
    - 아래 출력 형식대로 정리
-   - 결론은 **콘솔 시그니처 + 스크린샷**을 근거로 내리고, GameObject 검색 결과는 부가 정보로만 첨부
+   - 결론은 **콘솔 시그니처 + 스크린샷 + 자가 검증 결과**를 근거로 내리고, GameObject 검색 결과는 부가 정보로만 첨부
 
 ## 검증 체크 항목
 
@@ -156,13 +177,17 @@ Unity Editor를 자동 조작하여 Play Mode 진입 후 런타임 상태를 점
 - **단언 금지 원칙 [중요]**: 도구 결과만으로 단정하기 어려운 영역(아래 케이스)에서는 PASS/FAIL을 단언하지 말고 "⚠️ 불확실" 판정으로 처리하여 사용자 확인을 요청한다. 거짓 PASS는 사용자가 의심 없이 다음 단계로 넘어가게 만들고, 거짓 FAIL은 사용자에게 불필요한 수정 부담을 지운다 — 둘 다 도구 신뢰도를 갉아먹는다.
 
 ### 단언 금지가 필요한 케이스 (자주 발생)
-- **DontDestroyOnLoad 격리**: 매니저 싱글턴이 일반 GameObject 검색에서 누락 → 객체 부재만으로 FAIL 단정 금지
+- **DontDestroyOnLoad 격리**: 매니저 싱글턴이 일반 GameObject 검색에서 누락 → 객체 부재만으로 FAIL 단정 금지. **자가 검증 우선** (작업 순서 5번 참조 — `execute_code`로 정적 Instance·scene.name 검증)
 - **비동기 활성화 타이밍**: `activeSelf=false`로 잡혔어도 다음 프레임에 활성화될 수 있음 → 단일 시점 스냅샷만으로 단정 금지
 - **시각적 디테일**: 색상 정확도, 애니메이션 부드러움, 폰트 가독성 등 → 스크린샷 한 장으로 판정 불가 (사용자 직접 확인)
 - **인터랙션 후 동작**: 버튼 클릭/키 입력 결과는 이 스킬에서 시뮬레이션하지 않음 → 사용자 실기 테스트 필요
-- **도구 결과 간 모순**: 콘솔에 워닝 없는데 객체 검색은 부재 등 → 어느 쪽이 진실인지 단언 불가, 사용자 확인 요청
+- **도구 결과 간 모순**: 콘솔에 워닝 없는데 객체 검색은 부재 등 → **자가 검증 우선 시도** (3가지 조건 만족 시), 자가 검증 후에도 모호하면 사용자 확인 요청
+
+### 자가 검증 우선 원칙 [IMPORTANT]
+"⚠️ 불확실" 판정으로 사용자에게 떠넘기기 전에, 자가 검증 가능한 영역인지 먼저 확인한다. 자가 검증 3조건(기존 코드 미변경 + 저비용 + execute_code 등으로 직접 확인 가능)을 만족하면 컨펌 없이 바로 실행하고, 결과를 보고에 반영한다. 사용자 확인 요청은 자가 검증으로도 해소되지 않는 영역(시각/인터랙션/주관적 평가)에만 한정한다.
 
 ## 한계
 - **사용자 인터랙션(버튼 클릭, 키 입력) 시뮬레이션은 수행하지 않는다.** Play 진입 직후의 정적 상태만 검증한다. 인터랙션 후 동작까지 검증하려면 PlayMode 테스트(`test-writer` 스킬)가 적합하다.
 - Domain Reload 시간으로 인해 매 호출마다 10~30초 소요될 수 있다. 단순 텍스트 변경 등 위험 없는 작업에는 호출하지 않는다.
 - 시각적 디테일(애니메이션 부드러움, 색상 정확도)은 스크린샷 한 장으로 판정 불가. 시각 검증은 사람이 최종 확인한다.
+- **자가 검증(`execute_code`)은 Roslyn DLL이 `Assets/Plugins/Roslyn/`에 존재할 때만 가능**하다. CodeDom 폴백은 mono.exe CommandLine 32KB 한계로 이 프로젝트에서 작동하지 않는다 (Step 5 사전 확인 항목 참조).
