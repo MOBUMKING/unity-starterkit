@@ -228,7 +228,7 @@
         <span class="badge badge-info">UniTask</span>
         <span class="badge badge-info">DOTween (예정)</span>
     </p>
-    <p style="font-size: 0.55em; color: var(--muted); margin-top: 1.5em;">2026-05-04 기준 · 4 / 7 마일스톤 완료</p>
+    <p style="font-size: 0.55em; color: var(--muted); margin-top: 1.5em;">2026-05-04 기준 · 5 / 7 마일스톤 완료</p>
 </section>
 
 <!-- ═════════════ 한 줄 요약 ═════════════ -->
@@ -292,8 +292,8 @@
         <div class="progress-cell pc-done">M2 ✓</div>
         <div class="progress-cell pc-done">M3 ✓</div>
         <div class="progress-cell pc-done">M4 ✓</div>
-        <div class="progress-cell pc-current">M5 NOW</div>
-        <div class="progress-cell pc-todo">M6</div>
+        <div class="progress-cell pc-done">M5 ✓</div>
+        <div class="progress-cell pc-current">M6 NOW</div>
         <div class="progress-cell pc-todo">M7</div>
     </div>
     <table>
@@ -303,8 +303,8 @@
             <tr><td>M2</td><td>데이터 & 저장 시스템 (F005, F006)</td><td><span class="badge badge-ok">완료</span></td></tr>
             <tr><td>M3</td><td>Boot 씬 진입 & 초기화 흐름</td><td><span class="badge badge-ok">완료</span></td></tr>
             <tr><td>M4</td><td>UIManager & 화면 전환 골격 (F001/F002/F007/F008)</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>M5</td><td>GameFlowController & 판정 로직 연결</td><td><span class="badge badge-now">진행 예정</span></td></tr>
-            <tr><td>M6</td><td>DOTween 클리어·실패 연출</td><td><span class="badge badge-todo">대기</span></td></tr>
+            <tr><td>M5</td><td>GameFlowController & 판정 로직 연결</td><td><span class="badge badge-ok">완료</span></td></tr>
+            <tr><td>M6</td><td>DOTween 클리어·실패 연출</td><td><span class="badge badge-now">진행 예정</span></td></tr>
             <tr><td>M7</td><td>중규모 확장 대비 리팩토링</td><td><span class="badge badge-todo">대기</span></td></tr>
         </tbody>
     </table>
@@ -314,7 +314,7 @@
 <section class="center-slide divider-section">
     <h1>PART 1</h1>
     <h2 style="color: #fff;">지금까지 무엇을 만들었나</h2>
-    <p class="sub">M1 → M2 → M3 → M4 (4단계 완료)</p>
+    <p class="sub">M1 → M2 → M3 → M4 → M5 (5단계 완료)</p>
 </section>
 
 <!-- ═════════════ M1 ═════════════ -->
@@ -618,7 +618,7 @@ OnDestroy() — _cts.Cancel() / Dispose()</div>
 
 <!-- ═════════════ 현재 동작 흐름 ═════════════ -->
 <section>
-    <h2>지금 동작하는 전체 흐름</h2>
+    <h2>지금 동작하는 전체 흐름 (M5 완료)</h2>
     <div class="arrow-flow">[앱 실행]
    ↓
 <span style="color: var(--ok)">Boot.unity</span> — BootLoader.Awake()
@@ -631,10 +631,17 @@ OnDestroy() — _cts.Cancel() / Dispose()</div>
    ↓ RefreshStageDisplay() → "STAGE N" 텍스트 갱신
    ↓ ShowPanel(PanelType.Main) → 메인 화면 표시
    ↓
-[플레이 버튼] → ShowPanel(InGame)
-[처음부터 다시] → SaveManager.Reset() → ShowPanel(Main)</div>
+[플레이 버튼]      → UIManager.OnPlayButtonClick() → ShowPanel(InGame)
+[클리어 버튼]      → GameFlowController.OnStageClear()
+                     ├── SaveManager.Save(N) → 저장
+                     ├── IsLastStage==true → ShowPanel(GameClear)
+                     └── else → AdvanceToNextStage → RefreshStageDisplay → ShowPanel(Main)
+[실패 버튼]        → GameFlowController.OnStageFail()
+                     └── RefreshStageDisplay → ShowPanel(Main) (스테이지 번호 유지)
+[처음부터 다시]    → UIManager.OnRestartButtonClick()
+                     └── SaveManager.Reset → SetCurrentStage(1) → ShowPanel(Main)</div>
     <div class="info-box">
-        <p>⚠️ 클리어/실패 버튼은 아직 <strong>비연결 상태</strong>입니다. M5에서 GameFlowController를 만들고 InGamePanel 버튼 OnClick을 연결하면, 첫 스테이지 → 게임 완료까지 끊김 없이 동작하는 완전 MVP가 됩니다.</p>
+        <p>✅ M5 완료 — 클리어/실패 버튼이 <strong>GameFlowController</strong>와 연결되어 첫 스테이지 → 20스테이지 → 게임 완료까지 끊김 없이 동작하는 완전 MVP가 완성되었습니다. 다음 M6에서 DOTween 연출을 삽입합니다.</p>
     </div>
 </section>
 
@@ -652,7 +659,7 @@ OnDestroy() — _cts.Cancel() / Dispose()</div>
   ├── SaveManager     ✅
   └── StageManager    ✅
 
-GameFlowController (M5 예정)
+GameFlowController     ✅
   ├── StageManager    ✅
   ├── UIManager       ✅
   └── SaveManager     ✅
@@ -815,49 +822,100 @@ UIManager.Instance.RefreshStageDisplay();
 <section class="center-slide divider-section">
     <h1>PART 3</h1>
     <h2 style="color: #fff;">앞으로의 계획</h2>
-    <p class="sub">M5 → M6 → M7</p>
+    <p class="sub">M6 → M7 (M5 완료)</p>
 </section>
 
 <!-- ═════════════ M5 ═════════════ -->
 <section>
-    <h2><span class="badge badge-now">M5 NOW</span> GameFlowController & 판정 로직</h2>
-    <p style="color: var(--muted);">목표: 클리어/실패 버튼 → 컨트롤러 → 화면 전환 <strong>전체 흐름이 실제로 동작</strong></p>
+    <h2><span class="badge badge-ok">M5</span> GameFlowController & 판정 로직 — 완료</h2>
+    <p style="color: var(--muted);">클리어/실패 버튼 → GameFlowController → 화면 전환 전체 흐름 동작 완료</p>
+    <div class="info-box">
+        <p>
+            <strong>핵심 설계:</strong> GameFlowController는 "오케스트레이터"로서 직접 데이터를 보유하지 않고 StageManager·SaveManager·UIManager의 API를 <strong>정해진 순서로 호출</strong>하는 역할만 담당합니다. 역참조(UIManager → GameFlowController)는 없고, M6에서 AnimationController 콜백 삽입을 위한 <code>// TODO(M6)</code> 주석이 내부에 포함되어 있습니다.
+        </p>
+    </div>
     <table class="api-table">
-        <thead><tr><th>작업</th><th>구현 내용</th><th>의존 / 검증</th></tr></thead>
+        <thead><tr><th>작업</th><th>구현 내용</th><th>결과</th></tr></thead>
         <tbody>
             <tr>
-                <td><code>GameFlowController</code> 신규</td>
-                <td>OnStageClear() / OnStageFail() 공개 메서드. 내부에서 SaveManager 저장 → StageManager +1 → UIManager 패널 전환을 순서대로 수행</td>
-                <td>StageManager · UIManager · SaveManager / 단방향 의존 규칙 준수</td>
+                <td><code>GameFlowController.cs</code> 신규</td>
+                <td>OnStageClear() / OnStageFail() 공개 메서드. Main 씬 전용 싱글턴(DontDestroyOnLoad 없음)</td>
+                <td>✅ Play Mode 3시나리오 PASS</td>
             </tr>
             <tr>
-                <td>20스테이지 클리어 분기</td>
-                <td>IsLastStage() == true면 GameClearPanel로, 아니면 다음 스테이지 메인으로</td>
-                <td>StageManager.IsLastStage() 활용 — 호출처에 분기 코드 흩뿌리지 않음</td>
+                <td>클리어 버튼 연결</td>
+                <td>InGamePanel/ClearButton OnClick Persistent Listener → GameFlowController.OnStageClear</td>
+                <td>✅ 씬에 직렬화 저장</td>
             </tr>
             <tr>
-                <td>InGamePanel 버튼 연결</td>
-                <td>클리어 버튼 OnClick → OnStageClear / 실패 버튼 OnClick → OnStageFail</td>
-                <td>Inspector UnityEvent로 연결 — 코드 변경 없이 버튼 추가/제거 가능</td>
+                <td>실패 버튼 연결</td>
+                <td>InGamePanel/FailButton OnClick Persistent Listener → GameFlowController.OnStageFail</td>
+                <td>✅ 씬에 직렬화 저장</td>
             </tr>
             <tr>
                 <td>처음부터 다시 연결</td>
-                <td>GameClearPanel 버튼 → SaveManager.Reset() → StageManager.SetCurrentStage(1) → ShowPanel(Main)</td>
-                <td>UIManager.OnRestartButtonClick() 재사용 가능</td>
-            </tr>
-            <tr>
-                <td>전체 흐름 통합 테스트</td>
-                <td>1 → 클리어 → 2 → … → 20 클리어 → GameClearPanel 시나리오</td>
-                <td>실패 시 동일 스테이지 복귀 / 저장 데이터 유지 확인</td>
+                <td>GameClearPanel/RestartButton → UIManager.OnRestartButtonClick() (기존 구현 재사용)</td>
+                <td>✅ 중복 구현 없음</td>
             </tr>
         </tbody>
     </table>
-    <p class="footnote">⚙️ 이 단계가 끝나면 "연출 없는 완전한 MVP"가 완성됩니다.</p>
+    <p class="footnote">✅ "연출 없는 완전한 MVP" 완성. 다음 M6에서 DOTween 연출을 삽입합니다.</p>
+</section>
+
+<!-- ═════════════ GameFlowController 상세 ═════════════ -->
+<section>
+    <h2>🎮 GameFlowController — 메서드 상세</h2>
+    <p style="color: var(--muted);">싱글턴(DontDestroyOnLoad 없음, Main 씬 전용) / <code>Assets/_Project/Scripts/Managers/GameFlowController.cs</code></p>
+    <table class="api-table">
+        <thead><tr><th>API</th><th>역할</th><th>호출처 / 확장</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><code>OnStageClear()</code></td>
+                <td>① SaveManager.Save(currentStage) — 저장 먼저<br>② IsLastStage → GameClearPanel 표시<br>③ else → AdvanceToNextStage + RefreshStageDisplay + ShowPanel(Main)</td>
+                <td>InGamePanel 클리어 버튼 / 실제 게임플레이 시스템이 판정 시 동일 메서드 호출 / M6에서 연출 콜백 삽입 위치 <span class="key-tag">TODO(M6)</span></td>
+            </tr>
+            <tr>
+                <td><code>OnStageFail()</code></td>
+                <td>RefreshStageDisplay + ShowPanel(Main). 스테이지 번호·저장 데이터 변경 없음</td>
+                <td>InGamePanel 실패 버튼 / M6에서 실패 연출 콜백 삽입 위치 <span class="key-tag">TODO(M6)</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="grid-2" style="margin-top: 10px;">
+        <div class="card">
+            <h3>🔑 저장 타이밍 설계</h3>
+            <p>OnStageClear() 진입 즉시 <code>SaveManager.Save()</code>를 호출합니다. 연출 재생 전에 저장하므로, 연출 도중 앱이 강제 종료되어도 진행 데이터 유실이 없습니다.</p>
+        </div>
+        <div class="card">
+            <h3>🔑 M6 교체 준비</h3>
+            <p>OnStageClear/OnStageFail 내부에 <code>// TODO(M6)</code> 주석으로 콜백 삽입 위치가 명시되어 있습니다. M6에서 즉시 전환 코드를 AnimationController 콜백으로 교체하는 것만으로 연출 삽입이 완료됩니다.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═════════════ GameFlowController 활용 ═════════════ -->
+<section>
+    <h2>🎮 GameFlowController 활용법</h2>
+    <pre><code class="language-csharp">// 클리어 판정 발생 시 (버튼 또는 실제 게임플레이 시스템에서 호출)
+GameFlowController.Instance.OnStageClear();
+// 내부 동작:
+//   1. SaveManager.Instance.Save(currentStageNumber)  — 즉시 저장
+//   2. IsLastStage() → true  : UIManager.ShowPanel(PanelType.GameClear)
+//             → false : AdvanceToNextStage → RefreshStageDisplay → ShowPanel(Main)
+
+// 실패 판정 발생 시
+GameFlowController.Instance.OnStageFail();
+// 내부 동작:
+//   스테이지 번호 유지, 저장 없음
+//   RefreshStageDisplay → ShowPanel(PanelType.Main)  (동일 스테이지로 복귀)</code></pre>
+    <div class="info-box">
+        <p><strong>프로토타입 버튼 제거 방법:</strong> 실제 게임플레이 규칙을 구현한 후, InGamePanel의 클리어/실패 버튼을 제거하고 게임플레이 시스템이 동일한 <code>OnStageClear()</code> / <code>OnStageFail()</code>을 호출하도록 하면 됩니다. GameFlowController 내부 로직은 전혀 변경 불필요 — 이 설계가 스타터킷의 핵심 재사용 포인트입니다.</p>
+    </div>
 </section>
 
 <!-- ═════════════ M6 ═════════════ -->
 <section>
-    <h2><span class="badge badge-todo">M6</span> DOTween 클리어·실패 연출</h2>
+    <h2><span class="badge badge-now">M6 NOW</span> DOTween 클리어·실패 연출</h2>
     <p style="color: var(--muted);">목표: 판정 흐름 중간에 연출이 재생되고, 완료 후 자동 전환</p>
     <div class="grid-2">
         <div class="card">
@@ -987,19 +1045,25 @@ UIManager.Instance.RefreshStageDisplay();
 <section>
     <h2>📌 다음에 해야 할 일</h2>
     <ol>
-        <li><strong>지금 즉시 (M5 착수)</strong>
+        <li><strong>✅ M5 완료</strong>
             <ul>
-                <li>GameFlowController.cs 신규 작성 (OnStageClear / OnStageFail / 게임 완료 분기)</li>
-                <li>InGamePanel 클리어/실패 버튼 OnClick 인스펙터 연결</li>
-                <li>1 → 20 → 게임 완료 시나리오 통합 테스트</li>
+                <li>GameFlowController.cs 구현 완료 (OnStageClear / OnStageFail / 20스테이지 분기)</li>
+                <li>ClearButton / FailButton / RestartButton Persistent Listener 연결 완료</li>
+                <li>Play Mode 3시나리오(클리어→다음, 실패→유지, 20클리어→GameClear) PASS</li>
             </ul>
         </li>
-        <li><strong>M5 완료 후 (M6)</strong>: AnimationController 신규 + DOTween 연출 삽입 + Clear/FailPanel 디자인</li>
+        <li><strong>지금 즉시 (M6 착수)</strong>
+            <ul>
+                <li>AnimationController.cs 신규 작성 (DOTween PlayClear / PlayFail 콜백 방식)</li>
+                <li>ClearPanel, FailPanel 오버레이 UI 디자인 (텍스트 + 반투명 배경)</li>
+                <li>GameFlowController의 TODO(M6) 위치에 AnimationController 콜백 교체</li>
+            </ul>
+        </li>
         <li><strong>M6 완료 후 (M7)</strong>: 안정성 → 정리 → 성능 → I/O 순으로 단계적 리팩토링</li>
-        <li><strong>그 이후 (스타터킷 활용)</strong>: 실제 게임 콘텐츠를 InGamePanel에 삽입하면서 클리어/실패 버튼만 제거 (GameFlowController 호출 코드는 게임플레이 시스템이 인계)</li>
+        <li><strong>그 이후 (스타터킷 활용)</strong>: 실제 게임 콘텐츠를 InGamePanel에 삽입, 클리어/실패 버튼 제거, 게임플레이 시스템이 GameFlowController를 직접 호출</li>
     </ol>
     <div class="info-box">
-        <p><strong>각 단계의 검증 기준:</strong> M5는 "버튼 누르면 다음 스테이지로 가는가", M6은 "연출이 자연스러운가", M7은 "리팩토링 후에도 M5/M6 시나리오가 모두 통과하는가"입니다.</p>
+        <p><strong>각 단계의 검증 기준:</strong> M5 ✅ "버튼 누르면 다음 스테이지로 이동", M6은 "연출이 자연스럽게 재생되고 완료 후 자동 전환", M7은 "리팩토링 후에도 M5/M6 시나리오가 모두 통과"입니다.</p>
     </div>
 </section>
 
@@ -1035,7 +1099,7 @@ UIManager.Instance.RefreshStageDisplay();
 <section class="center-slide">
     <h1 style="font-size: 2.2em;">Thank you 🙌</h1>
     <p style="margin-top: 0.8em; font-size: 0.7em; color: var(--muted);">
-        4개 마일스톤 완료 · 다음은 <strong style="color: var(--accent-2)">M5 GameFlowController</strong>
+        5개 마일스톤 완료 · 다음은 <strong style="color: var(--accent-2)">M6 AnimationController & DOTween</strong>
     </p>
     <p style="margin-top: 1.5em; font-size: 0.5em; color: var(--muted);">
         <kbd>←</kbd> <kbd>→</kbd> 슬라이드 이동 · <kbd>F</kbd> 전체화면 · <kbd>ESC</kbd> 개요 보기
