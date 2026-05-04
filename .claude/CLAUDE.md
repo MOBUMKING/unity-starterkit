@@ -61,5 +61,27 @@
 
 > 모든 PRD / roadmap / ARCHITECTURE 문서는 프로젝트 루트의 docs/ 폴더 안에 위치한다.
 
+## 문서 자동 동기화 [IMPORTANT]
+프로젝트에 의미 있는 변화가 발생하면 사용자가 별도로 요청하지 않아도 docs 3종(`roadmap.md`, `ARCHITECTURE.md`, `PRD.md`)을 자동으로 동기화한다.
+사용자에게 "문서 업데이트하겠습니다" 한 줄 알리고 진행하며, 별도 확인 질문은 생략한다.
+
+### 자동 호출 트리거
+1. **roadmap 체크리스트 항목 또는 마일스톤 완료** → 3개 스킬 모두 순차 호출
+   - 호출 순서: `roadmap-manager` → `architecture-updater` → `prd-manager`
+   - 이유: 완료 표시 → 구조 동기화 → 기능 명세 상태 반영 흐름이 자연스러움
+2. **구조적 변경 발생**: 새 매니저/시스템/스크립트 추가, 클래스 의존성 변경, 새 ScriptableObject 타입 추가 등
+   - `architecture-updater` 우선 호출
+   - PRD에 영향 있는 변경이면 `prd-manager`도 이어서 호출
+
+### 자동 호출 제외 (수동 요청 시에만 호출)
+- 버그 수정만 한 경우 (구조/명세 변경 없음)
+- 주석·텍스트·스타일만 수정
+- 문서 자체만 변경한 경우
+- 인스펙터/씬 설정만 변경 (코드 변경 없음)
+
+### 호출 시점
+- 코드 변경 후 `code-reviewer` / `playmode-tester` 검증 통과 직후
+- 검증 단계에서 실패하면 문서 동기화는 보류하고 먼저 문제를 해결한다
+
 ## 작업 관리
 - 복잡한 멀티스텝 작업 시 Shrimp Task Manager(mcp__shrimp-task-manager)를 사용해 계획 및 추적

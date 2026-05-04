@@ -7,13 +7,14 @@
 > 2026-05-04 업데이트: 코드 리뷰·성능 분석 결과를 토대로 M7(중규모 확장 대비 리팩토링) 신설
 > 2026-05-04 업데이트: M7-A에 StageManager.IsLastStage 비교 연산자 정밀화 항목 추가
 > 2026-05-04 업데이트: M5 완료 반영 (GameFlowController 구현 및 버튼 연결)
+> 2026-05-04 업데이트: M6 완료 반영 (AnimationController DOTween 연출, UIManager 위임 방식, SceneBootstrapper 추가)
 
 ---
 
 ## 현재 단계
 
-- **현재 마일스톤**: M6 — 클리어·실패 연출 (AnimationController & DOTween)
-- **전체 진행률**: 5 / 7 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader, M4 UIManager, M5 GameFlowController)
+- **현재 마일스톤**: M7 — 중규모 확장 대비 리팩토링
+- **전체 진행률**: 6 / 7 마일스톤 완료 (M1 씬 구조, M2 데이터/저장, M3 BootLoader, M4 UIManager, M5 GameFlowController, M6 AnimationController)
 
 ---
 
@@ -103,24 +104,26 @@
 
 ### M6: 클리어·실패 연출 (F003, F004 연출)
 > **목표**: DOTween 기반 클리어/실패 오버레이 애니메이션이 판정 흐름 중간에 재생되고 완료 후 자동 전환
-> **상태**: 예정
+> **상태**: 완료
 > **선행 조건**: M5 완료 (GameFlowController 흐름 동작 확인 후 연출 레이어 추가)
 
 | 상태 | 기능 | 설명 |
 |------|------|------|
-| [ ] | AnimationController 구현 | DOTween 기반 PlayClear(callback) / PlayFail(callback) 메서드, 콜백으로 화면 전환 트리거 |
-| [ ] | F003 — 클리어 연출 패널 | ClearPanel: 반투명 오버레이 + "CLEAR!" 텍스트, 페이드인 + 스케일 애니메이션(골드/옐로우 계열), 약 1.5~2초 후 콜백 |
-| [ ] | F004 — 실패 연출 패널 | FailPanel: 반투명 오버레이 + "TRY AGAIN" 텍스트, 페이드인 + shake 애니메이션(붉은 계열), 약 1.5~2초 후 콜백 |
-| [ ] | GameFlowController에 연출 삽입 | OnStageClear/OnStageFail에서 즉시 전환하던 부분을 AnimationController 콜백 방식으로 교체 |
+| [x] | AnimationController 구현 | DOTween Sequence 기반 PlayClear(callback) / PlayFail(callback) 메서드 구현. CanvasGroup DOFade + DOScale(OutBack) / DOShakePosition 조합, 완료 후 콜백 호출 |
+| [x] | F003 — 클리어 연출 패널 | ClearPanel: CanvasGroup 오버레이 페이드인(0→0.85, 0.4초) + 텍스트 스케일 인(0→1, OutBack), 1.0초 대기 후 콜백 |
+| [x] | F004 — 실패 연출 패널 | FailPanel: CanvasGroup 오버레이 페이드인(0→0.85, 0.4초) + 텍스트 DOShakePosition(0.5초, 강도 20), 0.8초 대기 후 콜백 |
+| [x] | GameFlowController에 연출 삽입 | OnStageClear/OnStageFail에서 UIManager.PlayClearAndThen() / PlayFailAndThen() 콜백 위임 방식으로 교체. UIManager가 ShowPanel(Clear/Fail) 후 AnimationController에 재생 위임 |
+| [x] | SceneBootstrapper 추가 | Boot 씬 이외에서 Play 시 자동으로 Boot 씬으로 리다이렉트하는 에디터 전용 유틸리티 (`#if UNITY_EDITOR`, `RuntimeInitializeOnLoadMethod(BeforeSceneLoad)`) |
 
 > **설계 의도**: M5에서 연출 없이 전체 흐름을 먼저 검증한다. 흐름이 확인된 후 M6에서 연출을 삽입하면, 연출 관련 버그와 흐름 버그를 명확하게 분리할 수 있다.
+> **구현 방식 메모**: GameFlowController → UIManager.PlayClearAndThen() → ShowPanel(Clear) → AnimationController.PlayClear(callback) → 완료 시 콜백으로 다음 화면 전환. 직접 참조 대신 UIManager 위임 방식을 택하여 GameFlowController와 AnimationController 간 직접 의존을 회피함.
 
 ---
 
 ### M7: 중규모 확장 대비 리팩토링 (코드 리뷰 / 성능 분석 반영)
 > **목표**: MVP 흐름이 검증된 코드를 중규모(100+ 스테이지, 다수 패널, 다양한 디바이스 환경) 확장에 견딜 수 있도록 견고화
-> **상태**: 예정
-> **선행 조건**: M6 완료 (게임 흐름과 연출이 모두 검증된 후 적용해야 리팩토링 영향 범위를 좁힐 수 있음)
+> **상태**: 진행중
+> **선행 조건**: M6 완료 ✅ (게임 흐름과 연출이 모두 검증된 후 적용해야 리팩토링 영향 범위를 좁힐 수 있음)
 > **출처**: 2026-05-04 코드 리뷰 보고 + 성능 분석 보고
 
 #### M7-A: 안정성 보강 (방어 코드 / 검증)
@@ -220,3 +223,4 @@ M7: 중규모 확장 대비 리팩토링 (안정성 보강 / 코드 정리 / 성
 | 2026-05-04 | M1 — 프로젝트 기반 & 씬 구조 | Canvas CanvasScaler(1080×1920, Match 0.5), SafeArea 패널, MainPanel/InGamePanel/ClearPanel/FailPanel/GameClearPanel 비활성화 배치 |
 | 2026-05-04 | M4 — UIManager & 화면 전환 골격 | UIManager(ShowPanel/RefreshStageDisplay/버튼이벤트), SafeAreaHandler(노치/홈바 대응), 5개 패널 UI 골격, PanelType enum |
 | 2026-05-04 | M5 — GameFlowController & 판정 로직 연결 | GameFlowController(OnStageClear/OnStageFail), 클리어·실패·재시작 버튼 Persistent Listener 연결, Play Mode 3시나리오 PASS |
+| 2026-05-04 | M6 — 클리어·실패 연출 | AnimationController(DOTween Sequence), UIManager PlayClearAndThen/PlayFailAndThen 위임 방식, GameFlowController 콜백 교체, SceneBootstrapper(에디터 Boot 리다이렉트) 추가 |

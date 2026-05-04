@@ -326,7 +326,8 @@
     <h1 style="font-size: 2.2em;">Unity Starter Kit</h1>
     <h3 style="color: var(--muted); font-size: 0.95em; margin-bottom: 1em;">프로젝트 브리핑 — 신입 사원 안내 · 개발자 기술 참조</h3>
     <p style="margin-top: 0.8em;">
-        <span class="badge badge-ok">5 / 7 단계 완료</span>
+        <span class="badge badge-ok">6 / 7 단계 완료</span>
+        <span class="badge badge-now">7단계 진행중</span>
         <span class="badge badge-info">모바일 게임</span>
         <span class="badge badge-info">iOS · Android</span>
         <span class="badge badge-info">스테이지 1~20</span>
@@ -346,7 +347,7 @@
             </div>
         </div>
     </div>
-    <p style="font-size: 0.5em; color: var(--muted); margin-top: 1.2em;">2026-05-04 기준 · PART 1-2는 개발 경험이 없는 분도 읽을 수 있습니다</p>
+    <p style="font-size: 0.5em; color: var(--muted); margin-top: 1.2em;">2026-05-04 기준 · M6 완료 · PART 1-2는 개발 경험이 없는 분도 읽을 수 있습니다</p>
 </section>
 
 <!-- ═════════════ 이 프로젝트는 무엇인가요? ═════════════ -->
@@ -415,8 +416,8 @@
         <div class="progress-cell pc-done">3단계 ✓</div>
         <div class="progress-cell pc-done">4단계 ✓</div>
         <div class="progress-cell pc-done">5단계 ✓</div>
-        <div class="progress-cell pc-current">6단계 진행 중</div>
-        <div class="progress-cell pc-todo">7단계 대기</div>
+        <div class="progress-cell pc-done">6단계 ✓</div>
+        <div class="progress-cell pc-current">7단계 진행 중</div>
     </div>
     <table>
         <thead><tr><th>단계</th><th>무엇을 했나</th><th>상태</th></tr></thead>
@@ -426,8 +427,8 @@
             <tr><td>3단계 (M3)</td><td>앱 시작 시 저장 파일 불러오는 초기화 흐름</td><td><span class="badge badge-ok">완료</span></td></tr>
             <tr><td>4단계 (M4)</td><td>5개 화면 전환 관리자 + 노치·홈바 자동 대응</td><td><span class="badge badge-ok">완료</span></td></tr>
             <tr><td>5단계 (M5)</td><td>클리어·실패 판정 처리 + 다음 스테이지 진행</td><td><span class="badge badge-ok">완료</span></td></tr>
-            <tr><td>6단계 (M6)</td><td>클리어·실패 화면 전환 애니메이션 (부드러운 연출)</td><td><span class="badge badge-now">진행 예정</span></td></tr>
-            <tr><td>7단계 (M7)</td><td>코드 내부 구조 정리 (사용자 눈에는 변화 없음)</td><td><span class="badge badge-todo">대기</span></td></tr>
+            <tr><td>6단계 (M6)</td><td>클리어·실패 DOTween 연출 + 자동 화면 전환 통합</td><td><span class="badge badge-ok">완료</span></td></tr>
+            <tr><td>7단계 (M7)</td><td>안정성 보강·코드 정리·성능 최적화·I/O 견고화 (사용자 눈에는 변화 없음)</td><td><span class="badge badge-now">진행 중</span></td></tr>
         </tbody>
     </table>
 </section>
@@ -436,7 +437,7 @@
 <section class="center-slide divider-section">
     <h1>PART 1</h1>
     <h2 style="color: #fff;">지금까지 무엇을 만들었나</h2>
-    <p class="sub">1단계(M1) → 2단계(M2) → 3단계(M3) → 4단계(M4) → 5단계(M5) 완료</p>
+    <p class="sub">1단계(M1) → 2단계(M2) → 3단계(M3) → 4단계(M4) → 5단계(M5) → 6단계(M6) 완료</p>
 </section>
 
 <!-- ═════════════ M1 ═════════════ -->
@@ -632,12 +633,12 @@
             </tr>
             <tr>
                 <td>클리어 화면<br><span class="key-tag">ClearPanel</span></td>
-                <td>스테이지 성공 시 나타나는 화면 (M6에서 애니메이션 추가 예정)</td>
+                <td>스테이지 성공 시 나타나는 화면. <strong style="color: var(--ok);">M6 완료:</strong> 페이드인 + 텍스트 스케일 인 연출 적용</td>
                 <td>게임 화면에서 클리어 판정이 발생했을 때 (일반 스테이지)</td>
             </tr>
             <tr>
                 <td>실패 화면<br><span class="key-tag">FailPanel</span></td>
-                <td>스테이지 실패 시 나타나는 화면 (M6에서 애니메이션 추가 예정)</td>
+                <td>스테이지 실패 시 나타나는 화면. <strong style="color: var(--ok);">M6 완료:</strong> 페이드인 + 텍스트 흔들기(shake) 연출 적용</td>
                 <td>게임 화면에서 실패 판정이 발생했을 때</td>
             </tr>
             <tr>
@@ -686,8 +687,8 @@
             <p>클리어 직후 바로 저장합니다. 연출 화면이 나오는 도중에 앱이 꺼져도 진행 데이터가 날아가지 않습니다. "저장 먼저, 연출 나중"이 원칙입니다.</p>
         </div>
         <div class="card">
-            <h3>🔑 6단계(M6) 준비가 된 구조</h3>
-            <p>클리어·실패 처리 코드 안에 "여기에 애니메이션 연결하세요"라는 표시(TODO 주석)가 이미 있습니다. 6단계에서 그 자리에 연출 코드만 끼워 넣으면 됩니다.</p>
+            <h3>🔑 6단계(M6) 자연스러운 합류</h3>
+            <p>5단계에서 비워뒀던 "연출 자리"에 6단계에서 애니메이션 담당자(AnimationController)가 끼어 들어왔습니다. 콜백(callback) 방식으로 연결되어 연출이 끝나면 자동으로 다음 화면으로 넘어갑니다. <strong style="color: var(--ok);">M6 완료</strong></p>
         </div>
     </div>
 </section>
@@ -722,15 +723,70 @@
         </tbody>
     </table>
     <div class="info-box">
-        <p><strong>이 설계의 핵심 재사용 포인트:</strong> 나중에 실제 게임(퍼즐, 리듬 등)을 추가할 때 "클리어 조건이 충족되면 → 게임 교통 정리 담당자에게 클리어 신호를 보낸다"만 구현하면 됩니다. 저장·화면 전환은 이미 완성되어 있어서 건드릴 필요가 없습니다.</p>
+        <p><strong>이 설계의 핵심 재사용 포인트:</strong> 나중에 실제 게임(퍼즐, 리듬 등)을 추가할 때 "클리어 조건이 충족되면 → 게임 교통 정리 담당자에게 클리어 신호를 보낸다"만 구현하면 됩니다. 저장·화면 전환·연출은 이미 완성되어 있어서 건드릴 필요가 없습니다.</p>
     </div>
-    <p class="footnote">✅ "연출 없는 완전한 MVP" 완성 — 앱 시작부터 20단계 클리어까지 끊김 없이 동작합니다. 다음 6단계에서 부드러운 연출을 추가합니다.</p>
+    <p class="footnote">✅ "연출 없는 완전한 MVP" 완성 — 앱 시작부터 20단계 클리어까지 끊김 없이 동작. 6단계(M6)에서 DOTween 연출이 합류하여 MVP가 시각적으로도 완성되었습니다.</p>
+</section>
+
+<!-- ═════════════ M6 클리어/실패 연출 ═════════════ -->
+<section>
+    <span class="slide-label">PART 1 · M6 (1/2)</span>
+    <h2><span class="badge badge-ok">6단계 완료</span> 클리어·실패 화면 연출</h2>
+    <p style="color: var(--muted);">애니메이션 담당자(AnimationController) — 부드러운 연출을 재생하고 끝나면 신호를 보내는 전담 담당자</p>
+    <div class="grid-2" style="margin-bottom: 8px;">
+        <div class="card">
+            <h3>🏆 클리어 연출 — 약 1.4초</h3>
+            <ul>
+                <li>밝은 오버레이가 서서히 나타남 (0.4초 페이드인)</li>
+                <li>"CLEAR" 텍스트가 작은 점에서 통통 튀어 나오듯 커짐</li>
+                <li>1초간 멈춰서 보여준 뒤 다음 스테이지로 자동 이동</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>💥 실패 연출 — 약 1.3초</h3>
+            <ul>
+                <li>붉은 오버레이가 서서히 나타남 (0.4초 페이드인)</li>
+                <li>"FAIL" 텍스트가 좌우로 흔들리는 효과 (0.5초)</li>
+                <li>0.8초간 멈춰서 보여준 뒤 같은 스테이지로 자동 복귀</li>
+            </ul>
+        </div>
+    </div>
+    <div class="info-box">
+        <p><strong>지휘자 비유:</strong> 게임 교통 정리 담당자(지휘자)는 연출이 몇 초짜리인지 알 필요가 없습니다. "연출 끝났으면 알려줘"라고 부탁만 하고, 애니메이션 담당자가 끝났을 때 신호(callback)를 돌려보내는 구조입니다. 이렇게 하면 나중에 연출 시간을 변경해도 흐름 코드를 건드릴 필요가 없습니다.</p>
+    </div>
+</section>
+
+<!-- ═════════════ M6 SceneBootstrapper ═════════════ -->
+<section>
+    <span class="slide-label">PART 1 · M6 (2/2)</span>
+    <h2>6단계 — 개발자 편의 도구 추가</h2>
+    <div class="grid-2">
+        <div class="card">
+            <h3>🛠 자동 진입점 보정 (SceneBootstrapper)</h3>
+            <ul>
+                <li>개발 중에 메인 화면(Main 씬)에서 직접 Play 버튼을 눌러도 <strong>자동으로 Boot 화면부터 시작</strong></li>
+                <li>"세이브 데이터 불러오기"가 항상 동작하므로 테스트 편의성 향상</li>
+                <li>실제 출시 빌드에서는 자동으로 제거되어 영향 없음 (에디터 전용)</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>🔧 위임(delegation) 방식의 깔끔한 구조</h3>
+            <ul>
+                <li>게임 교통 정리 담당자 → 화면 전환 관리자 → 애니메이션 담당자 순으로 연결</li>
+                <li>각 담당자는 자기 역할에만 집중 (단방향 위임)</li>
+                <li>나중에 연출 종류를 늘리거나 바꿔도 흐름 코드는 건드릴 필요 없음</li>
+            </ul>
+        </div>
+    </div>
+    <div class="info-box">
+        <p><strong>왜 5단계에서 흐름을 먼저 검증하고 6단계에서 연출을 얹었나?</strong> — 흐름 버그와 연출 버그가 섞이면 디버깅이 어렵습니다. "스테이지가 제대로 넘어가는가"를 5단계에서 완전히 확인한 뒤, 6단계에서 연출만 얹으니 연출 관련 문제만 따로 추적할 수 있었습니다. 결과적으로 6단계는 빠르게 완료되었습니다.</p>
+    </div>
 </section>
 
 <!-- ═════════════ 현재 동작하는 전체 흐름 ═════════════ -->
 <section>
     <span class="slide-label">PART 1 · 정리</span>
-    <h2>지금 실제로 동작하는 전체 흐름 (5단계 완료 기준)</h2>
+    <h2>지금 실제로 동작하는 전체 흐름 (6단계 완료 기준)</h2>
     <div class="arrow-flow">[앱 실행]
    ↓
 초기화 전문가(BootLoader) 실행
@@ -745,12 +801,16 @@
 [플레이 버튼 클릭]   → 게임 화면으로
 [클리어 버튼 클릭]   → 게임 교통 정리 담당자(GameFlowController)
                        ├── 즉시 저장
-                       ├── 20단계? → 게임 완료 화면
-                       └── 아니면 → 다음 단계 메인 화면
-[실패 버튼 클릭]     → 저장 없이 같은 단계 메인 화면 복귀
+                       └── 화면 전환 관리자 → 애니메이션 담당자
+                            ├── 클리어 연출 재생 (~1.4초)
+                            └── 콜백 → 20단계? → 게임 완료 화면
+                                       → 아니면 다음 단계 메인 화면
+[실패 버튼 클릭]     → 화면 전환 관리자 → 애니메이션 담당자
+                       ├── 실패 연출 재생 (~1.3초)
+                       └── 콜백 → 저장 없이 같은 단계 메인 화면 복귀
 [처음부터 다시]      → 저장 초기화 → 1단계 메인 화면 복귀</div>
     <div class="info-box">
-        <p>✅ 5단계 완료 — 클리어/실패 버튼이 연결되어 첫 단계 → 20단계 → 게임 완료까지 끊김 없이 동작하는 완전한 MVP(최소 기능 제품)가 완성되었습니다. 다음 6단계에서 화면 전환 시 부드러운 애니메이션 연출을 추가합니다.</p>
+        <p>✅ 6단계까지 완료 — 클리어/실패 버튼 클릭부터 부드러운 연출 재생, 자동 화면 전환까지 끊김 없이 동작하는 <strong>시각적으로도 완성된 MVP</strong>입니다. 다음 7단계에서 코드 내부 정리와 안정성 보강을 진행합니다.</p>
     </div>
 </section>
 
@@ -771,18 +831,21 @@
 
 게임 교통 정리 담당자(GameFlowController) — 메인 화면 전용
   ├── 진행 상황 기록원(StageManager)    ✅ — 다음 단계로 넘기기, 마지막 단계 확인
-  ├── 화면 전환 관리자(UIManager)       ✅ — 어떤 화면 보여줄지 지시
+  ├── 화면 전환 관리자(UIManager)       ✅ — 연출 재생 위임 + 화면 전환
   └── 세이브 파일 담당자(SaveManager)   ✅ — 클리어 직후 저장 요청
 
 화면 전환 관리자(UIManager) — 메인 화면 전용
-  ├── 진행 상황 기록원(StageManager)    ✅ — 스테이지 번호 읽기
-  └── 애니메이션 담당자(AnimationController)  ⬜ 6단계(M6)에서 추가 예정
+  ├── 진행 상황 기록원(StageManager)         ✅ — 스테이지 번호 읽기
+  ├── 세이브 파일 담당자(SaveManager)         ✅ — 처음부터 다시 시 초기화
+  └── 애니메이션 담당자(AnimationController) ✅ — 클리어/실패 연출 위임 (M6)
 
-안전 영역 조정기(SafeAreaHandler)   ✅ 독립적으로 동작 (다른 담당자와 연결 없음)
-진행 상황 기록원(StageManager)       ✅ 독립적으로 동작
-세이브 파일 담당자(SaveManager)      ✅ 독립적으로 동작</div>
+애니메이션 담당자(AnimationController)  ✅ M6 완료 — DOTween만 사용 (다른 담당자 의존 없음)
+안전 영역 조정기(SafeAreaHandler)        ✅ 독립적으로 동작
+진행 상황 기록원(StageManager)            ✅ 독립적으로 동작
+세이브 파일 담당자(SaveManager)           ✅ 독립적으로 동작
+자동 진입점 보정기(SceneBootstrapper)    ✅ 에디터 전용 유틸 (의존 없음)</div>
     <div class="info-box">
-        <p><strong>"단방향 연결 규칙"의 의미:</strong> 위에 있는 담당자가 아래 담당자에게 지시를 내리되, 역방향은 없습니다. 예를 들어 진행 상황 기록원은 게임 교통 정리 담당자에게 먼저 말을 걸지 않습니다. 이 규칙 덕분에 아래 담당자(기록원·저장 담당자)는 독립적으로 테스트할 수 있고, 위 담당자를 교체해도 아래는 영향을 받지 않습니다.</p>
+        <p><strong>"단방향 연결 규칙"의 의미:</strong> 위에 있는 담당자가 아래 담당자에게 지시를 내리되, 역방향은 없습니다. 예를 들어 애니메이션 담당자는 화면 전환 관리자에게 먼저 말을 걸지 않습니다. 이 규칙 덕분에 아래 담당자(기록원·저장 담당자·애니메이션 담당자)는 독립적으로 테스트할 수 있고, 위 담당자를 교체해도 아래는 영향을 받지 않습니다.</p>
     </div>
 </section>
 
@@ -968,14 +1031,17 @@
             <thead><tr><th>설계 포인트</th><th>선택 이유</th><th>대안</th></tr></thead>
             <tbody>
                 <tr><td>싱글턴 아님</td><td>Boot 씬과 생사를 같이하므로 DontDestroyOnLoad 불필요. 중복 실행 위험 없음</td><td>싱글턴으로 만들면 씬 전환 후 남아서 메모리 낭비</td></tr>
+                <tr><td><code>Start()</code>에서 시작 <span class="badge badge-info" style="font-size: 0.75em;">M6 변경</span></td><td>모든 매니저의 <code>Awake()</code> 완료 후 실행 보장 → <code>SaveManager.Instance</code> null 참조 방지</td><td>Awake에서 직접 호출 시 매니저 초기화 순서 의존</td></tr>
                 <tr><td><code>UniTask</code> + <code>CancellationToken</code></td><td>씬 전환 도중 앱 종료 시 안전하게 작업 취소 가능</td><td>코루틴: 취소 신호 전파 어려움</td></tr>
-                <tr><td><code>InitializeAsync</code> 분리</td><td><code>Awake</code>를 단순하게 유지, 테스트 시 직접 호출 가능</td><td>Awake 직접 구현: 테스트 어렵고 가독성 저하</td></tr>
+                <tr><td><code>InitializeAsync</code> 분리</td><td>진입점을 단순하게 유지, 테스트 시 직접 호출 가능</td><td>Start 직접 구현: 테스트 어렵고 가독성 저하</td></tr>
                 <tr><td><code>OnDestroy</code>에서 <code>_cts.Cancel()</code></td><td>씬 전환 중 오브젝트 파괴 시 진행 중인 UniTask가 예외 없이 종료됨</td><td>미처리 시 OperationCanceledException 발생 가능</td></tr>
             </tbody>
         </table>
         <pre class="code-block"><span class="kw">private</span> <span class="ty">CancellationTokenSource</span> _cts;
 
-<span class="kw">void</span> <span class="mn">Awake</span>()
+<span class="cm">// M6: Awake → Start로 이동</span>
+<span class="cm">// 모든 매니저 Awake 완료 후 호출 보장</span>
+<span class="kw">void</span> <span class="mn">Start</span>()
 {
     _cts = <span class="kw">new</span> <span class="ty">CancellationTokenSource</span>();
     InitializeAsync(_cts.Token).Forget();
@@ -1010,9 +1076,11 @@
                 <thead><tr><th>메서드</th><th>역할</th><th>호출 시점</th></tr></thead>
                 <tbody>
                     <tr><td><code>ShowPanel(PanelType)</code></td><td><code>_panelMap</code> 전체 순회, 지정 패널만 활성화</td><td>GameFlowController, OnPlayButtonClick</td></tr>
-                    <tr><td><code>RefreshStageDisplay()</code></td><td>StageManager에서 번호 읽어 TMP_Text 2개 갱신</td><td>Start(), GameFlowController.OnStageClear/Fail</td></tr>
+                    <tr><td><code>RefreshStageDisplay()</code></td><td>StageManager에서 번호 읽어 TMP_Text 2개 갱신</td><td>Start(), GameFlowController 콜백</td></tr>
                     <tr><td><code>OnPlayButtonClick()</code></td><td>RefreshStageDisplay → ShowPanel(InGame)</td><td>Inspector 버튼 이벤트</td></tr>
                     <tr><td><code>OnRestartButtonClick()</code></td><td>SaveManager.Reset → StageManager.SetCurrentStage(1) → ShowPanel(Main)</td><td>Inspector 버튼 이벤트</td></tr>
+                    <tr><td><code>PlayClearAndThen(Action)</code> <span class="badge badge-ok" style="font-size: 0.75em;">M6</span></td><td>ShowPanel(Clear) → AnimationController.PlayClear(콜백) 위임</td><td>GameFlowController.OnStageClear()</td></tr>
+                    <tr><td><code>PlayFailAndThen(Action)</code> <span class="badge badge-ok" style="font-size: 0.75em;">M6</span></td><td>ShowPanel(Fail) → AnimationController.PlayFail(콜백) 위임</td><td>GameFlowController.OnStageFail()</td></tr>
                 </tbody>
             </table>
             <p style="font-size: 0.46em; color: var(--accent-2); margin: 6px 0 2px;"><code>PanelType</code> enum: <code>Main · InGame · Clear · Fail · GameClear</code></p>
@@ -1022,22 +1090,26 @@
         </div>
         <pre class="code-block"><span class="kw">private</span> Dictionary&lt;<span class="ty">PanelType</span>, <span class="ty">GameObject</span>&gt;
     _panelMap;
-
-<span class="kw">void</span> <span class="mn">Awake</span>()
-{
-    _panelMap = <span class="kw">new</span>() {
-        { <span class="ty">PanelType</span>.Main,      _mainPanel },
-        { <span class="ty">PanelType</span>.InGame,    _inGamePanel },
-        { <span class="ty">PanelType</span>.Clear,     _clearPanel },
-        { <span class="ty">PanelType</span>.Fail,      _failPanel },
-        { <span class="ty">PanelType</span>.GameClear, _gameClearPanel }
-    };
-}
+[<span class="ty">SerializeField</span>] <span class="kw">private</span> <span class="ty">AnimationController</span>
+    _animationController;  <span class="cm">// M6 추가</span>
 
 <span class="kw">public void</span> <span class="mn">ShowPanel</span>(<span class="ty">PanelType</span> type)
 {
     <span class="kw">foreach</span> (<span class="kw">var</span> kv <span class="kw">in</span> _panelMap)
         kv.Value.SetActive(kv.Key == type);
+}
+
+<span class="cm">// M6: 위임 메서드</span>
+<span class="kw">public void</span> <span class="mn">PlayClearAndThen</span>(<span class="ty">Action</span> onComplete)
+{
+    ShowPanel(<span class="ty">PanelType</span>.Clear);
+    _animationController.PlayClear(onComplete);
+}
+
+<span class="kw">public void</span> <span class="mn">PlayFailAndThen</span>(<span class="ty">Action</span> onComplete)
+{
+    ShowPanel(<span class="ty">PanelType</span>.Fail);
+    _animationController.PlayFail(onComplete);
 }</pre>
     </div>
 </section>
@@ -1049,44 +1121,121 @@
     <div class="grid-2">
         <div>
             <table class="api-table" style="font-size: 0.42em; margin-bottom: 8px;">
-                <thead><tr><th>메서드</th><th>흐름</th></tr></thead>
+                <thead><tr><th>메서드</th><th>흐름 <span class="badge badge-ok" style="font-size: 0.75em;">M6 통합</span></th></tr></thead>
                 <tbody>
                     <tr>
                         <td><code>OnStageClear()</code></td>
-                        <td>① SaveManager.Save(현재 스테이지) → ② IsLastStage()? → ③-a ShowPanel(GameClear) / ③-b AdvanceToNextStage → RefreshStageDisplay → ShowPanel(Main)</td>
+                        <td>① <code>SaveManager.Save(현재)</code> 즉시 저장 → ② <code>UIManager.PlayClearAndThen(콜백)</code> → ③ 콜백: <code>IsLastStage()</code>? → ③-a <code>ShowPanel(GameClear)</code> / ③-b <code>AdvanceToNextStage</code> → <code>RefreshStageDisplay</code> → <code>ShowPanel(Main)</code></td>
                     </tr>
                     <tr>
                         <td><code>OnStageFail()</code></td>
-                        <td>① RefreshStageDisplay → ② ShowPanel(Main) (스테이지 번호 변경 없음)</td>
+                        <td>① <code>UIManager.PlayFailAndThen(콜백)</code> → ② 콜백: <code>RefreshStageDisplay</code> → <code>ShowPanel(Main)</code> (스테이지 번호 변경 없음)</td>
                     </tr>
                 </tbody>
             </table>
             <div class="info-box">
-                <p><strong>M6 콜백 삽입 위치:</strong> <code>Save()</code> 직후 <code>// TODO(M6)</code> 주석 지점에 <code>await AnimationController.PlayClear()</code> 삽입 예정. GFC는 애니메이션 길이를 몰라도 됨 — UniTask await으로 완료 후 다음 단계 진행.</p>
+                <p><strong>M6 통합 완료:</strong> 콜백(<code>Action</code>) 기반 위임 방식으로 구현됨. GFC는 애니메이션 길이·종류를 몰라도 되고, AnimationController는 호출자의 후속 처리 로직을 몰라도 된다. <code>UIManager</code>가 중간 위임 계층 역할을 하므로 GFC와 AnimationController 사이 직접 의존이 발생하지 않는다.</p>
             </div>
         </div>
         <pre class="code-block"><span class="kw">public void</span> <span class="mn">OnStageClear</span>()
 {
-    <span class="ty">SaveManager</span>.Instance
-        .Save(<span class="ty">StageManager</span>.Instance
-            .CurrentStageNumber);
-    <span class="cm">// TODO(M6): AnimationController 콜백</span>
-
-    <span class="kw">if</span> (<span class="ty">StageManager</span>.Instance.IsLastStage())
-    {
-        <span class="ty">UIManager</span>.Instance
-            .ShowPanel(<span class="ty">PanelType</span>.GameClear);
-    }
-    <span class="kw">else</span>
-    {
+    <span class="cm">// 저장 먼저 — 연출 중 앱 종료 대비</span>
+    <span class="ty">SaveManager</span>.Instance.Save(
         <span class="ty">StageManager</span>.Instance
-            .AdvanceToNextStage();
-        <span class="ty">UIManager</span>.Instance
-            .RefreshStageDisplay();
+            .CurrentStageNumber);
+
+    <span class="cm">// 클리어 연출 위임 + 완료 콜백</span>
+    <span class="ty">UIManager</span>.Instance.PlayClearAndThen(() =&gt;
+    {
+        <span class="kw">if</span> (<span class="ty">StageManager</span>.Instance.IsLastStage())
+        {
+            <span class="ty">UIManager</span>.Instance
+                .ShowPanel(<span class="ty">PanelType</span>.GameClear);
+        }
+        <span class="kw">else</span>
+        {
+            <span class="ty">StageManager</span>.Instance
+                .AdvanceToNextStage();
+            <span class="ty">UIManager</span>.Instance
+                .RefreshStageDisplay();
+            <span class="ty">UIManager</span>.Instance
+                .ShowPanel(<span class="ty">PanelType</span>.Main);
+        }
+    });
+}
+
+<span class="kw">public void</span> <span class="mn">OnStageFail</span>()
+{
+    <span class="ty">UIManager</span>.Instance.PlayFailAndThen(() =&gt;
+    {
+        <span class="ty">UIManager</span>.Instance.RefreshStageDisplay();
         <span class="ty">UIManager</span>.Instance
             .ShowPanel(<span class="ty">PanelType</span>.Main);
-    }
+    });
 }</pre>
+    </div>
+</section>
+
+<!-- ═════════════ AnimationController 메서드 상세 (M6 신규) ═════════════ -->
+<section>
+    <span class="slide-label">PART 3 · AnimationController</span>
+    <h2><code>AnimationController</code> — DOTween Sequence 위임자 <span class="badge badge-ok" style="font-size: 0.55em;">M6 신규</span></h2>
+    <div class="grid-2">
+        <div>
+            <table class="api-table" style="font-size: 0.4em;">
+                <thead><tr><th>메서드</th><th>Sequence 구성</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><code>PlayClear(Action onComplete)</code></td>
+                        <td><code>_clearOverlay.DOFade(0.85f, 0.4f)</code> + <code>_clearTextTransform.DOScale(1f, 0.4f).From(0).SetEase(OutBack)</code> → <code>AppendInterval(1.0f)</code> → <code>OnComplete(콜백)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>PlayFail(Action onComplete)</code></td>
+                        <td><code>_failOverlay.DOFade(0.85f, 0.4f)</code> + <code>_failTextTransform.DOShakePosition(0.5f, 20f)</code> → <code>AppendInterval(0.8f)</code> → <code>OnComplete(콜백)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="api-table" style="font-size: 0.4em; margin-top: 6px;">
+                <thead><tr><th>SerializeField</th><th>역할</th></tr></thead>
+                <tbody>
+                    <tr><td><code>_clearOverlay</code> / <code>_failOverlay</code></td><td>CanvasGroup — 페이드 인/아웃 대상</td></tr>
+                    <tr><td><code>_clearTextTransform</code> / <code>_failTextTransform</code></td><td>Transform — 스케일/흔들기 대상</td></tr>
+                    <tr><td><code>_activeSequence</code> (private)</td><td>이전 Sequence가 살아있으면 <code>Kill()</code>로 강제 종료 (중복 재생 방지)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <pre class="code-block"><span class="kw">public void</span> <span class="mn">PlayClear</span>(<span class="ty">Action</span> onComplete)
+{
+    _activeSequence?.Kill();
+
+    _activeSequence = DOTween.Sequence()
+        .Join(_clearOverlay
+            .DOFade(<span class="nu">0.85f</span>, <span class="nu">0.4f</span>)
+            .From(<span class="nu">0f</span>))
+        .Join(_clearTextTransform
+            .DOScale(<span class="nu">1f</span>, <span class="nu">0.4f</span>)
+            .From(<span class="ty">Vector3</span>.zero)
+            .SetEase(<span class="ty">Ease</span>.OutBack))
+        .AppendInterval(<span class="nu">1.0f</span>)
+        .OnComplete(() =&gt; onComplete?.Invoke());
+}
+
+<span class="kw">public void</span> <span class="mn">PlayFail</span>(<span class="ty">Action</span> onComplete)
+{
+    _activeSequence?.Kill();
+
+    _activeSequence = DOTween.Sequence()
+        .Join(_failOverlay
+            .DOFade(<span class="nu">0.85f</span>, <span class="nu">0.4f</span>)
+            .From(<span class="nu">0f</span>))
+        .Join(_failTextTransform
+            .DOShakePosition(<span class="nu">0.5f</span>, <span class="nu">20f</span>))
+        .AppendInterval(<span class="nu">0.8f</span>)
+        .OnComplete(() =&gt; onComplete?.Invoke());
+}</pre>
+    </div>
+    <div class="info-box">
+        <p><strong>설계 의도:</strong> AnimationController는 "재생 + 완료 시 콜백 호출"만 담당한다. 어떤 화면으로 넘어갈지, 다음 스테이지가 무엇인지 모른다 — 호출자(UIManager → GameFlowController)가 콜백 안에서 결정한다. 이렇게 책임을 분리하면 연출 종류가 늘어도 GFC는 영향을 받지 않는다. <code>_activeSequence?.Kill()</code> 패턴으로 빠른 연속 클릭 시 잔여 Tween이 누적되는 문제를 방지한다.</p>
     </div>
 </section>
 
@@ -1101,26 +1250,33 @@ BootLoader            [Boot 씬 전용, 싱글턴 아님, DontDestroyOnLoad X]
 
 GameFlowController    [Main 씬 전용, 싱글턴, DontDestroyOnLoad X]
   ├── StageManager.Instance  ← AdvanceToNextStage(), IsLastStage()
-  ├── UIManager.Instance     ← ShowPanel(), RefreshStageDisplay()
+  ├── UIManager.Instance     ← PlayClearAndThen, PlayFailAndThen, ShowPanel
   └── SaveManager.Instance   ← Save(stageNumber)
 
 UIManager             [Main 씬 전용, 싱글턴, DontDestroyOnLoad X]
-  ├── StageManager.Instance  ← CurrentStageNumber (읽기 전용)
-  └── SaveManager.Instance   ← Reset() (처음부터 다시 버튼)
+  ├── StageManager.Instance         ← CurrentStageNumber (읽기 전용)
+  ├── SaveManager.Instance          ← Reset() (처음부터 다시 버튼)
+  └── AnimationController (SerializeField) ← PlayClear/PlayFail 위임  [M6]
+
+AnimationController   [Main 씬 전용, 싱글턴, M6 신규]
+  └── (DOTween만 사용, 다른 매니저 의존 없음)
 
 SafeAreaHandler       [독립, 의존 없음, Awake()에서 ApplySafeArea() 1회 실행]
+SceneBootstrapper     [Static, RuntimeInitializeOnLoadMethod, #if UNITY_EDITOR]
 StageManager          [Boot+Main 씬 공유, DontDestroyOnLoad O]
 SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
 </pre>
     <table class="api-table" style="font-size: 0.4em; margin-top: 8px;">
-        <thead><tr><th>클래스</th><th>계층</th><th>DontDestroyOnLoad</th><th>씬 범위</th></tr></thead>
+        <thead><tr><th>클래스</th><th>계층 / DontDestroyOnLoad</th><th>씬 범위</th></tr></thead>
         <tbody>
-            <tr><td><code>BootLoader</code></td><td>진입점</td><td>X</td><td>Boot 씬 전용</td></tr>
-            <tr><td><code>GameFlowController</code></td><td>오케스트레이터</td><td>X</td><td>Main 씬 전용</td></tr>
-            <tr><td><code>UIManager</code></td><td>View 제어</td><td>X</td><td>Main 씬 전용</td></tr>
-            <tr><td><code>StageManager</code></td><td>도메인 모델</td><td>O</td><td>Boot → Main 유지</td></tr>
-            <tr><td><code>SaveManager</code></td><td>인프라</td><td>O</td><td>Boot → Main 유지</td></tr>
-            <tr><td><code>SafeAreaHandler</code></td><td>UI 유틸</td><td>X</td><td>Main 씬 SafeArea 오브젝트</td></tr>
+            <tr><td><code>BootLoader</code></td><td>진입점 / X</td><td>Boot 씬 전용</td></tr>
+            <tr><td><code>GameFlowController</code></td><td>오케스트레이터 / X</td><td>Main 씬 전용</td></tr>
+            <tr><td><code>UIManager</code></td><td>View 제어 / X</td><td>Main 씬 전용</td></tr>
+            <tr><td><code>AnimationController</code> <span class="badge badge-ok" style="font-size: 0.7em;">M6</span></td><td>연출 위임자 / X</td><td>Main 씬 전용</td></tr>
+            <tr><td><code>StageManager</code></td><td>도메인 모델 / O</td><td>Boot → Main 유지</td></tr>
+            <tr><td><code>SaveManager</code></td><td>인프라 / O</td><td>Boot → Main 유지</td></tr>
+            <tr><td><code>SafeAreaHandler</code></td><td>UI 유틸 / X</td><td>Main 씬 SafeArea</td></tr>
+            <tr><td><code>SceneBootstrapper</code> <span class="badge badge-ok" style="font-size: 0.7em;">M6</span></td><td>Static 유틸 / —</td><td>에디터 전용 (#if UNITY_EDITOR)</td></tr>
         </tbody>
     </table>
     <div class="info-box">
@@ -1142,8 +1298,10 @@ SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
 │   │   ├── StageManager.cs        ← M2 ✅
 │   │   ├── SaveManager.cs         ← M2 ✅
 │   │   ├── BootLoader.cs          ← M3 ✅
-│   │   ├── UIManager.cs           ← M4 ✅
-│   │   └── GameFlowController.cs  ← M5 ✅
+│   │   ├── UIManager.cs           ← M4 ✅ (M6 위임 통합)
+│   │   ├── GameFlowController.cs  ← M5 ✅ (M6 콜백 통합)
+│   │   ├── AnimationController.cs ← M6 ✅ 신규
+│   │   └── SceneBootstrapper.cs   ← M6 ✅ 신규
 │   └── UI/
 │       └── SafeAreaHandler.cs     ← M4 ✅
 ├── ScriptableObjects/
@@ -1167,11 +1325,13 @@ SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
     │   │   ├── StageText   (TMP_Text)
     │   │   ├── ClearButton → OnStageClear()
     │   │   └── FailButton  → OnStageFail()
-    │   ├── ClearPanel      [비활성]
-    │   ├── FailPanel       [비활성]
+    │   ├── ClearPanel      [비활성, CanvasGroup + 텍스트]
+    │   ├── FailPanel       [비활성, CanvasGroup + 텍스트]
     │   └── GameClearPanel  [비활성]
     │       └── RestartButton → OnRestartButtonClick()
-    └── [UIManager 부착]
+    ├── [UIManager 부착, AnimationController 참조 (M6)]
+    └── [AnimationController 부착 (M6)]
+GameFlowController (Canvas 외부, Main 씬 루트)
     └── [GameFlowController 부착]</pre>
     </div>
 </section>
@@ -1180,45 +1340,45 @@ SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
 <section class="center-slide divider-section">
     <h1>PART 4</h1>
     <h2 style="color: #fff;">앞으로의 계획</h2>
-    <p class="sub">6단계(M6) → 7단계(M7)</p>
+    <p class="sub">7단계(M7) — 중규모 확장 대비 리팩토링</p>
 </section>
 
-<!-- ═════════════ M6 ═════════════ -->
+<!-- ═════════════ M6 완료 회고 ═════════════ -->
 <section>
-    <span class="slide-label">PART 4 · M6</span>
-    <h2><span class="badge badge-now">6단계 진행 예정</span> 화면 전환 애니메이션</h2>
-    <p style="color: var(--muted);">목표: 클리어·실패 판정 직후, 부드럽게 연출이 재생되고 완료 후 자동으로 다음 화면으로 넘어감</p>
+    <span class="slide-label">PART 4 · M6 완료 회고</span>
+    <h2><span class="badge badge-ok">6단계 완료</span> 화면 전환 애니메이션 (실측 결과)</h2>
+    <p style="color: var(--muted);">실제 구현된 DOTween Sequence 파라미터 — ARCHITECTURE.md / PRD.md 기준</p>
     <div class="grid-2" style="margin-bottom: 10px;">
         <div class="card">
-            <h3>🏆 클리어 연출</h3>
+            <h3>🏆 클리어 연출 — 실측 1.4초</h3>
             <ul>
-                <li>골드·노란색 계열 색감</li>
-                <li>"CLEAR!" 문구가 서서히 나타나며 커지는 효과</li>
-                <li>약 1.5~2초 후 자동으로 다음 화면으로 이동</li>
-                <li>스테이지마다 다른 연출 적용 가능 (일반/특별)</li>
+                <li><code>CanvasGroup.DOFade(0 → 0.85, 0.4초)</code> — 오버레이 페이드인</li>
+                <li><code>Transform.DOScale(0 → 1, 0.4초)</code> + <code>Ease.OutBack</code> — 텍스트 통통 튀어오름</li>
+                <li><code>AppendInterval(1.0초)</code> — 결과 인지 시간</li>
+                <li>완료 콜백 → IsLastStage 분기 → 다음 화면</li>
             </ul>
         </div>
         <div class="card">
-            <h3>💥 실패 연출</h3>
+            <h3>💥 실패 연출 — 실측 1.3초</h3>
             <ul>
-                <li>붉은 계열 색감</li>
-                <li>"TRY AGAIN" 문구 + 화면 흔들림 효과</li>
-                <li>약 1.5~2초 후 자동으로 같은 스테이지 복귀</li>
-                <li>스테이지마다 다른 실패 연출 적용 가능</li>
+                <li><code>CanvasGroup.DOFade(0 → 0.85, 0.4초)</code> — 오버레이 페이드인</li>
+                <li><code>Transform.DOShakePosition(0.5초, 강도 20)</code> — 텍스트 좌우 흔들기</li>
+                <li><code>AppendInterval(0.8초)</code> — 결과 인지 시간</li>
+                <li>완료 콜백 → 같은 스테이지 메인 복귀</li>
             </ul>
         </div>
     </div>
     <div class="info-box">
-        <p><strong>왜 5단계에서 흐름을 먼저 확인하고 6단계에서 연출을 추가하나?</strong> — 게임 흐름 버그와 연출 버그를 섞지 않기 위해서입니다. "스테이지가 제대로 넘어가는가"를 먼저 검증하고, 그 위에 연출을 얹는 것이 디버깅하기 훨씬 쉽습니다.<br><br><strong>지휘자 비유:</strong> 게임 교통 정리 담당자(지휘자)는 연출이 몇 초짜리인지 알 필요가 없습니다. "연출 끝났으면 알려줘"라고 요청만 하고, 애니메이션 담당자가 끝났을 때 신호를 보내는 구조입니다.</p>
+        <p><strong>5→6단계 분리의 효과:</strong> M5에서 흐름을 완전히 검증한 뒤 M6에서 연출을 얹는 단계 분리 덕분에 6단계는 빠르게 완료되었습니다. 흐름 버그(스테이지 +1 누락 등)는 M5에서 이미 잡혀 있었고, M6에서는 "연출이 잘 보이는가"만 추적하면 되었습니다.<br><br><strong>위임 패턴의 효과:</strong> <code>GameFlowController → UIManager → AnimationController</code> 단방향 위임 구조로 인해 향후 연출 종류를 늘려도 GFC를 건드릴 필요가 없습니다. M5 단계의 TODO 주석 자리가 자연스럽게 콜백 호출로 대체되었습니다.</p>
     </div>
 </section>
 
 <!-- ═════════════ M7 ═════════════ -->
 <section>
     <span class="slide-label">PART 4 · M7</span>
-    <h2><span class="badge badge-todo">7단계 대기</span> 안정성·최적화·코드 정리</h2>
+    <h2><span class="badge badge-now">7단계 진행 중</span> 안정성·최적화·코드 정리</h2>
     <div class="info-box" style="margin-bottom: 8px;">
-        <p><strong>사용자 눈에는 차이 없음 — 개발자를 위한 작업입니다.</strong> 7단계 완료 후에야 실제 게임 콘텐츠(퍼즐·리듬 등) 개발을 시작합니다.</p>
+        <p><strong>사용자 눈에는 차이 없음 — 개발자를 위한 작업입니다.</strong> 7단계 완료 후에야 실제 게임 콘텐츠(퍼즐·리듬 등) 개발을 시작합니다. 현재 4개 서브태스크(M7-A/B/C/D) 모두 착수 전.</p>
     </div>
     <table class="api-table" style="font-size: 0.42em;">
         <colgroup>
@@ -1287,16 +1447,17 @@ SaveManager           [Boot+Main 씬 공유, DontDestroyOnLoad O]
         <div class="card">
             <h3>개발자가 다음에 할 일</h3>
             <ul>
-                <li><strong>M6:</strong> <code>AnimationController</code> 구현 → <code>GameFlowController</code> TODO 위치에 연결</li>
-                <li><strong>M7-A:</strong> <code>IsLastStage() &gt;=20</code> → <code>==20</code> 수정</li>
-                <li><strong>M7-C:</strong> <code>ShowPanel</code> O(n)→O(1) Dictionary 최적화</li>
-                <li><strong>M7 완료 후:</strong> 실제 게임 콘텐츠 개발 시작</li>
+                <li><strong>M7-A 안정성 보강:</strong> <code>IsLastStage() &gt;=20</code> → <code>==20</code>, 패널 null 체크</li>
+                <li><strong>M7-B 코드 정리:</strong> 미사용 <code>_cts</code> 정리, magic string 상수화</li>
+                <li><strong>M7-C UI 성능:</strong> <code>ShowPanel</code> O(n)→O(1) Dictionary 최적화</li>
+                <li><strong>M7-D 데이터·I/O:</strong> <code>StageData</code> 캐싱, async <code>SaveAsync</code> 옵션</li>
+                <li><strong>M7 완료 후:</strong> 실제 게임 콘텐츠(퍼즐·리듬·아케이드) 개발 시작</li>
             </ul>
         </div>
     </div>
     <div class="info-box" style="max-width: 860px;">
         <p style="font-size: 0.62em;">
-            <strong>현재 상태:</strong> Boot 씬 초기화 → 저장 복원 → 메인 화면 → 게임 화면 → 클리어/실패 판정 → 저장 → 다음 화면까지 완전히 동작. 남은 작업: M6 애니메이션 + M7 코드 정리 → 그 후 실제 게임 콘텐츠 개발.
+            <strong>현재 상태:</strong> Boot 씬 초기화 → 저장 복원 → 메인 → 게임 → 클리어/실패 판정 → 즉시 저장 → DOTween 연출 → 자동 화면 전환까지 <strong style="color: var(--accent-2);">M6 통합 완료, MVP 시각적으로도 완성</strong>. 남은 작업: M7 리팩토링 4개 서브태스크 → 그 후 실제 게임 콘텐츠 개발.
         </p>
     </div>
     <p style="font-size: 0.5em; color: var(--muted); margin-top: 0.8em;">궁금한 점이 있으면 언제든지 팀에게 물어보세요!</p>

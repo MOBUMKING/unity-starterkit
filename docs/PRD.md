@@ -38,7 +38,7 @@
   - 화면 중앙: 현재 도전 스테이지 번호 표시 (예: "STAGE 1")
   - 화면 중앙 하단: 플레이 버튼 (터치 → 인게임 진입)
 - **레이아웃 규칙**: Arrows 참조 — 배경은 단색 또는 간단한 그라디언트, 버튼은 화면 중앙에 크게 배치
-- **상태**: 미구현
+- **상태**: 구현완료
 
 ---
 
@@ -58,7 +58,7 @@
   - 클리어/실패 버튼은 판정 로직을 직접 보유하지 않는다.
   - 버튼은 오직 `GameFlowController`의 공개 메서드(`OnStageClear`, `OnStageFail`)를 호출하는 역할만 담당한다.
   - 추후 실제 게임플레이 규칙이 구현되면, 게임플레이 시스템이 동일한 메서드를 호출하고 이 버튼들은 제거된다.
-- **상태**: 미구현
+- **상태**: 구현완료
 
 ---
 
@@ -71,13 +71,13 @@
   - 화면 전체를 덮는 반투명 오버레이 패널
   - 클리어 텍스트 (예: "CLEAR!" 또는 "STAGE CLEAR")
   - 연출 완료 후 자동으로 다음 스테이지 메인 화면으로 전환
-- **연출 방식**: DOTween을 사용한 텍스트/패널 페이드인·스케일 애니메이션
-- **전환 타이밍**: 연출 재생 → (약 1.5~2초) → 다음 스테이지 메인 화면으로 전환
+- **연출 방식**: DOTween Sequence — CanvasGroup 페이드인(0→0.85, 0.4초) + 텍스트 스케일 인(0→1, OutBack), 1.0초 대기 후 콜백
+- **전환 타이밍**: 연출 재생(약 1.4초) → 다음 스테이지 메인 화면으로 전환
 - **진행 처리**:
-  - 클리어한 스테이지 번호를 SaveManager를 통해 즉시 저장
-  - StageManager에서 현재 스테이지를 +1 증가
-  - 20스테이지 클리어 시 게임 완료 화면(F007)으로 전환
-- **상태**: 미구현
+  - 클리어한 스테이지 번호를 SaveManager를 통해 즉시 저장 (연출 재생 전)
+  - 연출 완료 콜백에서 IsLastStage 분기: 아니면 AdvanceToNextStage → MainPanel, 맞으면 GameClearPanel
+- **구현 구조**: GameFlowController → UIManager.PlayClearAndThen(콜백) → ShowPanel(Clear) → AnimationController.PlayClear(콜백) → 콜백에서 다음 화면 전환
+- **상태**: 구현완료
 
 ---
 
@@ -90,12 +90,13 @@
   - 화면 전체를 덮는 반투명 오버레이 패널
   - 실패 텍스트 (예: "FAILED" 또는 "TRY AGAIN")
   - 연출 완료 후 자동으로 현재 스테이지 메인 화면으로 복귀
-- **연출 방식**: DOTween을 사용한 텍스트/패널 페이드인·흔들기(shake) 애니메이션
-- **전환 타이밍**: 연출 재생 → (약 1.5~2초) → 동일 스테이지 메인 화면으로 복귀
+- **연출 방식**: DOTween Sequence — CanvasGroup 페이드인(0→0.85, 0.4초) + 텍스트 DOShakePosition(0.5초, 강도 20), 0.8초 대기 후 콜백
+- **전환 타이밍**: 연출 재생(약 1.3초) → 동일 스테이지 메인 화면으로 복귀
 - **진행 처리**:
   - 스테이지 번호 변경 없음 (현재 스테이지 유지)
   - 저장 데이터 변경 없음
-- **상태**: 미구현
+- **구현 구조**: GameFlowController → UIManager.PlayFailAndThen(콜백) → ShowPanel(Fail) → AnimationController.PlayFail(콜백) → 콜백에서 MainPanel 복귀
+- **상태**: 구현완료
 
 ---
 
@@ -137,8 +138,8 @@
 - **UI 구성**:
   - 축하 텍스트 (예: "ALL CLEAR!" 또는 "CONGRATULATIONS")
   - 처음부터 다시 시작하는 버튼 (선택적) 또는 타이틀 복귀 버튼
-- **처음부터 다시 시작 시**: SaveManager를 통해 저장 데이터 초기화 후 1스테이지로 복귀
-- **상태**: 미구현
+- **처음부터 다시 시작 시**: SaveManager.Reset() → StageManager.SetCurrentStage(1) → RefreshStageDisplay() → ShowPanel(Main)
+- **상태**: 구현완료
 
 ---
 
@@ -149,8 +150,8 @@
 - **구현 시스템**: UIManager, SafeAreaHandler
 - **적용 방식**:
   - Canvas Scaler: Scale With Screen Size, 기준 해상도 1080×1920, Match Width Or Height = 0.5
-  - Safe Area 처리: 상단 노치/하단 홈바 영역을 침범하지 않도록 RectTransform 조정
-- **상태**: 미구현
+  - Safe Area 처리: SafeAreaHandler가 Awake()에서 Screen.safeArea 픽셀 좌표를 0~1 앵커 좌표로 변환하여 RectTransform에 적용
+- **상태**: 구현완료
 
 ---
 
@@ -158,34 +159,49 @@
 
 | 시스템 | 역할 | 관련 기능 |
 |--------|------|-----------|
-| **GameFlowController** | 게임 전체 흐름 제어. `OnStageClear()` / `OnStageFail()` 공개 메서드를 통해 클리어/실패 판정 처리 및 화면 전환 명령 | F002, F003, F004, F007 |
+| **GameFlowController** | 게임 전체 흐름 제어. `OnStageClear()` / `OnStageFail()` 공개 메서드를 통해 클리어/실패 판정 처리 및 UIManager에 화면 전환 위임 | F002, F003, F004, F007 |
 | **StageManager** | 현재 스테이지 번호 관리, 스테이지 범위(1~20) 제한, 다음 스테이지 계산, StageDataSO 배열 보관 | F001, F002, F005, F006 |
-| **UIManager** | 화면별 UI 패널 활성화/비활성화, 버튼 이벤트 연결 | F001, F002, F003, F004, F007, F008 |
+| **UIManager** | 화면별 UI 패널 활성화/비활성화, 버튼 이벤트 연결, AnimationController 위임(PlayClearAndThen / PlayFailAndThen) | F001, F002, F003, F004, F007, F008 |
 | **SaveManager** | PlayerPrefs 기반 진행 상태 저장/불러오기, 데이터 초기화 | F005, F007 |
-| **AnimationController** | DOTween을 이용한 UI 전환 연출(클리어/실패 애니메이션) | F003, F004 |
-| **SafeAreaHandler** | 디바이스 Safe Area에 따라 UI RectTransform 자동 조정 | F008 |
+| **AnimationController** | DOTween Sequence 기반 클리어/실패 오버레이 연출. UIManager의 위임 요청을 받아 재생하고 완료 콜백 호출 | F003, F004 |
+| **SafeAreaHandler** | 디바이스 Safe Area에 따라 UI RectTransform 앵커를 자동 조정 | F008 |
+| **SceneBootstrapper** | 에디터 전용 유틸리티. Boot 이외의 씬에서 Play 시 자동으로 Boot 씬으로 리다이렉트 (`#if UNITY_EDITOR`) | — |
 
 ### 시스템 의존 관계
 
 ```
 GameFlowController
   ├── StageManager  (스테이지 번호 조회/갱신, 범위 초과 여부 확인)
-  ├── UIManager     (화면 전환 명령)
+  ├── UIManager     (PlayClearAndThen / PlayFailAndThen / ShowPanel 호출)
   └── SaveManager   (클리어 저장 요청)
 
 UIManager
-  └── AnimationController  (연출 재생 요청)
+  ├── StageManager        (RefreshStageDisplay에서 현재 스테이지 번호 조회)
+  ├── SaveManager         (OnRestartButtonClick에서 Reset 호출)
+  └── AnimationController (PlayClear / PlayFail 위임)
 
-StageManager
-  └── SaveManager  (저장/불러오기)
+BootLoader
+  ├── SaveManager         (Load 호출)
+  └── StageManager        (SetCurrentStage 호출)
+
+StageManager  ── (의존 없음, 독립)
+SaveManager   ── (의존 없음, 독립)
+SceneBootstrapper ── (에디터 전용, 의존 없음)
 ```
 
 ### 프로토타입 버튼과 GameFlowController의 관계
 
 ```
-[프로토타입 단계]
+[현재 — 프로토타입 단계 (구현완료)]
 클리어 버튼 (UI) → GameFlowController.OnStageClear()
+                     → UIManager.PlayClearAndThen(콜백)
+                       → AnimationController.PlayClear(콜백)
+                         → 콜백: IsLastStage? → GameClearPanel / AdvanceToNextStage → MainPanel
+
 실패 버튼 (UI)   → GameFlowController.OnStageFail()
+                     → UIManager.PlayFailAndThen(콜백)
+                       → AnimationController.PlayFail(콜백)
+                         → 콜백: RefreshStageDisplay → MainPanel
 
 [실제 게임플레이 구현 후]
 클리어 버튼 제거
@@ -228,6 +244,7 @@ StageManager
 | Main | 메인 화면 + 인게임 화면 + 연출 패널 + 게임 완료 화면을 모두 포함하는 단일 씬 |
 
 > 단일 씬 구성(Main 1개)으로 씬 전환 없이 패널 활성화/비활성화 방식으로 화면을 전환한다.
+> SceneBootstrapper(에디터 전용)를 통해 Main 씬에서 직접 Play 버튼을 눌러도 자동으로 Boot 씬부터 시작된다.
 
 ---
 
@@ -283,7 +300,7 @@ StageManager
 | 번호 | 항목 | 결과 |
 |------|------|------|
 | 1 | 모든 기능이 시스템 구성에 매핑되어 있는가? | 통과 (F001~F008 모두 매핑) |
-| 2 | 시스템 구성에 기능 명세 없는 항목이 있는가? | 없음 |
-| 3 | ARCHITECTURE.md와 구현 상태 일치하는가? | ARCHITECTURE.md 미존재 — 전체 미구현 상태로 표기 |
-| 4 | 기능 간 의존 관계가 명시되어 있는가? | 통과 (시스템 의존 관계 및 프로토타입 버튼 관계 다이어그램 포함) |
+| 2 | 시스템 구성에 기능 명세 없는 항목이 있는가? | SceneBootstrapper는 에디터 전용 유틸리티로 기능 명세 외 항목 — 정상 |
+| 3 | ARCHITECTURE.md와 구현 상태 일치하는가? | 통과 (M6 완료 기준 동기화 — F001~F008 모두 구현완료, SceneBootstrapper 시스템 추가 반영) |
+| 4 | 기능 간 의존 관계가 명시되어 있는가? | 통과 (시스템 의존 관계 다이어그램 및 콜백 체인 흐름 포함) |
 | 5 | 누락되거나 고아 상태인 항목이 없는가? | 없음 |
